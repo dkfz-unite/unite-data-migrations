@@ -4,7 +4,7 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS restore
 ARG GITHUB_TOKEN
 WORKDIR /src
-RUN dotnet nuget add source https://nuget.pkg.github.com/dkfz-unite/index.json -n github -u vulasau-dkfz -p ${GITHUB_TOKEN} --store-password-in-clear-text
+RUN dotnet nuget add source https://nuget.pkg.github.com/dkfz-unite/index.json -n github -u vulasau-dkfz -p ${GITHUB_TOKEN}
 COPY ["Unite.Data.Migrations/Unite.Data.Migrations.csproj", "Unite.Data.Migrations/"]
 RUN dotnet restore "Unite.Data.Migrations/Unite.Data.Migrations.csproj"
 
