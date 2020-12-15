@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag unite-migrations:$(date +%s) --build-arg GITHUB_TOKEN={{ secrets.GITHUB_TOKEN}}
+      run: docker build . --file Dockerfile --tag unite-migrations:$(date +%s) --build-arg GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
