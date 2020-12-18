@@ -9,7 +9,7 @@ using Unite.Data.Services;
 namespace Unite.Data.Migrations.Migrations
 {
     [DbContext(typeof(UniteDbContext))]
-    [Migration("20201215083038_Root")]
+    [Migration("20201218145600_Root")]
     partial class Root
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -392,9 +392,17 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("CellLineId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Data")
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100);
+
                     b.Property<string>("DonorId")
                         .IsRequired()
                         .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Format")
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Link")
                         .HasColumnType("varchar(500)")
@@ -430,6 +438,17 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<int>("MutationId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Filter")
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Info")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Quality")
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100);
 
                     b.HasKey("SampleId", "MutationId");
 

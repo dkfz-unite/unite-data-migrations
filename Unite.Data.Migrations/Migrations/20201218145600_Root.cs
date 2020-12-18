@@ -685,7 +685,9 @@ namespace Unite.Data.Migrations.Migrations
                     Name = table.Column<string>(maxLength: 500, nullable: true),
                     Link = table.Column<string>(maxLength: 500, nullable: true),
                     TypeId = table.Column<int>(nullable: true),
-                    SubtypeId = table.Column<int>(nullable: true)
+                    SubtypeId = table.Column<int>(nullable: true),
+                    Format = table.Column<string>(maxLength: 100, nullable: true),
+                    Data = table.Column<string>(maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -721,7 +723,10 @@ namespace Unite.Data.Migrations.Migrations
                 columns: table => new
                 {
                     SampleId = table.Column<int>(nullable: false),
-                    MutationId = table.Column<int>(nullable: false)
+                    MutationId = table.Column<int>(nullable: false),
+                    Quality = table.Column<string>(maxLength: 100, nullable: true),
+                    Filter = table.Column<string>(maxLength: 100, nullable: true),
+                    Info = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

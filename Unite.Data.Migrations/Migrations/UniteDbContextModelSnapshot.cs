@@ -390,9 +390,17 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("CellLineId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Data")
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100);
+
                     b.Property<string>("DonorId")
                         .IsRequired()
                         .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Format")
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Link")
                         .HasColumnType("varchar(500)")
@@ -428,6 +436,17 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<int>("MutationId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Filter")
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Info")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Quality")
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100);
 
                     b.HasKey("SampleId", "MutationId");
 
