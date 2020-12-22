@@ -390,17 +390,9 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("CellLineId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Data")
-                        .HasColumnType("varchar(100)")
-                        .HasMaxLength(100);
-
                     b.Property<string>("DonorId")
                         .IsRequired()
                         .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Format")
-                        .HasColumnType("varchar(100)")
-                        .HasMaxLength(100);
 
                     b.Property<string>("Link")
                         .HasColumnType("varchar(500)")
