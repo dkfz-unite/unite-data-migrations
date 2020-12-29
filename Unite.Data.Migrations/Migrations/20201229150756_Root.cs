@@ -56,11 +56,12 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Value = table.Column<string>(maxLength: 500, nullable: false)
+                    Value = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Contigs", x => x.Id);
+                    table.UniqueConstraint("AK_Contigs_Value", x => x.Value);
                 });
 
             migrationBuilder.CreateTable(
@@ -102,6 +103,7 @@ namespace Unite.Data.Migrations.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Genes", x => x.Id);
+                    table.UniqueConstraint("AK_Genes_Name", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -338,19 +340,21 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    ReferenceId = table.Column<string>(maxLength: 100, nullable: true),
+                    Code = table.Column<string>(maxLength: 500, nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: true),
                     GeneId = table.Column<int>(nullable: true),
                     ChromosomeId = table.Column<int>(nullable: true),
                     ContigId = table.Column<int>(nullable: true),
                     SequenceTypeId = table.Column<int>(nullable: false),
                     Position = table.Column<int>(nullable: false),
                     TypeId = table.Column<int>(nullable: false),
-                    ReferenceAllele = table.Column<string>(maxLength: 500, nullable: true),
-                    AlternateAllele = table.Column<string>(maxLength: 500, nullable: true)
+                    ReferenceAllele = table.Column<string>(maxLength: 200, nullable: true),
+                    AlternateAllele = table.Column<string>(maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Mutations", x => x.Id);
+                    table.UniqueConstraint("AK_Mutations_Code", x => x.Code);
                     table.ForeignKey(
                         name: "FK_Mutations_Chromosomes_ChromosomeId",
                         column: x => x.ChromosomeId,
@@ -992,12 +996,6 @@ namespace Unite.Data.Migrations.Migrations
                 column: "VitalStatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Contigs_Value",
-                table: "Contigs",
-                column: "Value",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DonorIndexingTasks_DonorId",
                 table: "DonorIndexingTasks",
                 column: "DonorId");
@@ -1006,12 +1004,6 @@ namespace Unite.Data.Migrations.Migrations
                 name: "IX_Donors_PrimarySiteId",
                 table: "Donors",
                 column: "PrimarySiteId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Genes_Name",
-                table: "Genes",
-                column: "Name",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Localizations_Value",

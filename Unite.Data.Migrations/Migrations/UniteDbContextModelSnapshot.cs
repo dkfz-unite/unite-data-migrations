@@ -300,13 +300,12 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("varchar(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Value")
-                        .IsUnique();
+                    b.HasAlternateKey("Value");
 
                     b.ToTable("Contigs");
                 });
@@ -324,8 +323,7 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
+                    b.HasAlternateKey("Name");
 
                     b.ToTable("Genes");
                 });
@@ -337,11 +335,16 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("AlternateAllele")
-                        .HasColumnType("varchar(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("varchar(200)")
+                        .HasMaxLength(200);
 
                     b.Property<int?>("ChromosomeId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("varchar(500)")
+                        .HasMaxLength(500);
 
                     b.Property<int?>("ContigId")
                         .HasColumnType("int");
@@ -349,16 +352,16 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("GeneId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50);
+
                     b.Property<int>("Position")
                         .HasColumnType("int");
 
                     b.Property<string>("ReferenceAllele")
-                        .HasColumnType("varchar(500)")
-                        .HasMaxLength(500);
-
-                    b.Property<string>("ReferenceId")
-                        .HasColumnType("varchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("varchar(200)")
+                        .HasMaxLength(200);
 
                     b.Property<int>("SequenceTypeId")
                         .HasColumnType("int");
@@ -367,6 +370,8 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("Code");
 
                     b.HasIndex("ChromosomeId");
 
