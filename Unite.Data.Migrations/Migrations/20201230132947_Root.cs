@@ -689,7 +689,8 @@ namespace Unite.Data.Migrations.Migrations
                     Name = table.Column<string>(maxLength: 500, nullable: true),
                     Link = table.Column<string>(maxLength: 500, nullable: true),
                     TypeId = table.Column<int>(nullable: true),
-                    SubtypeId = table.Column<int>(nullable: true)
+                    SubtypeId = table.Column<int>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {

@@ -395,6 +395,9 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("CellLineId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime");
+
                     b.Property<string>("DonorId")
                         .IsRequired()
                         .HasColumnType("varchar(100)");

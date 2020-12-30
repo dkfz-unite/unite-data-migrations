@@ -9,7 +9,7 @@ using Unite.Data.Services;
 namespace Unite.Data.Migrations.Migrations
 {
     [DbContext(typeof(UniteDbContext))]
-    [Migration("20201229150756_Root")]
+    [Migration("20201230132947_Root")]
     partial class Root
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -396,6 +396,9 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<int?>("CellLineId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime");
 
                     b.Property<string>("DonorId")
                         .IsRequired()
