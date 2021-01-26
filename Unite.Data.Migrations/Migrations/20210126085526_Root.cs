@@ -255,6 +255,7 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(maxLength: 500, nullable: false),
                     TypeId = table.Column<int>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
                     FileId = table.Column<int>(nullable: true)
@@ -262,6 +263,7 @@ namespace Unite.Data.Migrations.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Analyses", x => x.Id);
+                    table.UniqueConstraint("AK_Analyses_Name", x => x.Name);
                     table.ForeignKey(
                         name: "FK_Analyses_Files_FileId",
                         column: x => x.FileId,
