@@ -250,35 +250,6 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Analyses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(maxLength: 500, nullable: false),
-                    TypeId = table.Column<int>(nullable: true),
-                    Date = table.Column<DateTime>(nullable: false),
-                    FileId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Analyses", x => x.Id);
-                    table.UniqueConstraint("AK_Analyses_Name", x => x.Name);
-                    table.ForeignKey(
-                        name: "FK_Analyses_Files_FileId",
-                        column: x => x.FileId,
-                        principalTable: "Files",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Analyses_AnalysisTypes_TypeId",
-                        column: x => x.TypeId,
-                        principalTable: "AnalysisTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Donors",
                 columns: table => new
                 {
@@ -351,6 +322,41 @@ namespace Unite.Data.Migrations.Migrations
                         principalTable: "MutationTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Analyses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    DonorId = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(maxLength: 500, nullable: false),
+                    TypeId = table.Column<int>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    FileId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Analyses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Analyses_Donors_DonorId",
+                        column: x => x.DonorId,
+                        principalTable: "Donors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Analyses_Files_FileId",
+                        column: x => x.FileId,
+                        principalTable: "Files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Analyses_AnalysisTypes_TypeId",
+                        column: x => x.TypeId,
+                        principalTable: "AnalysisTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -434,7 +440,7 @@ namespace Unite.Data.Migrations.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     DonorId = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(maxLength: 500, nullable: true),
+                    Name = table.Column<string>(maxLength: 500, nullable: false),
                     TypeId = table.Column<int>(nullable: true),
                     SubtypeId = table.Column<int>(nullable: true),
                     Date = table.Column<DateTime>(nullable: true)
@@ -755,6 +761,11 @@ namespace Unite.Data.Migrations.Migrations
                 name: "IX_AnalysedSamples_SampleId",
                 table: "AnalysedSamples",
                 column: "SampleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Analyses_DonorId",
+                table: "Analyses",
+                column: "DonorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Analyses_FileId",

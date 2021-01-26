@@ -305,8 +305,12 @@ namespace Unite.Data.Migrations.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime?>("Date")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("DonorId")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
 
                     b.Property<int?>("FileId")
                         .HasColumnType("int");
@@ -321,7 +325,7 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("Name");
+                    b.HasIndex("DonorId");
 
                     b.HasIndex("FileId")
                         .IsUnique();
@@ -475,6 +479,7 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("varchar(500)")
                         .HasMaxLength(500);
 
@@ -1147,6 +1152,12 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Mutations.Analysis", b =>
                 {
+                    b.HasOne("Unite.Data.Entities.Donors.Donor", "Donor")
+                        .WithMany("Analyses")
+                        .HasForeignKey("DonorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Unite.Data.Entities.File", "File")
                         .WithOne()
                         .HasForeignKey("Unite.Data.Entities.Mutations.Analysis", "FileId");
