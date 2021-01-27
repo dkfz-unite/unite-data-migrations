@@ -9,7 +9,7 @@ using Unite.Data.Services;
 namespace Unite.Data.Migrations.Migrations
 {
     [DbContext(typeof(UniteDbContext))]
-    [Migration("20210126103752_Root")]
+    [Migration("20210127161855_Root")]
     partial class Root
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
