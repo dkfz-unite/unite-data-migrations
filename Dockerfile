@@ -1,7 +1,8 @@
 FROM mcr.microsoft.com/dotnet/runtime:5.0-buster-slim AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS restore
+#FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS restore 5.0.102-ca-patch-buster-slim
+FROM mcr.microsoft.com/dotnet/sdk:5.0.102-ca-patch-buster-slim AS restore
 ARG USER
 ARG TOKEN
 WORKDIR /src
