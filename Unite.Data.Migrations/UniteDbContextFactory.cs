@@ -8,7 +8,7 @@ namespace Unite.Data.Migrations
     {
         public UniteDbContext CreateDbContext(string[] args)
         {
-            var options = new MySqlOptions();
+            var options = new SqlOptions();
             var dbContext = new UniteDbContext(options);
 
             return dbContext;

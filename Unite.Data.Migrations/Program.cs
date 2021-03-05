@@ -14,7 +14,7 @@ namespace Unite.Data.Migrations
 
             Console.WriteLine($"[{DateTime.UtcNow}] - Configuring migration service");
 
-            var options = new MySqlOptions();
+            var options = new SqlOptions();
 
             Console.WriteLine($"[{DateTime.UtcNow}] - Host: {options.Host}");
             Console.WriteLine($"[{DateTime.UtcNow}] - Database: {options.Database}");
