@@ -10,27 +10,31 @@ using Unite.Data.Services;
 namespace Unite.Data.Migrations.Migrations
 {
     [DbContext(typeof(UniteDbContext))]
-    [Migration("20210322170016_Transcripts")]
-    partial class Transcripts
+    [Migration("20210514154455_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.3")
+                .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("Unite.Data.Entities.Donors.ClinicalData", b =>
+            modelBuilder.Entity("Unite.Data.Entities.Clinical.ClinicalData", b =>
                 {
-                    b.Property<string>("DonorId")
-                        .HasColumnType("character varying(100)");
+                    b.Property<int?>("DonorId")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("Age")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("AgeCategoryId")
-                        .HasColumnType("integer");
+                    b.Property<string>("Diagnosis")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTime?>("DiagnosisDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("GenderId")
                         .HasColumnType("integer");
@@ -41,109 +45,148 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("LocalizationId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("ProgressionDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int?>("ProgressionFreeDays")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("RelapseDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int?>("RelapseFreeDays")
+                    b.Property<int?>("PrimarySiteId")
                         .HasColumnType("integer");
 
                     b.Property<bool?>("SteroidsBaseline")
                         .HasColumnType("boolean");
 
-                    b.Property<int?>("SurvivalDays")
-                        .HasColumnType("integer");
+                    b.Property<bool?>("VitalStatus")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("VitalStatusChangeDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int?>("VitalStatusId")
-                        .HasColumnType("integer");
-
                     b.HasKey("DonorId");
-
-                    b.HasIndex("AgeCategoryId");
 
                     b.HasIndex("GenderId");
 
                     b.HasIndex("LocalizationId");
 
-                    b.HasIndex("VitalStatusId");
+                    b.HasIndex("PrimarySiteId");
 
                     b.ToTable("ClinicalData");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Donors.Donor", b =>
+            modelBuilder.Entity("Unite.Data.Entities.Clinical.Therapy", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("Diagnosis")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                    b.HasKey("Id");
 
-                    b.Property<DateTime?>("DiagnosisDate")
+                    b.HasAlternateKey("Name");
+
+                    b.ToTable("Therapies");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Clinical.Treatment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Details")
+                        .HasColumnType("text");
+
+                    b.Property<int>("DonorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<bool?>("MtaProtected")
+                    b.Property<bool?>("ProgressionStatus")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Origin")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                    b.Property<DateTime?>("ProgressionStatusChangeDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<int?>("PrimarySiteId")
+                    b.Property<string>("Results")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("TherapyId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PrimarySiteId");
+                    b.HasIndex("DonorId");
+
+                    b.HasIndex("TherapyId");
+
+                    b.ToTable("Treatments");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Clinical.TumourLocalization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("TumourLocalizations");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Clinical.TumourPrimarySite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("TumourPrimarySites");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Donors.Donor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<bool?>("MtaProtected")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("ReferenceId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReferenceId");
 
                     b.ToTable("Donors");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Donors.Localization", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Value");
-
-                    b.ToTable("Localizations");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Donors.PrimarySite", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Value");
-
-                    b.ToTable("PrimarySites");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Donors.Study", b =>
@@ -170,63 +213,14 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("StudyId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("DonorId")
-                        .HasColumnType("character varying(100)");
+                    b.Property<int>("DonorId")
+                        .HasColumnType("integer");
 
                     b.HasKey("StudyId", "DonorId");
 
                     b.HasIndex("DonorId");
 
                     b.ToTable("StudyDonors");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Donors.Therapy", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Name");
-
-                    b.ToTable("Therapies");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Donors.Treatment", b =>
-                {
-                    b.Property<string>("DonorId")
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<int>("TherapyId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Details")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Results")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("DonorId", "TherapyId");
-
-                    b.HasIndex("TherapyId");
-
-                    b.ToTable("Treatments");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Donors.WorkPackage", b =>
@@ -253,52 +247,14 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("WorkPackageId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("DonorId")
-                        .HasColumnType("character varying(100)");
+                    b.Property<int>("DonorId")
+                        .HasColumnType("integer");
 
                     b.HasKey("WorkPackageId", "DonorId");
 
                     b.HasIndex("DonorId");
 
                     b.ToTable("WorkPackageDonors");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Epigenetics.EpigeneticsData", b =>
-                {
-                    b.Property<string>("DonorId")
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<bool?>("GcimpMethylation")
-                        .HasColumnType("boolean");
-
-                    b.Property<int?>("GeneExpressionSubtypeId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("IdhMutationId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("IdhStatusId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("MethylationStatusId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("MethylationSubtypeId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("DonorId");
-
-                    b.HasIndex("GeneExpressionSubtypeId");
-
-                    b.HasIndex("IdhMutationId");
-
-                    b.HasIndex("IdhStatusId");
-
-                    b.HasIndex("MethylationStatusId");
-
-                    b.HasIndex("MethylationSubtypeId");
-
-                    b.ToTable("EpigeneticsData");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.File", b =>
@@ -376,11 +332,49 @@ namespace Unite.Data.Migrations.Migrations
                     b.ToTable("UserSessions");
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.Molecular.MolecularData", b =>
+                {
+                    b.Property<int?>("SpecimenId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool?>("GcimpMethylation")
+                        .HasColumnType("boolean");
+
+                    b.Property<int?>("GeneExpressionSubtypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("IdhMutationId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("IdhStatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("MethylationStatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("MethylationSubtypeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("SpecimenId");
+
+                    b.HasIndex("GeneExpressionSubtypeId");
+
+                    b.HasIndex("IdhMutationId");
+
+                    b.HasIndex("IdhStatusId");
+
+                    b.HasIndex("MethylationStatusId");
+
+                    b.HasIndex("MethylationSubtypeId");
+
+                    b.ToTable("MolecularData");
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Mutations.AffectedTranscript", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("AminoAcidChange")
@@ -404,8 +398,8 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("GeneId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("MutationId")
-                        .HasColumnType("integer");
+                    b.Property<long>("MutationId")
+                        .HasColumnType("bigint");
 
                     b.Property<int?>("ProteinEnd")
                         .HasColumnType("integer");
@@ -429,8 +423,8 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Mutations.AffectedTranscriptConsequence", b =>
                 {
-                    b.Property<int>("AffectedTranscriptId")
-                        .HasColumnType("integer");
+                    b.Property<long>("AffectedTranscriptId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("ConsequenceId")
                         .HasColumnType("integer");
@@ -474,27 +468,22 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<DateTime?>("Date")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("DonorId")
-                        .IsRequired()
-                        .HasColumnType("character varying(100)");
-
                     b.Property<int?>("FileId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                    b.Property<string>("ReferenceId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<int?>("TypeId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DonorId");
-
                     b.HasIndex("FileId")
                         .IsUnique();
+
+                    b.HasIndex("ReferenceId");
 
                     b.HasIndex("TypeId");
 
@@ -510,8 +499,8 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -792,9 +781,13 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("EnsemblId")
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.HasKey("GeneId");
+
+                    b.HasIndex("EnsemblId")
+                        .IsUnique();
 
                     b.ToTable("GeneInfo");
                 });
@@ -816,9 +809,9 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Mutations.Mutation", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("AlternateBase")
@@ -864,22 +857,22 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Mutations.MutationOccurrence", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<int>("AnalysedSampleId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("MutationId")
-                        .HasColumnType("integer");
+                    b.Property<long>("MutationId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("AnalysedSampleId", "MutationId");
+                    b.HasAlternateKey("MutationId", "AnalysedSampleId");
 
-                    b.HasIndex("MutationId");
+                    b.HasIndex("AnalysedSampleId");
 
                     b.ToTable("MutationOccurrences");
                 });
@@ -894,28 +887,18 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<DateTime?>("Date")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("DonorId")
-                        .IsRequired()
-                        .HasColumnType("character varying(100)");
+                    b.Property<string>("ReferenceId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<int?>("SubtypeId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("TypeId")
+                    b.Property<int>("SpecimenId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DonorId");
+                    b.HasIndex("ReferenceId");
 
-                    b.HasIndex("SubtypeId");
-
-                    b.HasIndex("TypeId");
+                    b.HasIndex("SpecimenId");
 
                     b.ToTable("Samples");
                 });
@@ -958,18 +941,150 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("EnsemblId")
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.HasKey("TranscriptId");
+
+                    b.HasIndex("EnsemblId")
+                        .IsUnique();
 
                     b.ToTable("TranscriptInfo");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Tasks.Task", b =>
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Cells.CellLine", b =>
+                {
+                    b.Property<int>("SpecimenId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int?>("SpeciesId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TypeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("SpecimenId");
+
+                    b.HasIndex("SpeciesId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("CellLines");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Cells.CellLineInfo", b =>
+                {
+                    b.Property<int>("SpecimenId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("AtccId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DepositorEstablishment")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DepositorName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("EstablishmentDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("ExPasyId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PublicationId")
+                        .HasColumnType("text");
+
+                    b.HasKey("SpecimenId");
+
+                    b.ToTable("CellLineInfo");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Specimen", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int?>("DonorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ReferenceId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DonorId");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("ReferenceId");
+
+                    b.ToTable("Specimens");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Tissues.Tissue", b =>
+                {
+                    b.Property<int>("SpecimenId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("ExtractionDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int?>("SourceId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TumourTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TypeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("SpecimenId");
+
+                    b.HasIndex("SourceId");
+
+                    b.HasIndex("TumourTypeId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("Tissues");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Tissues.TissueSource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("TissueSources");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Tasks.Task", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Data")
@@ -997,7 +1112,7 @@ namespace Unite.Data.Migrations.Migrations
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Donors.Enums.AgeCategory>", b =>
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Clinical.Enums.Gender>", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
@@ -1008,43 +1123,8 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Value");
-
-                    b.ToTable("AgeCategories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Pediatric",
-                            Value = "Pediatric"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Adult",
-                            Value = "Adult"
-                        });
-                });
-
-            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Donors.Enums.Gender>", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -1073,7 +1153,7 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Donors.Enums.VitalStatus>", b =>
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.GeneExpressionSubtype>", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
@@ -1084,43 +1164,8 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Value");
-
-                    b.ToTable("VitalStatuses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Living",
-                            Value = "Living"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Deceased",
-                            Value = "Deceased"
-                        });
-                });
-
-            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Epigenetics.Enums.GeneExpressionSubtype>", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -1149,7 +1194,7 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Epigenetics.Enums.IDHMutation>", b =>
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.IDHMutation>", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
@@ -1160,8 +1205,8 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -1238,7 +1283,7 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Epigenetics.Enums.IDHStatus>", b =>
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.IDHStatus>", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
@@ -1249,8 +1294,8 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -1262,8 +1307,8 @@ namespace Unite.Data.Migrations.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "WildType",
-                            Value = "WildType"
+                            Name = "Wild Type",
+                            Value = "Wild Type"
                         },
                         new
                         {
@@ -1273,7 +1318,7 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Epigenetics.Enums.MethylationStatus>", b =>
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.MethylationStatus>", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
@@ -1284,8 +1329,8 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -1308,7 +1353,7 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Epigenetics.Enums.MethylationSubtype>", b =>
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.MethylationSubtype>", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
@@ -1319,8 +1364,8 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -1372,8 +1417,8 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -1431,8 +1476,8 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -1598,8 +1643,8 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -1645,8 +1690,8 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -1884,8 +1929,8 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -1920,76 +1965,6 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Mutations.Enums.SampleSubtype>", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Value");
-
-                    b.ToTable("SampleSubtypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Primary",
-                            Value = "Primary"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Recurrent",
-                            Value = "Recurrent"
-                        });
-                });
-
-            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Mutations.Enums.SampleType>", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Value");
-
-                    b.ToTable("SampleTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Control",
-                            Value = "Control"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Tumor",
-                            Value = "Tumor"
-                        });
-                });
-
             modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Mutations.Enums.SequenceType>", b =>
                 {
                     b.Property<int>("Id")
@@ -2001,8 +1976,8 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -2055,6 +2030,152 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Cells.Enums.CellLineType>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("CellLineTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "GSC",
+                            Value = "GSC"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Suspension",
+                            Value = "Suspension"
+                        });
+                });
+
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Cells.Enums.Species>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("Species");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Human",
+                            Value = "Human"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Mouse",
+                            Value = "Mouse"
+                        });
+                });
+
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Tissues.Enums.TissueType>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("TissueTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Control",
+                            Value = "Control"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Tumour",
+                            Value = "Tumour"
+                        });
+                });
+
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Tissues.Enums.TumourType>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("TumourTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Primary",
+                            Value = "Primary"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Metastasis",
+                            Value = "Metastasis"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Recurrent",
+                            Value = "Recurrent"
+                        });
+                });
+
             modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Tasks.Enums.TaskTargetType>", b =>
                 {
                     b.Property<int>("Id")
@@ -2066,8 +2187,8 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -2085,32 +2206,14 @@ namespace Unite.Data.Migrations.Migrations
                         new
                         {
                             Id = 2,
-                            Name = "Mutation",
-                            Value = "Mutation"
+                            Name = "Specimen",
+                            Value = "Specimen"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Gene",
-                            Value = "Gene"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "CellLine",
-                            Value = "CellLine"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Xenograft",
-                            Value = "Xenograft"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "MRIFeature",
-                            Value = "MRIFeature"
+                            Name = "Mutation",
+                            Value = "Mutation"
                         });
                 });
 
@@ -2125,8 +2228,8 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -2144,45 +2247,51 @@ namespace Unite.Data.Migrations.Migrations
                         new
                         {
                             Id = 2,
-                            Name = "Anotation(VEP)",
-                            Value = "Anotation(VEP)"
+                            Name = "Anotation",
+                            Value = "Anotation"
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Donors.ClinicalData", b =>
+            modelBuilder.Entity("Unite.Data.Entities.Clinical.ClinicalData", b =>
                 {
-                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Donors.Enums.AgeCategory>", null)
-                        .WithMany()
-                        .HasForeignKey("AgeCategoryId");
-
                     b.HasOne("Unite.Data.Entities.Donors.Donor", null)
                         .WithOne("ClinicalData")
-                        .HasForeignKey("Unite.Data.Entities.Donors.ClinicalData", "DonorId")
+                        .HasForeignKey("Unite.Data.Entities.Clinical.ClinicalData", "DonorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Donors.Enums.Gender>", null)
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Clinical.Enums.Gender>", null)
                         .WithMany()
                         .HasForeignKey("GenderId");
 
-                    b.HasOne("Unite.Data.Entities.Donors.Localization", "Localization")
+                    b.HasOne("Unite.Data.Entities.Clinical.TumourLocalization", "Localization")
                         .WithMany()
                         .HasForeignKey("LocalizationId");
 
-                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Donors.Enums.VitalStatus>", null)
-                        .WithMany()
-                        .HasForeignKey("VitalStatusId");
-
-                    b.Navigation("Localization");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Donors.Donor", b =>
-                {
-                    b.HasOne("Unite.Data.Entities.Donors.PrimarySite", "PrimarySite")
+                    b.HasOne("Unite.Data.Entities.Clinical.TumourPrimarySite", "PrimarySite")
                         .WithMany()
                         .HasForeignKey("PrimarySiteId");
 
+                    b.Navigation("Localization");
+
                     b.Navigation("PrimarySite");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Clinical.Treatment", b =>
+                {
+                    b.HasOne("Unite.Data.Entities.Donors.Donor", null)
+                        .WithMany("Treatments")
+                        .HasForeignKey("DonorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Unite.Data.Entities.Clinical.Therapy", "Therapy")
+                        .WithMany()
+                        .HasForeignKey("TherapyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Therapy");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Donors.StudyDonor", b =>
@@ -2204,25 +2313,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("Study");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Donors.Treatment", b =>
-                {
-                    b.HasOne("Unite.Data.Entities.Donors.Donor", "Donor")
-                        .WithMany("Treatments")
-                        .HasForeignKey("DonorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Unite.Data.Entities.Donors.Therapy", "Therapy")
-                        .WithMany()
-                        .HasForeignKey("TherapyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Donor");
-
-                    b.Navigation("Therapy");
-                });
-
             modelBuilder.Entity("Unite.Data.Entities.Donors.WorkPackageDonor", b =>
                 {
                     b.HasOne("Unite.Data.Entities.Donors.Donor", "Donor")
@@ -2242,35 +2332,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("WorkPackage");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Epigenetics.EpigeneticsData", b =>
-                {
-                    b.HasOne("Unite.Data.Entities.Donors.Donor", null)
-                        .WithOne("EpigeneticsData")
-                        .HasForeignKey("Unite.Data.Entities.Epigenetics.EpigeneticsData", "DonorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Epigenetics.Enums.GeneExpressionSubtype>", null)
-                        .WithMany()
-                        .HasForeignKey("GeneExpressionSubtypeId");
-
-                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Epigenetics.Enums.IDHMutation>", null)
-                        .WithMany()
-                        .HasForeignKey("IdhMutationId");
-
-                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Epigenetics.Enums.IDHStatus>", null)
-                        .WithMany()
-                        .HasForeignKey("IdhStatusId");
-
-                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Epigenetics.Enums.MethylationStatus>", null)
-                        .WithMany()
-                        .HasForeignKey("MethylationStatusId");
-
-                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Epigenetics.Enums.MethylationSubtype>", null)
-                        .WithMany()
-                        .HasForeignKey("MethylationSubtypeId");
-                });
-
             modelBuilder.Entity("Unite.Data.Entities.Identity.UserSession", b =>
                 {
                     b.HasOne("Unite.Data.Entities.Identity.User", "User")
@@ -2280,6 +2341,35 @@ namespace Unite.Data.Migrations.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Molecular.MolecularData", b =>
+                {
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.GeneExpressionSubtype>", null)
+                        .WithMany()
+                        .HasForeignKey("GeneExpressionSubtypeId");
+
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.IDHMutation>", null)
+                        .WithMany()
+                        .HasForeignKey("IdhMutationId");
+
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.IDHStatus>", null)
+                        .WithMany()
+                        .HasForeignKey("IdhStatusId");
+
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.MethylationStatus>", null)
+                        .WithMany()
+                        .HasForeignKey("MethylationStatusId");
+
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.MethylationSubtype>", null)
+                        .WithMany()
+                        .HasForeignKey("MethylationSubtypeId");
+
+                    b.HasOne("Unite.Data.Entities.Specimens.Specimen", null)
+                        .WithOne("MolecularData")
+                        .HasForeignKey("Unite.Data.Entities.Molecular.MolecularData", "SpecimenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Mutations.AffectedTranscript", b =>
@@ -2337,7 +2427,7 @@ namespace Unite.Data.Migrations.Migrations
                         .IsRequired();
 
                     b.HasOne("Unite.Data.Entities.Mutations.Sample", "Sample")
-                        .WithMany("SampleAnalises")
+                        .WithMany()
                         .HasForeignKey("SampleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2349,12 +2439,6 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Mutations.Analysis", b =>
                 {
-                    b.HasOne("Unite.Data.Entities.Donors.Donor", "Donor")
-                        .WithMany("Analyses")
-                        .HasForeignKey("DonorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Unite.Data.Entities.File", "File")
                         .WithOne()
                         .HasForeignKey("Unite.Data.Entities.Mutations.Analysis", "FileId");
@@ -2362,8 +2446,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Mutations.Enums.AnalysisType>", null)
                         .WithMany()
                         .HasForeignKey("TypeId");
-
-                    b.Navigation("Donor");
 
                     b.Navigation("File");
                 });
@@ -2447,21 +2529,13 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Mutations.Sample", b =>
                 {
-                    b.HasOne("Unite.Data.Entities.Donors.Donor", "Donor")
+                    b.HasOne("Unite.Data.Entities.Specimens.Specimen", "Specimen")
                         .WithMany("Samples")
-                        .HasForeignKey("DonorId")
+                        .HasForeignKey("SpecimenId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Mutations.Enums.SampleSubtype>", null)
-                        .WithMany()
-                        .HasForeignKey("SubtypeId");
-
-                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Mutations.Enums.SampleType>", null)
-                        .WithMany()
-                        .HasForeignKey("TypeId");
-
-                    b.Navigation("Donor");
+                    b.Navigation("Specimen");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Mutations.Transcript", b =>
@@ -2482,6 +2556,70 @@ namespace Unite.Data.Migrations.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Cells.CellLine", b =>
+                {
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Cells.Enums.Species>", null)
+                        .WithMany()
+                        .HasForeignKey("SpeciesId");
+
+                    b.HasOne("Unite.Data.Entities.Specimens.Specimen", null)
+                        .WithOne("CellLine")
+                        .HasForeignKey("Unite.Data.Entities.Specimens.Cells.CellLine", "SpecimenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Cells.Enums.CellLineType>", null)
+                        .WithMany()
+                        .HasForeignKey("TypeId");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Cells.CellLineInfo", b =>
+                {
+                    b.HasOne("Unite.Data.Entities.Specimens.Cells.CellLine", null)
+                        .WithOne("Info")
+                        .HasForeignKey("Unite.Data.Entities.Specimens.Cells.CellLineInfo", "SpecimenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Specimen", b =>
+                {
+                    b.HasOne("Unite.Data.Entities.Donors.Donor", "Donor")
+                        .WithMany("Specimens")
+                        .HasForeignKey("DonorId");
+
+                    b.HasOne("Unite.Data.Entities.Specimens.Specimen", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Donor");
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Tissues.Tissue", b =>
+                {
+                    b.HasOne("Unite.Data.Entities.Specimens.Tissues.TissueSource", "Source")
+                        .WithMany()
+                        .HasForeignKey("SourceId");
+
+                    b.HasOne("Unite.Data.Entities.Specimens.Specimen", null)
+                        .WithOne("Tissue")
+                        .HasForeignKey("Unite.Data.Entities.Specimens.Tissues.Tissue", "SpecimenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Tissues.Enums.TumourType>", null)
+                        .WithMany()
+                        .HasForeignKey("TumourTypeId");
+
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Tissues.Enums.TissueType>", null)
+                        .WithMany()
+                        .HasForeignKey("TypeId");
+
+                    b.Navigation("Source");
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Tasks.Task", b =>
                 {
                     b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Tasks.Enums.TaskTargetType>", null)
@@ -2499,17 +2637,13 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Donors.Donor", b =>
                 {
-                    b.Navigation("Analyses");
-
                     b.Navigation("ClinicalData");
 
                     b.Navigation("DonorStudies");
 
                     b.Navigation("DonorWorkPackages");
 
-                    b.Navigation("EpigeneticsData");
-
-                    b.Navigation("Samples");
+                    b.Navigation("Specimens");
 
                     b.Navigation("Treatments");
                 });
@@ -2558,14 +2692,27 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("MutationOccurrences");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Mutations.Sample", b =>
-                {
-                    b.Navigation("SampleAnalises");
-                });
-
             modelBuilder.Entity("Unite.Data.Entities.Mutations.Transcript", b =>
                 {
                     b.Navigation("Info");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Cells.CellLine", b =>
+                {
+                    b.Navigation("Info");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Specimen", b =>
+                {
+                    b.Navigation("CellLine");
+
+                    b.Navigation("Children");
+
+                    b.Navigation("MolecularData");
+
+                    b.Navigation("Samples");
+
+                    b.Navigation("Tissue");
                 });
 #pragma warning restore 612, 618
         }
