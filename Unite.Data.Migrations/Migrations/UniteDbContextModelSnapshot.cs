@@ -350,7 +350,7 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("MethylationStatusId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("MethylationSubtypeId")
+                    b.Property<int?>("MethylationTypeId")
                         .HasColumnType("integer");
 
                     b.HasKey("SpecimenId");
@@ -363,7 +363,7 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasIndex("MethylationStatusId");
 
-                    b.HasIndex("MethylationSubtypeId");
+                    b.HasIndex("MethylationTypeId");
 
                     b.ToTable("MolecularData");
                 });
@@ -955,10 +955,9 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("SpecimenId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                    b.Property<string>("ReferenceId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<int?>("SpeciesId")
                         .HasColumnType("integer");
@@ -967,6 +966,8 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("SpecimenId");
+
+                    b.HasIndex("ReferenceId");
 
                     b.HasIndex("SpeciesId");
 
@@ -980,7 +981,7 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("SpecimenId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("AtccId")
+                    b.Property<string>("AtccLink")
                         .HasColumnType("text");
 
                     b.Property<string>("DepositorEstablishment")
@@ -992,10 +993,13 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<DateTime?>("EstablishmentDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("ExPasyId")
+                    b.Property<string>("ExPasyLink")
                         .HasColumnType("text");
 
-                    b.Property<string>("PublicationId")
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PubMedLink")
                         .HasColumnType("text");
 
                     b.HasKey("SpecimenId");
@@ -1010,23 +1014,17 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("DonorId")
+                    b.Property<int>("DonorId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("ParentId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("ReferenceId")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DonorId");
 
                     b.HasIndex("ParentId");
-
-                    b.HasIndex("ReferenceId");
 
                     b.ToTable("Specimens");
                 });
@@ -1039,6 +1037,10 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<DateTime?>("ExtractionDate")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<string>("ReferenceId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
                     b.Property<int?>("SourceId")
                         .HasColumnType("integer");
 
@@ -1049,6 +1051,8 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("SpecimenId");
+
+                    b.HasIndex("ReferenceId");
 
                     b.HasIndex("SourceId");
 
@@ -1351,7 +1355,7 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.MethylationSubtype>", b =>
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.MethylationType>", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
@@ -1369,7 +1373,7 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasAlternateKey("Value");
 
-                    b.ToTable("MethylationSubtypes");
+                    b.ToTable("MethylationTypes");
 
                     b.HasData(
                         new
@@ -2052,8 +2056,8 @@ namespace Unite.Data.Migrations.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "GSC",
-                            Value = "GSC"
+                            Name = "GCS",
+                            Value = "GCS"
                         },
                         new
                         {
@@ -2359,9 +2363,9 @@ namespace Unite.Data.Migrations.Migrations
                         .WithMany()
                         .HasForeignKey("MethylationStatusId");
 
-                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.MethylationSubtype>", null)
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.MethylationType>", null)
                         .WithMany()
-                        .HasForeignKey("MethylationSubtypeId");
+                        .HasForeignKey("MethylationTypeId");
 
                     b.HasOne("Unite.Data.Entities.Specimens.Specimen", null)
                         .WithOne("MolecularData")
@@ -2584,7 +2588,9 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     b.HasOne("Unite.Data.Entities.Donors.Donor", "Donor")
                         .WithMany("Specimens")
-                        .HasForeignKey("DonorId");
+                        .HasForeignKey("DonorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Unite.Data.Entities.Specimens.Specimen", "Parent")
                         .WithMany("Children")

@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Unite.Data.Migrations.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -206,7 +206,7 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MethylationSubtypes",
+                name: "MethylationTypes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
@@ -215,8 +215,8 @@ namespace Unite.Data.Migrations.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MethylationSubtypes", x => x.Id);
-                    table.UniqueConstraint("AK_MethylationSubtypes_Value", x => x.Value);
+                    table.PrimaryKey("PK_MethylationTypes", x => x.Id);
+                    table.UniqueConstraint("AK_MethylationTypes_Value", x => x.Value);
                 });
 
             migrationBuilder.CreateTable(
@@ -472,8 +472,7 @@ namespace Unite.Data.Migrations.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ParentId = table.Column<int>(type: "integer", nullable: true),
-                    ReferenceId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
-                    DonorId = table.Column<int>(type: "integer", nullable: true)
+                    DonorId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -483,7 +482,7 @@ namespace Unite.Data.Migrations.Migrations
                         column: x => x.DonorId,
                         principalTable: "Donors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Specimens_Specimens_ParentId",
                         column: x => x.ParentId,
@@ -775,7 +774,7 @@ namespace Unite.Data.Migrations.Migrations
                 columns: table => new
                 {
                     SpecimenId = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    ReferenceId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     TypeId = table.Column<int>(type: "integer", nullable: true),
                     SpeciesId = table.Column<int>(type: "integer", nullable: true)
                 },
@@ -811,7 +810,7 @@ namespace Unite.Data.Migrations.Migrations
                     IdhStatusId = table.Column<int>(type: "integer", nullable: true),
                     IdhMutationId = table.Column<int>(type: "integer", nullable: true),
                     MethylationStatusId = table.Column<int>(type: "integer", nullable: true),
-                    MethylationSubtypeId = table.Column<int>(type: "integer", nullable: true),
+                    MethylationTypeId = table.Column<int>(type: "integer", nullable: true),
                     GcimpMethylation = table.Column<bool>(type: "boolean", nullable: true)
                 },
                 constraints: table =>
@@ -842,9 +841,9 @@ namespace Unite.Data.Migrations.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_MolecularData_MethylationSubtypes_MethylationSubtypeId",
-                        column: x => x.MethylationSubtypeId,
-                        principalTable: "MethylationSubtypes",
+                        name: "FK_MolecularData_MethylationTypes_MethylationTypeId",
+                        column: x => x.MethylationTypeId,
+                        principalTable: "MethylationTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -881,6 +880,7 @@ namespace Unite.Data.Migrations.Migrations
                 columns: table => new
                 {
                     SpecimenId = table.Column<int>(type: "integer", nullable: false),
+                    ReferenceId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     SourceId = table.Column<int>(type: "integer", nullable: true),
                     TypeId = table.Column<int>(type: "integer", nullable: true),
                     TumourTypeId = table.Column<int>(type: "integer", nullable: true),
@@ -962,12 +962,13 @@ namespace Unite.Data.Migrations.Migrations
                 columns: table => new
                 {
                     SpecimenId = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
                     DepositorName = table.Column<string>(type: "text", nullable: true),
                     DepositorEstablishment = table.Column<string>(type: "text", nullable: true),
                     EstablishmentDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    PublicationId = table.Column<string>(type: "text", nullable: true),
-                    AtccId = table.Column<string>(type: "text", nullable: true),
-                    ExPasyId = table.Column<string>(type: "text", nullable: true)
+                    PubMedLink = table.Column<string>(type: "text", nullable: true),
+                    AtccLink = table.Column<string>(type: "text", nullable: true),
+                    ExPasyLink = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1101,7 +1102,7 @@ namespace Unite.Data.Migrations.Migrations
                 values: new object[,]
                 {
                     { 2, "Suspension", "Suspension" },
-                    { 1, "GSC", "GSC" }
+                    { 1, "GCS", "GCS" }
                 });
 
             migrationBuilder.InsertData(
@@ -1289,7 +1290,7 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "MethylationSubtypes",
+                table: "MethylationTypes",
                 columns: new[] { "Id", "Name", "Value" },
                 values: new object[,]
                 {
@@ -1409,6 +1410,11 @@ namespace Unite.Data.Migrations.Migrations
                 column: "TypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CellLines_ReferenceId",
+                table: "CellLines",
+                column: "ReferenceId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CellLines_SpeciesId",
                 table: "CellLines",
                 column: "SpeciesId");
@@ -1475,9 +1481,9 @@ namespace Unite.Data.Migrations.Migrations
                 column: "MethylationStatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MolecularData_MethylationSubtypeId",
+                name: "IX_MolecularData_MethylationTypeId",
                 table: "MolecularData",
-                column: "MethylationSubtypeId");
+                column: "MethylationTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MutationOccurrences_AnalysedSampleId",
@@ -1520,11 +1526,6 @@ namespace Unite.Data.Migrations.Migrations
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Specimens_ReferenceId",
-                table: "Specimens",
-                column: "ReferenceId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_StudyDonors_DonorId",
                 table: "StudyDonors",
                 column: "DonorId");
@@ -1538,6 +1539,11 @@ namespace Unite.Data.Migrations.Migrations
                 name: "IX_Tasks_TypeId",
                 table: "Tasks",
                 column: "TypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tissues_ReferenceId",
+                table: "Tissues",
+                column: "ReferenceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tissues_SourceId",
@@ -1667,7 +1673,7 @@ namespace Unite.Data.Migrations.Migrations
                 name: "MethylationStatuses");
 
             migrationBuilder.DropTable(
-                name: "MethylationSubtypes");
+                name: "MethylationTypes");
 
             migrationBuilder.DropTable(
                 name: "AnalysedSamples");
