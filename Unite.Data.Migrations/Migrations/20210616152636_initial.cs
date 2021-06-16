@@ -37,6 +37,20 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CellLineCultureTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CellLineCultureTypes", x => x.Id);
+                    table.UniqueConstraint("AK_CellLineCultureTypes_Value", x => x.Value);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CellLineTypes",
                 columns: table => new
                 {
@@ -347,6 +361,20 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TumorTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TumorTypes", x => x.Id);
+                    table.UniqueConstraint("AK_TumorTypes_Value", x => x.Value);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TumourLocalizations",
                 columns: table => new
                 {
@@ -372,20 +400,6 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     table.PrimaryKey("PK_TumourPrimarySites", x => x.Id);
                     table.UniqueConstraint("AK_TumourPrimarySites_Value", x => x.Value);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TumourTypes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false),
-                    Value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TumourTypes", x => x.Id);
-                    table.UniqueConstraint("AK_TumourTypes_Value", x => x.Value);
                 });
 
             migrationBuilder.CreateTable(
@@ -775,12 +789,20 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     SpecimenId = table.Column<int>(type: "integer", nullable: false),
                     ReferenceId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    SpeciesId = table.Column<int>(type: "integer", nullable: true),
                     TypeId = table.Column<int>(type: "integer", nullable: true),
-                    SpeciesId = table.Column<int>(type: "integer", nullable: true)
+                    CultureTypeId = table.Column<int>(type: "integer", nullable: true),
+                    PassageNumber = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CellLines", x => x.SpecimenId);
+                    table.ForeignKey(
+                        name: "FK_CellLines_CellLineCultureTypes_CultureTypeId",
+                        column: x => x.CultureTypeId,
+                        principalTable: "CellLineCultureTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CellLines_CellLineTypes_TypeId",
                         column: x => x.TypeId,
@@ -883,7 +905,7 @@ namespace Unite.Data.Migrations.Migrations
                     ReferenceId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     SourceId = table.Column<int>(type: "integer", nullable: true),
                     TypeId = table.Column<int>(type: "integer", nullable: true),
-                    TumourTypeId = table.Column<int>(type: "integer", nullable: true),
+                    TumorTypeId = table.Column<int>(type: "integer", nullable: true),
                     ExtractionDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
@@ -908,9 +930,9 @@ namespace Unite.Data.Migrations.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Tissues_TumourTypes_TumourTypeId",
-                        column: x => x.TumourTypeId,
-                        principalTable: "TumourTypes",
+                        name: "FK_Tissues_TumorTypes_TumorTypeId",
+                        column: x => x.TumorTypeId,
+                        principalTable: "TumorTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -1088,12 +1110,21 @@ namespace Unite.Data.Migrations.Migrations
                 columns: new[] { "Id", "Name", "Value" },
                 values: new object[,]
                 {
-                    { 2, "WES", "WES" },
-                    { 6, "Amplicon", "Amplicon" },
                     { 5, "Validation", "Validation" },
+                    { 6, "Amplicon", "Amplicon" },
+                    { 1, "WGS", "WGS" },
                     { 4, "RNASeq", "RNASeq" },
                     { 3, "WGA", "WGA" },
-                    { 1, "WGS", "WGS" }
+                    { 2, "WES", "WES" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "CellLineCultureTypes",
+                columns: new[] { "Id", "Name", "Value" },
+                values: new object[,]
+                {
+                    { 2, "Adherent", "Adherent" },
+                    { 1, "Suspension", "Suspension" }
                 });
 
             migrationBuilder.InsertData(
@@ -1101,8 +1132,8 @@ namespace Unite.Data.Migrations.Migrations
                 columns: new[] { "Id", "Name", "Value" },
                 values: new object[,]
                 {
-                    { 2, "Suspension", "Suspension" },
-                    { 1, "GCS", "GCS" }
+                    { 2, "Differentiated", "Differentiated" },
+                    { 1, "Stem Cell", "Stem Cell" }
                 });
 
             migrationBuilder.InsertData(
@@ -1114,26 +1145,26 @@ namespace Unite.Data.Migrations.Migrations
                     { 17, "Chromosome 17", "17" },
                     { 18, "Chromosome 18", "18" },
                     { 19, "Chromosome 19", "19" },
-                    { 11, "Chromosome 11", "11" },
+                    { 12, "Chromosome 12", "12" },
+                    { 20, "Chromosome 20", "20" },
                     { 21, "Chromosome 21", "21" },
-                    { 15, "Chromosome 15", "15" },
                     { 22, "Chromosome 22", "22" },
                     { 23, "Chromosome X", "X" },
-                    { 20, "Chromosome 20", "20" },
+                    { 15, "Chromosome 15", "15" },
                     { 14, "Chromosome 14", "14" },
-                    { 9, "Chromosome 9", "9" },
-                    { 12, "Chromosome 12", "12" },
-                    { 10, "Chromosome 10", "10" },
-                    { 24, "Chromosome Y", "Y" },
                     { 8, "Chromosome 8", "8" },
+                    { 11, "Chromosome 11", "11" },
+                    { 10, "Chromosome 10", "10" },
+                    { 9, "Chromosome 9", "9" },
+                    { 24, "Chromosome Y", "Y" },
                     { 7, "Chromosome 7", "7" },
-                    { 6, "Chromosome 6", "6" },
-                    { 5, "Chromosome 5", "5" },
                     { 1, "Chromosome 1", "1" },
                     { 2, "Chromosome 2", "2" },
-                    { 13, "Chromosome 13", "13" },
                     { 3, "Chromosome 3", "3" },
-                    { 4, "Chromosome 4", "4" }
+                    { 4, "Chromosome 4", "4" },
+                    { 13, "Chromosome 13", "13" },
+                    { 5, "Chromosome 5", "5" },
+                    { 6, "Chromosome 6", "6" }
                 });
 
             migrationBuilder.InsertData(
@@ -1172,8 +1203,8 @@ namespace Unite.Data.Migrations.Migrations
                     { 18, "Coding sequence variant", "coding_sequence_variant" },
                     { 19, "Mature miRNA variant", "mature_miRNA_variant" },
                     { 6, "Stop lost", "stop_lost" },
-                    { 5, "Frameshift variant", "frameshift_variant" },
                     { 9, "Inframe insertion", "inframe_insertion" },
+                    { 4, "Stop gained", "stop_gained" },
                     { 3, "Splice donor variant", "splice_donor_variant" },
                     { 2, "Splice acceptor variant", "splice_acceptor_variant" },
                     { 1, "Transcript ablation", "transcript_ablation" },
@@ -1187,7 +1218,7 @@ namespace Unite.Data.Migrations.Migrations
                     { 17, "Synonymous variant", "synonymous_variant" },
                     { 8, "Transcript amplification", "transcript_amplification" },
                     { 20, "5 prime UTR variant", "5_prime_UTR_variant" },
-                    { 4, "Stop gained", "stop_gained" }
+                    { 5, "Frameshift variant", "frameshift_variant" }
                 });
 
             migrationBuilder.InsertData(
@@ -1296,9 +1327,9 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     { 4, "RTKII", "RTKII" },
                     { 2, "H3-G34", "H3-G34" },
-                    { 1, "H3-K27", "H3-K27" },
                     { 3, "RTKI", "RTKI" },
-                    { 5, "Mesenchymal", "Mesenchymal" }
+                    { 5, "Mesenchymal", "Mesenchymal" },
+                    { 1, "H3-K27", "H3-K27" }
                 });
 
             migrationBuilder.InsertData(
@@ -1307,9 +1338,9 @@ namespace Unite.Data.Migrations.Migrations
                 values: new object[,]
                 {
                     { 1, "Single Nucleotide Variant", "SNV" },
-                    { 2, "Insertion", "INS" },
+                    { 4, "Multiple Nucleotide Variant", "MNV" },
                     { 3, "Deletion", "DEL" },
-                    { 4, "Multiple Nucleotide Variant", "MNV" }
+                    { 2, "Insertion", "INS" }
                 });
 
             migrationBuilder.InsertData(
@@ -1317,13 +1348,13 @@ namespace Unite.Data.Migrations.Migrations
                 columns: new[] { "Id", "Name", "Value" },
                 values: new object[,]
                 {
-                    { 7, "Protein", "p" },
-                    { 6, "RNA", "r" },
-                    { 4, "Curcular Genomic DNA", "o" },
-                    { 3, "Linear Genomic DNA", "g" },
                     { 2, "Non Coding DNA", "n" },
-                    { 1, "Coding DNA", "c" },
-                    { 5, "Mitochondrial DNA", "m" }
+                    { 3, "Linear Genomic DNA", "g" },
+                    { 4, "Curcular Genomic DNA", "o" },
+                    { 5, "Mitochondrial DNA", "m" },
+                    { 6, "RNA", "r" },
+                    { 7, "Protein", "p" },
+                    { 1, "Coding DNA", "c" }
                 });
 
             migrationBuilder.InsertData(
@@ -1331,8 +1362,8 @@ namespace Unite.Data.Migrations.Migrations
                 columns: new[] { "Id", "Name", "Value" },
                 values: new object[,]
                 {
-                    { 1, "Human", "Human" },
-                    { 2, "Mouse", "Mouse" }
+                    { 2, "Mouse", "Mouse" },
+                    { 1, "Human", "Human" }
                 });
 
             migrationBuilder.InsertData(
@@ -1340,9 +1371,9 @@ namespace Unite.Data.Migrations.Migrations
                 columns: new[] { "Id", "Name", "Value" },
                 values: new object[,]
                 {
+                    { 1, "Donor", "Donor" },
                     { 2, "Specimen", "Specimen" },
-                    { 3, "Mutation", "Mutation" },
-                    { 1, "Donor", "Donor" }
+                    { 3, "Mutation", "Mutation" }
                 });
 
             migrationBuilder.InsertData(
@@ -1359,18 +1390,18 @@ namespace Unite.Data.Migrations.Migrations
                 columns: new[] { "Id", "Name", "Value" },
                 values: new object[,]
                 {
-                    { 2, "Tumour", "Tumour" },
-                    { 1, "Control", "Control" }
+                    { 1, "Control", "Control" },
+                    { 2, "Tumor", "Tumor" }
                 });
 
             migrationBuilder.InsertData(
-                table: "TumourTypes",
+                table: "TumorTypes",
                 columns: new[] { "Id", "Name", "Value" },
                 values: new object[,]
                 {
-                    { 3, "Recurrent", "Recurrent" },
                     { 1, "Primary", "Primary" },
-                    { 2, "Metastasis", "Metastasis" }
+                    { 2, "Metastasis", "Metastasis" },
+                    { 3, "Recurrent", "Recurrent" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -1408,6 +1439,11 @@ namespace Unite.Data.Migrations.Migrations
                 name: "IX_Analyses_TypeId",
                 table: "Analyses",
                 column: "TypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CellLines_CultureTypeId",
+                table: "CellLines",
+                column: "CultureTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CellLines_ReferenceId",
@@ -1551,9 +1587,9 @@ namespace Unite.Data.Migrations.Migrations
                 column: "SourceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tissues_TumourTypeId",
+                name: "IX_Tissues_TumorTypeId",
                 table: "Tissues",
-                column: "TumourTypeId");
+                column: "TumorTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tissues_TypeId",
@@ -1694,7 +1730,7 @@ namespace Unite.Data.Migrations.Migrations
                 name: "TissueTypes");
 
             migrationBuilder.DropTable(
-                name: "TumourTypes");
+                name: "TumorTypes");
 
             migrationBuilder.DropTable(
                 name: "Therapies");
@@ -1713,6 +1749,9 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.DropTable(
                 name: "Transcripts");
+
+            migrationBuilder.DropTable(
+                name: "CellLineCultureTypes");
 
             migrationBuilder.DropTable(
                 name: "CellLineTypes");

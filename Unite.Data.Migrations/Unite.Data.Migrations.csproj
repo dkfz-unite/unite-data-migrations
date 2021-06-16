@@ -12,9 +12,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Unite.Data" Version="1.5.13" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Migrations\" />
+    <PackageReference Include="Unite.Data" Version="1.5.14" />
   </ItemGroup>
 </Project>

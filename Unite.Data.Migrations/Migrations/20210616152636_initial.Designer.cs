@@ -10,7 +10,7 @@ using Unite.Data.Services;
 namespace Unite.Data.Migrations.Migrations
 {
     [DbContext(typeof(UniteDbContext))]
-    [Migration("20210603150756_initial")]
+    [Migration("20210616152636_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -957,6 +957,12 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("SpecimenId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("CultureTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PassageNumber")
+                        .HasColumnType("text");
+
                     b.Property<string>("ReferenceId")
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
@@ -968,6 +974,8 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("SpecimenId");
+
+                    b.HasIndex("CultureTypeId");
 
                     b.HasIndex("ReferenceId");
 
@@ -1046,7 +1054,7 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("SourceId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("TumourTypeId")
+                    b.Property<int?>("TumorTypeId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("TypeId")
@@ -1058,7 +1066,7 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasIndex("SourceId");
 
-                    b.HasIndex("TumourTypeId");
+                    b.HasIndex("TumorTypeId");
 
                     b.HasIndex("TypeId");
 
@@ -2034,6 +2042,41 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Cells.Enums.CellLineCultureType>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("CellLineCultureTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Suspension",
+                            Value = "Suspension"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Adherent",
+                            Value = "Adherent"
+                        });
+                });
+
             modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Cells.Enums.CellLineType>", b =>
                 {
                     b.Property<int>("Id")
@@ -2058,14 +2101,14 @@ namespace Unite.Data.Migrations.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "GCS",
-                            Value = "GCS"
+                            Name = "Stem Cell",
+                            Value = "Stem Cell"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Suspension",
-                            Value = "Suspension"
+                            Name = "Differentiated",
+                            Value = "Differentiated"
                         });
                 });
 
@@ -2134,12 +2177,12 @@ namespace Unite.Data.Migrations.Migrations
                         new
                         {
                             Id = 2,
-                            Name = "Tumour",
-                            Value = "Tumour"
+                            Name = "Tumor",
+                            Value = "Tumor"
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Tissues.Enums.TumourType>", b =>
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Tissues.Enums.TumorType>", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
@@ -2157,7 +2200,7 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasAlternateKey("Value");
 
-                    b.ToTable("TumourTypes");
+                    b.ToTable("TumorTypes");
 
                     b.HasData(
                         new
@@ -2562,6 +2605,10 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Specimens.Cells.CellLine", b =>
                 {
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Cells.Enums.CellLineCultureType>", null)
+                        .WithMany()
+                        .HasForeignKey("CultureTypeId");
+
                     b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Cells.Enums.Species>", null)
                         .WithMany()
                         .HasForeignKey("SpeciesId");
@@ -2615,9 +2662,9 @@ namespace Unite.Data.Migrations.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Tissues.Enums.TumourType>", null)
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Tissues.Enums.TumorType>", null)
                         .WithMany()
-                        .HasForeignKey("TumourTypeId");
+                        .HasForeignKey("TumorTypeId");
 
                     b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Tissues.Enums.TissueType>", null)
                         .WithMany()
