@@ -16,7 +16,7 @@ namespace Unite.Data.Migrations.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.6")
+                .HasAnnotation("ProductVersion", "5.0.7")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("Unite.Data.Entities.Clinical.ClinicalData", b =>
@@ -128,7 +128,7 @@ namespace Unite.Data.Migrations.Migrations
                     b.ToTable("Treatments");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Clinical.TumourLocalization", b =>
+            modelBuilder.Entity("Unite.Data.Entities.Clinical.TumorLocalization", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -144,10 +144,10 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasAlternateKey("Value");
 
-                    b.ToTable("TumourLocalizations");
+                    b.ToTable("TumorLocalizations");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Clinical.TumourPrimarySite", b =>
+            modelBuilder.Entity("Unite.Data.Entities.Clinical.TumorPrimarySite", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -163,7 +163,7 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasAlternateKey("Value");
 
-                    b.ToTable("TumourPrimarySites");
+                    b.ToTable("TumorPrimarySites");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Donors.Donor", b =>
@@ -347,10 +347,10 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("IdhStatusId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("MethylationStatusId")
+                    b.Property<int?>("MethylationSubtypeId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("MethylationTypeId")
+                    b.Property<int?>("MgmtStatusId")
                         .HasColumnType("integer");
 
                     b.HasKey("SpecimenId");
@@ -361,9 +361,9 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasIndex("IdhStatusId");
 
-                    b.HasIndex("MethylationStatusId");
+                    b.HasIndex("MethylationSubtypeId");
 
-                    b.HasIndex("MethylationTypeId");
+                    b.HasIndex("MgmtStatusId");
 
                     b.ToTable("MolecularData");
                 });
@@ -885,16 +885,10 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<DateTime?>("Date")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("ReferenceId")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
                     b.Property<int>("SpecimenId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ReferenceId");
 
                     b.HasIndex("SpecimenId");
 
@@ -958,9 +952,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("CultureTypeId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("PassageNumber")
-                        .HasColumnType("text");
-
                     b.Property<string>("ReferenceId")
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
@@ -1013,6 +1004,87 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasKey("SpecimenId");
 
                     b.ToTable("CellLineInfo");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Organoids.Organoid", b =>
+                {
+                    b.Property<int>("SpecimenId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ImplantedCellsNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Medium")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ReferenceId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<bool?>("Tumorigenicity")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("SpecimenId");
+
+                    b.HasIndex("ReferenceId");
+
+                    b.ToTable("Organoids");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Organoids.OrganoidIntervention", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Details")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("DurationDays")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Results")
+                        .HasColumnType("text");
+
+                    b.Property<int>("SpecimenId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("StartDay")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TypeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SpecimenId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("OrganoidInterventions");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Organoids.OrganoidInterventionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Name");
+
+                    b.ToTable("OrganoidInterventionTypes");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Specimens.Specimen", b =>
@@ -1088,6 +1160,111 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasAlternateKey("Value");
 
                     b.ToTable("TissueSources");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Xenografts.Xenograft", b =>
+                {
+                    b.Property<int>("SpecimenId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("GroupSize")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ImplantTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ImplantedCellsNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MouseStrain")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ReferenceId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<int?>("SurvivalDaysFrom")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SurvivalDaysTo")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TissueLocationId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TumorGrowthFormId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool?>("Tumorigenicity")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("SpecimenId");
+
+                    b.HasIndex("ImplantTypeId");
+
+                    b.HasIndex("ReferenceId");
+
+                    b.HasIndex("TissueLocationId");
+
+                    b.HasIndex("TumorGrowthFormId");
+
+                    b.ToTable("Xenografts");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Xenografts.XenograftIntervention", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Details")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("DurationDays")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Results")
+                        .HasColumnType("text");
+
+                    b.Property<int>("SpecimenId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("StartDay")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TypeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SpecimenId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("XenograftInterventions");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Xenografts.XenograftInterventionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Name");
+
+                    b.ToTable("XenograftInterventionTypes");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Tasks.Task", b =>
@@ -1204,7 +1381,7 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.IDHMutation>", b =>
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.IdhMutation>", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
@@ -1222,7 +1399,7 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasAlternateKey("Value");
 
-                    b.ToTable("IDHMutations");
+                    b.ToTable("IdhMutations");
 
                     b.HasData(
                         new
@@ -1293,7 +1470,7 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.IDHStatus>", b =>
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.IdhStatus>", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
@@ -1311,7 +1488,7 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasAlternateKey("Value");
 
-                    b.ToTable("IDHStatuses");
+                    b.ToTable("IdhStatuses");
 
                     b.HasData(
                         new
@@ -1328,7 +1505,7 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.MethylationStatus>", b =>
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.MethylationSubtype>", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
@@ -1346,42 +1523,7 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasAlternateKey("Value");
 
-                    b.ToTable("MethylationStatuses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Unmethylated",
-                            Value = "Unmethylated"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Methylated",
-                            Value = "Methylated"
-                        });
-                });
-
-            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.MethylationType>", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Value");
-
-                    b.ToTable("MethylationTypes");
+                    b.ToTable("MethylationSubtypes");
 
                     b.HasData(
                         new
@@ -1413,6 +1555,41 @@ namespace Unite.Data.Migrations.Migrations
                             Id = 5,
                             Name = "Mesenchymal",
                             Value = "Mesenchymal"
+                        });
+                });
+
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.MgmtStatus>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("MgmtStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Unmethylated",
+                            Value = "Unmethylated"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Methylated",
+                            Value = "Methylated"
                         });
                 });
 
@@ -2072,6 +2249,12 @@ namespace Unite.Data.Migrations.Migrations
                             Id = 2,
                             Name = "Adherent",
                             Value = "Adherent"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Both",
+                            Value = "Both"
                         });
                 });
 
@@ -2221,6 +2404,117 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Xenografts.Enums.ImplantType>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("ImplantTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Other",
+                            Value = "Other"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Orhtotopical",
+                            Value = "Orhtotopical"
+                        });
+                });
+
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Xenografts.Enums.TissueLocation>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("TissueLocations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Other",
+                            Value = "Other"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Striatal",
+                            Value = "Striatal"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Cortical",
+                            Value = "Cortical"
+                        });
+                });
+
+            modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Xenografts.Enums.TumorGrowthForm>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("TumorGrowthForms");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Encapsulated",
+                            Value = "Encapsulated"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Invasive",
+                            Value = "Invasive"
+                        });
+                });
+
             modelBuilder.Entity("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Tasks.Enums.TaskTargetType>", b =>
                 {
                     b.Property<int>("Id")
@@ -2309,11 +2603,11 @@ namespace Unite.Data.Migrations.Migrations
                         .WithMany()
                         .HasForeignKey("GenderId");
 
-                    b.HasOne("Unite.Data.Entities.Clinical.TumourLocalization", "Localization")
+                    b.HasOne("Unite.Data.Entities.Clinical.TumorLocalization", "Localization")
                         .WithMany()
                         .HasForeignKey("LocalizationId");
 
-                    b.HasOne("Unite.Data.Entities.Clinical.TumourPrimarySite", "PrimarySite")
+                    b.HasOne("Unite.Data.Entities.Clinical.TumorPrimarySite", "PrimarySite")
                         .WithMany()
                         .HasForeignKey("PrimarySiteId");
 
@@ -2394,21 +2688,21 @@ namespace Unite.Data.Migrations.Migrations
                         .WithMany()
                         .HasForeignKey("GeneExpressionSubtypeId");
 
-                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.IDHMutation>", null)
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.IdhMutation>", null)
                         .WithMany()
                         .HasForeignKey("IdhMutationId");
 
-                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.IDHStatus>", null)
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.IdhStatus>", null)
                         .WithMany()
                         .HasForeignKey("IdhStatusId");
 
-                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.MethylationStatus>", null)
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.MethylationSubtype>", null)
                         .WithMany()
-                        .HasForeignKey("MethylationStatusId");
+                        .HasForeignKey("MethylationSubtypeId");
 
-                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.MethylationType>", null)
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.MgmtStatus>", null)
                         .WithMany()
-                        .HasForeignKey("MethylationTypeId");
+                        .HasForeignKey("MgmtStatusId");
 
                     b.HasOne("Unite.Data.Entities.Specimens.Specimen", null)
                         .WithOne("MolecularData")
@@ -2631,6 +2925,32 @@ namespace Unite.Data.Migrations.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Organoids.Organoid", b =>
+                {
+                    b.HasOne("Unite.Data.Entities.Specimens.Specimen", null)
+                        .WithOne("Organoid")
+                        .HasForeignKey("Unite.Data.Entities.Specimens.Organoids.Organoid", "SpecimenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Organoids.OrganoidIntervention", b =>
+                {
+                    b.HasOne("Unite.Data.Entities.Specimens.Organoids.Organoid", null)
+                        .WithMany("Interventions")
+                        .HasForeignKey("SpecimenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Unite.Data.Entities.Specimens.Organoids.OrganoidInterventionType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Type");
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Specimens.Specimen", b =>
                 {
                     b.HasOne("Unite.Data.Entities.Donors.Donor", "Donor")
@@ -2669,6 +2989,44 @@ namespace Unite.Data.Migrations.Migrations
                         .HasForeignKey("TypeId");
 
                     b.Navigation("Source");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Xenografts.Xenograft", b =>
+                {
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Xenografts.Enums.ImplantType>", null)
+                        .WithMany()
+                        .HasForeignKey("ImplantTypeId");
+
+                    b.HasOne("Unite.Data.Entities.Specimens.Specimen", null)
+                        .WithOne("Xenograft")
+                        .HasForeignKey("Unite.Data.Entities.Specimens.Xenografts.Xenograft", "SpecimenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Xenografts.Enums.TissueLocation>", null)
+                        .WithMany()
+                        .HasForeignKey("TissueLocationId");
+
+                    b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Specimens.Xenografts.Enums.TumorGrowthForm>", null)
+                        .WithMany()
+                        .HasForeignKey("TumorGrowthFormId");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Xenografts.XenograftIntervention", b =>
+                {
+                    b.HasOne("Unite.Data.Entities.Specimens.Xenografts.Xenograft", null)
+                        .WithMany("Interventions")
+                        .HasForeignKey("SpecimenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Unite.Data.Entities.Specimens.Xenografts.XenograftInterventionType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Tasks.Task", b =>
@@ -2753,6 +3111,11 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("Info");
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Organoids.Organoid", b =>
+                {
+                    b.Navigation("Interventions");
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Specimens.Specimen", b =>
                 {
                     b.Navigation("CellLine");
@@ -2761,9 +3124,18 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Navigation("MolecularData");
 
+                    b.Navigation("Organoid");
+
                     b.Navigation("Samples");
 
                     b.Navigation("Tissue");
+
+                    b.Navigation("Xenograft");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Xenografts.Xenograft", b =>
+                {
+                    b.Navigation("Interventions");
                 });
 #pragma warning restore 612, 618
         }
