@@ -16,7 +16,7 @@ namespace Unite.Data.Migrations.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.7")
+                .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("Unite.Data.Entities.Clinical.ClinicalData", b =>
@@ -30,9 +30,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<string>("Diagnosis")
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
-
-                    b.Property<DateTime?>("DiagnosisDate")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("GenderId")
                         .HasColumnType("integer");
@@ -52,8 +49,8 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<bool?>("VitalStatus")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("VitalStatusChangeDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<int?>("VitalStatusChangeDay")
+                        .HasColumnType("integer");
 
                     b.HasKey("DonorId");
 
@@ -101,20 +98,20 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("DonorId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<int?>("DurationDays")
+                        .HasColumnType("integer");
 
                     b.Property<bool?>("ProgressionStatus")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("ProgressionStatusChangeDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<int?>("ProgressionStatusChangeDay")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Results")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<int?>("StartDay")
+                        .HasColumnType("integer");
 
                     b.Property<int>("TherapyId")
                         .HasColumnType("integer");
@@ -262,18 +259,12 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<string>("Link")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -444,12 +435,17 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("AnalysisId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("MatchedSampleId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("SampleId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("AnalysisId", "SampleId");
+                    b.HasIndex("AnalysisId");
+
+                    b.HasIndex("MatchedSampleId");
 
                     b.HasIndex("SampleId");
 
@@ -787,21 +783,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.ToTable("GeneInfo");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Mutations.MatchedSample", b =>
-                {
-                    b.Property<int>("AnalysedSampleId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MatchedSampleId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("AnalysedSampleId", "MatchedSampleId");
-
-                    b.HasIndex("MatchedSampleId");
-
-                    b.ToTable("MatchedSamples");
-                });
-
             modelBuilder.Entity("Unite.Data.Entities.Mutations.Mutation", b =>
                 {
                     b.Property<long>("Id")
@@ -1112,8 +1093,8 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("SpecimenId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("ExtractionDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<int?>("ExtractionDay")
+                        .HasColumnType("integer");
 
                     b.Property<string>("ReferenceId")
                         .HasMaxLength(255)
@@ -2763,6 +2744,10 @@ namespace Unite.Data.Migrations.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Unite.Data.Entities.Mutations.Sample", "MatchedSample")
+                        .WithMany()
+                        .HasForeignKey("MatchedSampleId");
+
                     b.HasOne("Unite.Data.Entities.Mutations.Sample", "Sample")
                         .WithMany()
                         .HasForeignKey("SampleId")
@@ -2770,6 +2755,8 @@ namespace Unite.Data.Migrations.Migrations
                         .IsRequired();
 
                     b.Navigation("Analysis");
+
+                    b.Navigation("MatchedSample");
 
                     b.Navigation("Sample");
                 });
@@ -2803,25 +2790,6 @@ namespace Unite.Data.Migrations.Migrations
                         .HasForeignKey("Unite.Data.Entities.Mutations.GeneInfo", "GeneId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Mutations.MatchedSample", b =>
-                {
-                    b.HasOne("Unite.Data.Entities.Mutations.AnalysedSample", "Analysed")
-                        .WithMany("MatchedSamples")
-                        .HasForeignKey("AnalysedSampleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Unite.Data.Entities.Mutations.AnalysedSample", "Matched")
-                        .WithMany()
-                        .HasForeignKey("MatchedSampleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Analysed");
-
-                    b.Navigation("Matched");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Mutations.Mutation", b =>
@@ -3077,8 +3045,6 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Mutations.AnalysedSample", b =>
                 {
-                    b.Navigation("MatchedSamples");
-
                     b.Navigation("MutationOccurrences");
                 });
 

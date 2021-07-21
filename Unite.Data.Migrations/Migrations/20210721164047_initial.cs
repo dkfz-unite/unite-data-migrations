@@ -140,9 +140,7 @@ namespace Unite.Data.Migrations.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Link = table.Column<string>(type: "text", nullable: true),
-                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    Updated = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                    Link = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -585,7 +583,6 @@ namespace Unite.Data.Migrations.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ReferenceId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     TypeId = table.Column<int>(type: "integer", nullable: true),
-                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     FileId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -706,10 +703,10 @@ namespace Unite.Data.Migrations.Migrations
                     DonorId = table.Column<int>(type: "integer", nullable: false),
                     TherapyId = table.Column<int>(type: "integer", nullable: false),
                     Details = table.Column<string>(type: "text", nullable: true),
-                    StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    StartDay = table.Column<int>(type: "integer", nullable: true),
+                    DurationDays = table.Column<int>(type: "integer", nullable: true),
                     ProgressionStatus = table.Column<bool>(type: "boolean", nullable: true),
-                    ProgressionStatusChangeDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ProgressionStatusChangeDay = table.Column<int>(type: "integer", nullable: true),
                     Results = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -737,11 +734,10 @@ namespace Unite.Data.Migrations.Migrations
                     GenderId = table.Column<int>(type: "integer", nullable: true),
                     Age = table.Column<int>(type: "integer", nullable: true),
                     Diagnosis = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
-                    DiagnosisDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     PrimarySiteId = table.Column<int>(type: "integer", nullable: true),
                     LocalizationId = table.Column<int>(type: "integer", nullable: true),
                     VitalStatus = table.Column<bool>(type: "boolean", nullable: true),
-                    VitalStatusChangeDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    VitalStatusChangeDay = table.Column<int>(type: "integer", nullable: true),
                     KpsBaseline = table.Column<int>(type: "integer", nullable: true),
                     SteroidsBaseline = table.Column<bool>(type: "boolean", nullable: true)
                 },
@@ -974,8 +970,8 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    SpecimenId = table.Column<int>(type: "integer", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                    ReferenceId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    SpecimenId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -997,7 +993,7 @@ namespace Unite.Data.Migrations.Migrations
                     SourceId = table.Column<int>(type: "integer", nullable: true),
                     TypeId = table.Column<int>(type: "integer", nullable: true),
                     TumorTypeId = table.Column<int>(type: "integer", nullable: true),
-                    ExtractionDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                    ExtractionDay = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1175,19 +1171,25 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AnalysisId = table.Column<int>(type: "integer", nullable: false),
                     SampleId = table.Column<int>(type: "integer", nullable: false),
-                    AnalysisId = table.Column<int>(type: "integer", nullable: false)
+                    MatchedSampleId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AnalysedSamples", x => x.Id);
-                    table.UniqueConstraint("AK_AnalysedSamples_AnalysisId_SampleId", x => new { x.AnalysisId, x.SampleId });
                     table.ForeignKey(
                         name: "FK_AnalysedSamples_Analyses_AnalysisId",
                         column: x => x.AnalysisId,
                         principalTable: "Analyses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AnalysedSamples_Samples_MatchedSampleId",
+                        column: x => x.MatchedSampleId,
+                        principalTable: "Samples",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AnalysedSamples_Samples_SampleId",
                         column: x => x.SampleId,
@@ -1251,37 +1253,13 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MatchedSamples",
-                columns: table => new
-                {
-                    AnalysedSampleId = table.Column<int>(type: "integer", nullable: false),
-                    MatchedSampleId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MatchedSamples", x => new { x.AnalysedSampleId, x.MatchedSampleId });
-                    table.ForeignKey(
-                        name: "FK_MatchedSamples_AnalysedSamples_AnalysedSampleId",
-                        column: x => x.AnalysedSampleId,
-                        principalTable: "AnalysedSamples",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MatchedSamples_AnalysedSamples_MatchedSampleId",
-                        column: x => x.MatchedSampleId,
-                        principalTable: "AnalysedSamples",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "MutationOccurrences",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    MutationId = table.Column<long>(type: "bigint", nullable: false),
-                    AnalysedSampleId = table.Column<int>(type: "integer", nullable: false)
+                    AnalysedSampleId = table.Column<int>(type: "integer", nullable: false),
+                    MutationId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1645,6 +1623,16 @@ namespace Unite.Data.Migrations.Migrations
                 column: "TranscriptId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AnalysedSamples_AnalysisId",
+                table: "AnalysedSamples",
+                column: "AnalysisId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AnalysedSamples_MatchedSampleId",
+                table: "AnalysedSamples",
+                column: "MatchedSampleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AnalysedSamples_SampleId",
                 table: "AnalysedSamples",
                 column: "SampleId");
@@ -1715,11 +1703,6 @@ namespace Unite.Data.Migrations.Migrations
                 name: "IX_Genes_BiotypeId",
                 table: "Genes",
                 column: "BiotypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MatchedSamples_MatchedSampleId",
-                table: "MatchedSamples",
-                column: "MatchedSampleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MolecularData_GeneExpressionSubtypeId",
@@ -1912,9 +1895,6 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.DropTable(
                 name: "GeneInfo");
-
-            migrationBuilder.DropTable(
-                name: "MatchedSamples");
 
             migrationBuilder.DropTable(
                 name: "MolecularData");
