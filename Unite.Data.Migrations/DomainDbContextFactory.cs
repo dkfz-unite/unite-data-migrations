@@ -4,12 +4,12 @@ using Unite.Data.Services;
 
 namespace Unite.Data.Migrations
 {
-    public class UniteDbContextFactory: IDesignTimeDbContextFactory<UniteDbContext>
+    public class DomainDbContextFactory : IDesignTimeDbContextFactory<DomainDbContext>
     {
-        public UniteDbContext CreateDbContext(string[] args)
+        public DomainDbContext CreateDbContext(string[] args)
         {
             var options = new SqlOptions();
-            var dbContext = new UniteDbContext(options);
+            var dbContext = new DomainDbContext(options);
 
             return dbContext;
         }

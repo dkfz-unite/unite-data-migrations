@@ -8,15 +8,15 @@ using Unite.Data.Services;
 
 namespace Unite.Data.Migrations.Migrations
 {
-    [DbContext(typeof(UniteDbContext))]
-    partial class UniteDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(DomainDbContext))]
+    partial class DomainDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.8")
+                .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("Unite.Data.Entities.Clinical.ClinicalData", b =>
@@ -271,56 +271,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.ToTable("Files");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Identity.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Email");
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Identity.UserSession", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Session")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Client")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("ExpiryDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("UserId", "Session");
-
-                    b.HasIndex("Session");
-
-                    b.ToTable("UserSessions");
-                });
-
             modelBuilder.Entity("Unite.Data.Entities.Molecular.MolecularData", b =>
                 {
                     b.Property<int?>("SpecimenId")
@@ -384,9 +334,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<string>("CodonChange")
                         .HasColumnType("text");
 
-                    b.Property<int>("GeneId")
-                        .HasColumnType("integer");
-
                     b.Property<long>("MutationId")
                         .HasColumnType("bigint");
 
@@ -401,9 +348,7 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("MutationId", "GeneId", "TranscriptId");
-
-                    b.HasIndex("GeneId");
+                    b.HasAlternateKey("MutationId", "TranscriptId");
 
                     b.HasIndex("TranscriptId");
 
@@ -853,6 +798,47 @@ namespace Unite.Data.Migrations.Migrations
                     b.ToTable("MutationOccurrences");
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.Mutations.Protein", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int?>("End")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Length")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Start")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Symbol")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Proteins");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Mutations.ProteinInfo", b =>
+                {
+                    b.Property<int>("ProteinId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("EnsemblId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("ProteinId");
+
+                    b.HasIndex("EnsemblId")
+                        .IsUnique();
+
+                    b.ToTable("ProteinInfo");
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Mutations.Sample", b =>
                 {
                     b.Property<int>("Id")
@@ -890,6 +876,12 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("End")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("GeneId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ProteinId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("Start")
                         .HasColumnType("integer");
 
@@ -902,6 +894,10 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BiotypeId");
+
+                    b.HasIndex("GeneId");
+
+                    b.HasIndex("ProteinId");
 
                     b.ToTable("Transcripts");
                 });
@@ -2532,6 +2528,12 @@ namespace Unite.Data.Migrations.Migrations
                             Id = 3,
                             Name = "Mutation",
                             Value = "Mutation"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Gene",
+                            Value = "Gene"
                         });
                 });
 
@@ -2650,17 +2652,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("WorkPackage");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Identity.UserSession", b =>
-                {
-                    b.HasOne("Unite.Data.Entities.Identity.User", "User")
-                        .WithMany("UserSessions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Unite.Data.Entities.Molecular.MolecularData", b =>
                 {
                     b.HasOne("Unite.Data.Services.Entities.EnumValue<Unite.Data.Entities.Molecular.Enums.GeneExpressionSubtype>", null)
@@ -2692,12 +2683,6 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Mutations.AffectedTranscript", b =>
                 {
-                    b.HasOne("Unite.Data.Entities.Mutations.Gene", "Gene")
-                        .WithMany()
-                        .HasForeignKey("GeneId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Unite.Data.Entities.Mutations.Mutation", "Mutation")
                         .WithMany("AffectedTranscripts")
                         .HasForeignKey("MutationId")
@@ -2709,8 +2694,6 @@ namespace Unite.Data.Migrations.Migrations
                         .HasForeignKey("TranscriptId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Gene");
 
                     b.Navigation("Mutation");
 
@@ -2832,6 +2815,15 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("Mutation");
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.Mutations.ProteinInfo", b =>
+                {
+                    b.HasOne("Unite.Data.Entities.Mutations.Protein", null)
+                        .WithOne("Info")
+                        .HasForeignKey("Unite.Data.Entities.Mutations.ProteinInfo", "ProteinId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Mutations.Sample", b =>
                 {
                     b.HasOne("Unite.Data.Entities.Specimens.Specimen", "Specimen")
@@ -2849,7 +2841,19 @@ namespace Unite.Data.Migrations.Migrations
                         .WithMany()
                         .HasForeignKey("BiotypeId");
 
+                    b.HasOne("Unite.Data.Entities.Mutations.Gene", "Gene")
+                        .WithMany()
+                        .HasForeignKey("GeneId");
+
+                    b.HasOne("Unite.Data.Entities.Mutations.Protein", "Protein")
+                        .WithMany()
+                        .HasForeignKey("ProteinId");
+
                     b.Navigation("Biotype");
+
+                    b.Navigation("Gene");
+
+                    b.Navigation("Protein");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Mutations.TranscriptInfo", b =>
@@ -3033,11 +3037,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("WorkPackageDonors");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Identity.User", b =>
-                {
-                    b.Navigation("UserSessions");
-                });
-
             modelBuilder.Entity("Unite.Data.Entities.Mutations.AffectedTranscript", b =>
                 {
                     b.Navigation("Consequences");
@@ -3063,6 +3062,11 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("AffectedTranscripts");
 
                     b.Navigation("MutationOccurrences");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Mutations.Protein", b =>
+                {
+                    b.Navigation("Info");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Mutations.Transcript", b =>
