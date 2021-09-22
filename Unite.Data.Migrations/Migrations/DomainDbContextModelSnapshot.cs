@@ -426,25 +426,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.ToTable("Analyses");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Mutations.Biotype", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Value");
-
-                    b.ToTable("Biotypes");
-                });
-
             modelBuilder.Entity("Unite.Data.Entities.Mutations.Consequence", b =>
                 {
                     b.Property<int>("TypeId")
@@ -711,6 +692,25 @@ namespace Unite.Data.Migrations.Migrations
                     b.ToTable("Genes");
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.Mutations.GeneBiotype", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("GeneBiotypes");
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Mutations.GeneInfo", b =>
                 {
                     b.Property<int>("GeneId")
@@ -900,6 +900,25 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasIndex("ProteinId");
 
                     b.ToTable("Transcripts");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Mutations.TranscriptBiotype", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("TranscriptBiotypes");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Mutations.TranscriptInfo", b =>
@@ -2759,7 +2778,7 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Mutations.Gene", b =>
                 {
-                    b.HasOne("Unite.Data.Entities.Mutations.Biotype", "Biotype")
+                    b.HasOne("Unite.Data.Entities.Mutations.GeneBiotype", "Biotype")
                         .WithMany()
                         .HasForeignKey("BiotypeId");
 
@@ -2837,7 +2856,7 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Mutations.Transcript", b =>
                 {
-                    b.HasOne("Unite.Data.Entities.Mutations.Biotype", "Biotype")
+                    b.HasOne("Unite.Data.Entities.Mutations.TranscriptBiotype", "Biotype")
                         .WithMany()
                         .HasForeignKey("BiotypeId");
 

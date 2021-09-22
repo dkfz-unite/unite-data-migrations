@@ -23,20 +23,6 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Biotypes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Biotypes", x => x.Id);
-                    table.UniqueConstraint("AK_Biotypes_Value", x => x.Value);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CellLineCultureTypes",
                 columns: table => new
                 {
@@ -159,6 +145,20 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     table.PrimaryKey("PK_Genders", x => x.Id);
                     table.UniqueConstraint("AK_Genders_Value", x => x.Value);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GeneBiotypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GeneBiotypes", x => x.Id);
+                    table.UniqueConstraint("AK_GeneBiotypes_Value", x => x.Value);
                 });
 
             migrationBuilder.CreateTable(
@@ -418,6 +418,20 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TranscriptBiotypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TranscriptBiotypes", x => x.Id);
+                    table.UniqueConstraint("AK_TranscriptBiotypes_Value", x => x.Value);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TumorGrowthForms",
                 columns: table => new
                 {
@@ -503,30 +517,6 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Genes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    BiotypeId = table.Column<int>(type: "integer", nullable: true),
-                    Symbol = table.Column<string>(type: "text", nullable: true),
-                    ChromosomeId = table.Column<int>(type: "integer", nullable: true),
-                    Start = table.Column<int>(type: "integer", nullable: true),
-                    End = table.Column<int>(type: "integer", nullable: true),
-                    Strand = table.Column<bool>(type: "boolean", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Genes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Genes_Biotypes_BiotypeId",
-                        column: x => x.BiotypeId,
-                        principalTable: "Biotypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Specimens",
                 columns: table => new
                 {
@@ -575,6 +565,30 @@ namespace Unite.Data.Migrations.Migrations
                         name: "FK_Analyses_Files_FileId",
                         column: x => x.FileId,
                         principalTable: "Files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Genes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    BiotypeId = table.Column<int>(type: "integer", nullable: true),
+                    Symbol = table.Column<string>(type: "text", nullable: true),
+                    ChromosomeId = table.Column<int>(type: "integer", nullable: true),
+                    Start = table.Column<int>(type: "integer", nullable: true),
+                    End = table.Column<int>(type: "integer", nullable: true),
+                    Strand = table.Column<bool>(type: "boolean", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Genes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Genes_GeneBiotypes_BiotypeId",
+                        column: x => x.BiotypeId,
+                        principalTable: "GeneBiotypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -787,62 +801,6 @@ namespace Unite.Data.Migrations.Migrations
                         principalTable: "WorkPackages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GeneInfo",
-                columns: table => new
-                {
-                    GeneId = table.Column<int>(type: "integer", nullable: false),
-                    EnsemblId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GeneInfo", x => x.GeneId);
-                    table.ForeignKey(
-                        name: "FK_GeneInfo_Genes_GeneId",
-                        column: x => x.GeneId,
-                        principalTable: "Genes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Transcripts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    GeneId = table.Column<int>(type: "integer", nullable: true),
-                    ProteinId = table.Column<int>(type: "integer", nullable: true),
-                    BiotypeId = table.Column<int>(type: "integer", nullable: true),
-                    Symbol = table.Column<string>(type: "text", nullable: true),
-                    ChromosomeId = table.Column<int>(type: "integer", nullable: true),
-                    Start = table.Column<int>(type: "integer", nullable: true),
-                    End = table.Column<int>(type: "integer", nullable: true),
-                    Strand = table.Column<bool>(type: "boolean", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Transcripts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Transcripts_Biotypes_BiotypeId",
-                        column: x => x.BiotypeId,
-                        principalTable: "Biotypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Transcripts_Genes_GeneId",
-                        column: x => x.GeneId,
-                        principalTable: "Genes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Transcripts_Proteins_ProteinId",
-                        column: x => x.ProteinId,
-                        principalTable: "Proteins",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1064,56 +1022,59 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AffectedTranscripts",
+                name: "GeneInfo",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    MutationId = table.Column<long>(type: "bigint", nullable: false),
-                    TranscriptId = table.Column<int>(type: "integer", nullable: false),
-                    CDNAStart = table.Column<int>(type: "integer", nullable: true),
-                    CDNAEnd = table.Column<int>(type: "integer", nullable: true),
-                    CDSStart = table.Column<int>(type: "integer", nullable: true),
-                    CDSEnd = table.Column<int>(type: "integer", nullable: true),
-                    ProteinStart = table.Column<int>(type: "integer", nullable: true),
-                    ProteinEnd = table.Column<int>(type: "integer", nullable: true),
-                    AminoAcidChange = table.Column<string>(type: "text", nullable: true),
-                    CodonChange = table.Column<string>(type: "text", nullable: true)
+                    GeneId = table.Column<int>(type: "integer", nullable: false),
+                    EnsemblId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AffectedTranscripts", x => x.Id);
-                    table.UniqueConstraint("AK_AffectedTranscripts_MutationId_TranscriptId", x => new { x.MutationId, x.TranscriptId });
+                    table.PrimaryKey("PK_GeneInfo", x => x.GeneId);
                     table.ForeignKey(
-                        name: "FK_AffectedTranscripts_Mutations_MutationId",
-                        column: x => x.MutationId,
-                        principalTable: "Mutations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AffectedTranscripts_Transcripts_TranscriptId",
-                        column: x => x.TranscriptId,
-                        principalTable: "Transcripts",
+                        name: "FK_GeneInfo_Genes_GeneId",
+                        column: x => x.GeneId,
+                        principalTable: "Genes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TranscriptInfo",
+                name: "Transcripts",
                 columns: table => new
                 {
-                    TranscriptId = table.Column<int>(type: "integer", nullable: false),
-                    EnsemblId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    GeneId = table.Column<int>(type: "integer", nullable: true),
+                    ProteinId = table.Column<int>(type: "integer", nullable: true),
+                    BiotypeId = table.Column<int>(type: "integer", nullable: true),
+                    Symbol = table.Column<string>(type: "text", nullable: true),
+                    ChromosomeId = table.Column<int>(type: "integer", nullable: true),
+                    Start = table.Column<int>(type: "integer", nullable: true),
+                    End = table.Column<int>(type: "integer", nullable: true),
+                    Strand = table.Column<bool>(type: "boolean", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TranscriptInfo", x => x.TranscriptId);
+                    table.PrimaryKey("PK_Transcripts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TranscriptInfo_Transcripts_TranscriptId",
-                        column: x => x.TranscriptId,
-                        principalTable: "Transcripts",
+                        name: "FK_Transcripts_Genes_GeneId",
+                        column: x => x.GeneId,
+                        principalTable: "Genes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Transcripts_Proteins_ProteinId",
+                        column: x => x.ProteinId,
+                        principalTable: "Proteins",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Transcripts_TranscriptBiotypes_BiotypeId",
+                        column: x => x.BiotypeId,
+                        principalTable: "TranscriptBiotypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1234,26 +1195,55 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AffectedTranscriptConsequences",
+                name: "AffectedTranscripts",
                 columns: table => new
                 {
-                    AffectedTranscriptId = table.Column<long>(type: "bigint", nullable: false),
-                    ConsequenceId = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    MutationId = table.Column<long>(type: "bigint", nullable: false),
+                    TranscriptId = table.Column<int>(type: "integer", nullable: false),
+                    CDNAStart = table.Column<int>(type: "integer", nullable: true),
+                    CDNAEnd = table.Column<int>(type: "integer", nullable: true),
+                    CDSStart = table.Column<int>(type: "integer", nullable: true),
+                    CDSEnd = table.Column<int>(type: "integer", nullable: true),
+                    ProteinStart = table.Column<int>(type: "integer", nullable: true),
+                    ProteinEnd = table.Column<int>(type: "integer", nullable: true),
+                    AminoAcidChange = table.Column<string>(type: "text", nullable: true),
+                    CodonChange = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AffectedTranscriptConsequences", x => new { x.AffectedTranscriptId, x.ConsequenceId });
+                    table.PrimaryKey("PK_AffectedTranscripts", x => x.Id);
+                    table.UniqueConstraint("AK_AffectedTranscripts_MutationId_TranscriptId", x => new { x.MutationId, x.TranscriptId });
                     table.ForeignKey(
-                        name: "FK_AffectedTranscriptConsequences_AffectedTranscripts_Affected~",
-                        column: x => x.AffectedTranscriptId,
-                        principalTable: "AffectedTranscripts",
+                        name: "FK_AffectedTranscripts_Mutations_MutationId",
+                        column: x => x.MutationId,
+                        principalTable: "Mutations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AffectedTranscriptConsequences_Consequences_ConsequenceId",
-                        column: x => x.ConsequenceId,
-                        principalTable: "Consequences",
-                        principalColumn: "TypeId",
+                        name: "FK_AffectedTranscripts_Transcripts_TranscriptId",
+                        column: x => x.TranscriptId,
+                        principalTable: "Transcripts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TranscriptInfo",
+                columns: table => new
+                {
+                    TranscriptId = table.Column<int>(type: "integer", nullable: false),
+                    EnsemblId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TranscriptInfo", x => x.TranscriptId);
+                    table.ForeignKey(
+                        name: "FK_TranscriptInfo_Transcripts_TranscriptId",
+                        column: x => x.TranscriptId,
+                        principalTable: "Transcripts",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -1281,6 +1271,30 @@ namespace Unite.Data.Migrations.Migrations
                         column: x => x.MutationId,
                         principalTable: "Mutations",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AffectedTranscriptConsequences",
+                columns: table => new
+                {
+                    AffectedTranscriptId = table.Column<long>(type: "bigint", nullable: false),
+                    ConsequenceId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AffectedTranscriptConsequences", x => new { x.AffectedTranscriptId, x.ConsequenceId });
+                    table.ForeignKey(
+                        name: "FK_AffectedTranscriptConsequences_AffectedTranscripts_Affected~",
+                        column: x => x.AffectedTranscriptId,
+                        principalTable: "AffectedTranscripts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AffectedTranscriptConsequences_Consequences_ConsequenceId",
+                        column: x => x.ConsequenceId,
+                        principalTable: "Consequences",
+                        principalColumn: "TypeId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -2059,6 +2073,9 @@ namespace Unite.Data.Migrations.Migrations
                 name: "Proteins");
 
             migrationBuilder.DropTable(
+                name: "TranscriptBiotypes");
+
+            migrationBuilder.DropTable(
                 name: "AnalysisTypes");
 
             migrationBuilder.DropTable(
@@ -2068,7 +2085,7 @@ namespace Unite.Data.Migrations.Migrations
                 name: "Specimens");
 
             migrationBuilder.DropTable(
-                name: "Biotypes");
+                name: "GeneBiotypes");
 
             migrationBuilder.DropTable(
                 name: "Donors");
