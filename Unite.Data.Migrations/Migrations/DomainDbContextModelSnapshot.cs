@@ -267,25 +267,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.ToTable("WorkPackageDonors", "don");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.File", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Link")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Files", "com");
-                });
-
             modelBuilder.Entity("Unite.Data.Entities.Genome.Gene", b =>
                 {
                     b.Property<int>("Id")
@@ -451,8 +432,8 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("FileId")
-                        .HasColumnType("integer");
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ReferenceId")
                         .HasMaxLength(255)
@@ -462,9 +443,6 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FileId")
-                        .IsUnique();
 
                     b.HasIndex("ReferenceId");
 
@@ -991,8 +969,8 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("FileId")
-                        .HasColumnType("integer");
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ReferenceId")
                         .HasMaxLength(255)
@@ -1002,10 +980,6 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FileId")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Analyses_FileId1");
 
                     b.HasIndex("ReferenceId")
                         .HasDatabaseName("IX_Analyses_ReferenceId1");
@@ -3008,15 +2982,9 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Mutations.Analysis", b =>
                 {
-                    b.HasOne("Unite.Data.Entities.File", "File")
-                        .WithOne()
-                        .HasForeignKey("Unite.Data.Entities.Genome.Mutations.Analysis", "FileId");
-
                     b.HasOne("Unite.Data.Services.Models.EnumValue<Unite.Data.Entities.Genome.Mutations.Enums.AnalysisType>", null)
                         .WithMany()
                         .HasForeignKey("TypeId");
-
-                    b.Navigation("File");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Mutations.AnalysisParameterOccurrence", b =>
@@ -3147,15 +3115,9 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Images.Features.Analysis", b =>
                 {
-                    b.HasOne("Unite.Data.Entities.File", "File")
-                        .WithOne()
-                        .HasForeignKey("Unite.Data.Entities.Images.Features.Analysis", "FileId");
-
                     b.HasOne("Unite.Data.Services.Models.EnumValue<Unite.Data.Entities.Images.Features.Enums.AnalysisType>", null)
                         .WithMany()
                         .HasForeignKey("TypeId");
-
-                    b.Navigation("File");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Images.Features.AnalysisParameterOccurrence", b =>

@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Unite.Data.Migrations.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Root : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -200,21 +200,6 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     table.PrimaryKey("PK_Features", x => x.Id);
                     table.UniqueConstraint("AK_Features_Name", x => x.Name);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Files",
-                schema: "com",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Link = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Files", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -613,6 +598,52 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Analyses",
+                schema: "gen",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ReferenceId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    TypeId = table.Column<int>(type: "integer", nullable: true),
+                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Analyses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Analyses_AnalysisTypes_TypeId",
+                        column: x => x.TypeId,
+                        principalSchema: "gen",
+                        principalTable: "AnalysisTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Analyses",
+                schema: "img",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ReferenceId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    TypeId = table.Column<int>(type: "integer", nullable: true),
+                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Analyses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Analyses_AnalysisTypes_TypeId",
+                        column: x => x.TypeId,
+                        principalSchema: "img",
+                        principalTable: "AnalysisTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Images",
                 schema: "img",
                 columns: table => new
@@ -662,66 +693,6 @@ namespace Unite.Data.Migrations.Migrations
                         column: x => x.ParentId,
                         principalSchema: "spe",
                         principalTable: "Specimens",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Analyses",
-                schema: "gen",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ReferenceId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
-                    TypeId = table.Column<int>(type: "integer", nullable: true),
-                    FileId = table.Column<int>(type: "integer", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Analyses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Analyses_AnalysisTypes_TypeId",
-                        column: x => x.TypeId,
-                        principalSchema: "gen",
-                        principalTable: "AnalysisTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Analyses_Files_FileId",
-                        column: x => x.FileId,
-                        principalSchema: "com",
-                        principalTable: "Files",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Analyses",
-                schema: "img",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ReferenceId = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
-                    TypeId = table.Column<int>(type: "integer", nullable: true),
-                    FileId = table.Column<int>(type: "integer", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Analyses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Analyses_AnalysisTypes_TypeId",
-                        column: x => x.TypeId,
-                        principalSchema: "img",
-                        principalTable: "AnalysisTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Analyses_Files_FileId",
-                        column: x => x.FileId,
-                        principalSchema: "com",
-                        principalTable: "Files",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -985,6 +956,97 @@ namespace Unite.Data.Migrations.Migrations
                         column: x => x.WorkPackageId,
                         principalSchema: "don",
                         principalTable: "WorkPackages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnalysisParameterOccurrences",
+                schema: "gen",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AnalysisId = table.Column<int>(type: "integer", nullable: false),
+                    ParameterId = table.Column<int>(type: "integer", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalysisParameterOccurrences", x => x.Id);
+                    table.UniqueConstraint("AK_AnalysisParameterOccurrences_ParameterId_AnalysisId", x => new { x.ParameterId, x.AnalysisId });
+                    table.ForeignKey(
+                        name: "FK_AnalysisParameterOccurrences_Analyses_AnalysisId",
+                        column: x => x.AnalysisId,
+                        principalSchema: "gen",
+                        principalTable: "Analyses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AnalysisParameterOccurrences_AnalysisParameters_ParameterId",
+                        column: x => x.ParameterId,
+                        principalSchema: "gen",
+                        principalTable: "AnalysisParameters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnalysisParameterOccurrences",
+                schema: "img",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AnalysisId = table.Column<int>(type: "integer", nullable: false),
+                    ParameterId = table.Column<int>(type: "integer", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalysisParameterOccurrences", x => x.Id);
+                    table.UniqueConstraint("AK_AnalysisParameterOccurrences_ParameterId_AnalysisId", x => new { x.ParameterId, x.AnalysisId });
+                    table.ForeignKey(
+                        name: "FK_AnalysisParameterOccurrences_Analyses_AnalysisId",
+                        column: x => x.AnalysisId,
+                        principalSchema: "img",
+                        principalTable: "Analyses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AnalysisParameterOccurrences_AnalysisParameters_ParameterId",
+                        column: x => x.ParameterId,
+                        principalSchema: "img",
+                        principalTable: "AnalysisParameters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnalysedImages",
+                schema: "img",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AnalysisId = table.Column<int>(type: "integer", nullable: false),
+                    ImageId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalysedImages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AnalysedImages_Analyses_AnalysisId",
+                        column: x => x.AnalysisId,
+                        principalSchema: "img",
+                        principalTable: "Analyses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AnalysedImages_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalSchema: "img",
+                        principalTable: "Images",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1268,97 +1330,6 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AnalysisParameterOccurrences",
-                schema: "gen",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AnalysisId = table.Column<int>(type: "integer", nullable: false),
-                    ParameterId = table.Column<int>(type: "integer", nullable: false),
-                    Value = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AnalysisParameterOccurrences", x => x.Id);
-                    table.UniqueConstraint("AK_AnalysisParameterOccurrences_ParameterId_AnalysisId", x => new { x.ParameterId, x.AnalysisId });
-                    table.ForeignKey(
-                        name: "FK_AnalysisParameterOccurrences_Analyses_AnalysisId",
-                        column: x => x.AnalysisId,
-                        principalSchema: "gen",
-                        principalTable: "Analyses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AnalysisParameterOccurrences_AnalysisParameters_ParameterId",
-                        column: x => x.ParameterId,
-                        principalSchema: "gen",
-                        principalTable: "AnalysisParameters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AnalysedImages",
-                schema: "img",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AnalysisId = table.Column<int>(type: "integer", nullable: false),
-                    ImageId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AnalysedImages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AnalysedImages_Analyses_AnalysisId",
-                        column: x => x.AnalysisId,
-                        principalSchema: "img",
-                        principalTable: "Analyses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AnalysedImages_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalSchema: "img",
-                        principalTable: "Images",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AnalysisParameterOccurrences",
-                schema: "img",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AnalysisId = table.Column<int>(type: "integer", nullable: false),
-                    ParameterId = table.Column<int>(type: "integer", nullable: false),
-                    Value = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AnalysisParameterOccurrences", x => x.Id);
-                    table.UniqueConstraint("AK_AnalysisParameterOccurrences_ParameterId_AnalysisId", x => new { x.ParameterId, x.AnalysisId });
-                    table.ForeignKey(
-                        name: "FK_AnalysisParameterOccurrences_Analyses_AnalysisId",
-                        column: x => x.AnalysisId,
-                        principalSchema: "img",
-                        principalTable: "Analyses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AnalysisParameterOccurrences_AnalysisParameters_ParameterId",
-                        column: x => x.ParameterId,
-                        principalSchema: "img",
-                        principalTable: "AnalysisParameters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "GeneInfo",
                 schema: "gen",
                 columns: table => new
@@ -1425,6 +1396,37 @@ namespace Unite.Data.Migrations.Migrations
                         principalTable: "TranscriptBiotypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FeatureOccurrences",
+                schema: "img",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AnalysedImageId = table.Column<int>(type: "integer", nullable: false),
+                    FeatureId = table.Column<int>(type: "integer", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FeatureOccurrences", x => x.Id);
+                    table.UniqueConstraint("AK_FeatureOccurrences_FeatureId_AnalysedImageId", x => new { x.FeatureId, x.AnalysedImageId });
+                    table.ForeignKey(
+                        name: "FK_FeatureOccurrences_AnalysedImages_AnalysedImageId",
+                        column: x => x.AnalysedImageId,
+                        principalSchema: "img",
+                        principalTable: "AnalysedImages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FeatureOccurrences_Features_FeatureId",
+                        column: x => x.FeatureId,
+                        principalSchema: "img",
+                        principalTable: "Features",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -1557,37 +1559,6 @@ namespace Unite.Data.Migrations.Migrations
                         principalSchema: "spe",
                         principalTable: "Xenografts",
                         principalColumn: "SpecimenId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FeatureOccurrences",
-                schema: "img",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AnalysedImageId = table.Column<int>(type: "integer", nullable: false),
-                    FeatureId = table.Column<int>(type: "integer", nullable: false),
-                    Value = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FeatureOccurrences", x => x.Id);
-                    table.UniqueConstraint("AK_FeatureOccurrences_FeatureId_AnalysedImageId", x => new { x.FeatureId, x.AnalysedImageId });
-                    table.ForeignKey(
-                        name: "FK_FeatureOccurrences_AnalysedImages_AnalysedImageId",
-                        column: x => x.AnalysedImageId,
-                        principalSchema: "img",
-                        principalTable: "AnalysedImages",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FeatureOccurrences_Features_FeatureId",
-                        column: x => x.FeatureId,
-                        principalSchema: "img",
-                        principalTable: "Features",
-                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -2090,13 +2061,6 @@ namespace Unite.Data.Migrations.Migrations
                 column: "SampleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Analyses_FileId",
-                schema: "gen",
-                table: "Analyses",
-                column: "FileId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Analyses_ReferenceId",
                 schema: "gen",
                 table: "Analyses",
@@ -2107,13 +2071,6 @@ namespace Unite.Data.Migrations.Migrations
                 schema: "gen",
                 table: "Analyses",
                 column: "TypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Analyses_FileId1",
-                schema: "img",
-                table: "Analyses",
-                column: "FileId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Analyses_ReferenceId1",
@@ -2712,10 +2669,6 @@ namespace Unite.Data.Migrations.Migrations
             migrationBuilder.DropTable(
                 name: "AnalysisTypes",
                 schema: "gen");
-
-            migrationBuilder.DropTable(
-                name: "Files",
-                schema: "com");
 
             migrationBuilder.DropTable(
                 name: "Specimens",
