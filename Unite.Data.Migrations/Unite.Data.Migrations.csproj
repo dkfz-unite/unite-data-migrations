@@ -8,11 +8,11 @@
 		<SynchReleaseVersion>false</SynchReleaseVersion>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.6">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.7">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Unite.Data" Version="3.1.0" />
+		<PackageReference Include="Unite.Data" Version="3.2.1" />
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="Unite.Data" />
