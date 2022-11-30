@@ -1402,6 +1402,12 @@ namespace Unite.Data.Migrations.Migrations
                     Distance = table.Column<int>(type: "integer", nullable: true),
                     OverlapBpNumber = table.Column<int>(type: "integer", nullable: true),
                     OverlapPercentage = table.Column<double>(type: "double precision", nullable: true),
+                    CDNAStart = table.Column<int>(type: "integer", nullable: true),
+                    CDNAEnd = table.Column<int>(type: "integer", nullable: true),
+                    CDSStart = table.Column<int>(type: "integer", nullable: true),
+                    CDSEnd = table.Column<int>(type: "integer", nullable: true),
+                    ProteinStart = table.Column<int>(type: "integer", nullable: true),
+                    ProteinEnd = table.Column<int>(type: "integer", nullable: true),
                     Consequences = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -1430,6 +1436,7 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     VariantId = table.Column<long>(type: "bigint", nullable: false),
                     FeatureId = table.Column<int>(type: "integer", nullable: false),
+                    Distance = table.Column<int>(type: "integer", nullable: true),
                     CDNAStart = table.Column<int>(type: "integer", nullable: true),
                     CDNAEnd = table.Column<int>(type: "integer", nullable: true),
                     CDSStart = table.Column<int>(type: "integer", nullable: true),
@@ -1469,6 +1476,12 @@ namespace Unite.Data.Migrations.Migrations
                     Distance = table.Column<int>(type: "integer", nullable: true),
                     OverlapBpNumber = table.Column<int>(type: "integer", nullable: true),
                     OverlapPercentage = table.Column<double>(type: "double precision", nullable: true),
+                    CDNAStart = table.Column<int>(type: "integer", nullable: true),
+                    CDNAEnd = table.Column<int>(type: "integer", nullable: true),
+                    CDSStart = table.Column<int>(type: "integer", nullable: true),
+                    CDSEnd = table.Column<int>(type: "integer", nullable: true),
+                    ProteinStart = table.Column<int>(type: "integer", nullable: true),
+                    ProteinEnd = table.Column<int>(type: "integer", nullable: true),
                     Consequences = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -1767,7 +1780,7 @@ namespace Unite.Data.Migrations.Migrations
                     { 3, "Whole Exome Sequencing", "WES" },
                     { 4, "RNA Sequencing", "RNA-Seq" },
                     { 5, "Mass Spectrometry", "MS" },
-                    { 6, "Microarray", "Microarray Analysis" }
+                    { 6, "Microarray Analysis", "Microarray" }
                 });
 
             migrationBuilder.InsertData(

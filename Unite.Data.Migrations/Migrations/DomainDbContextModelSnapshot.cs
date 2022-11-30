@@ -533,6 +533,18 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("FeatureId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("CDNAEnd")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("CDNAStart")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("CDSEnd")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("CDSStart")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Consequences")
                         .HasColumnType("text");
 
@@ -544,6 +556,12 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<double?>("OverlapPercentage")
                         .HasColumnType("double precision");
+
+                    b.Property<int?>("ProteinEnd")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ProteinStart")
+                        .HasColumnType("integer");
 
                     b.HasKey("VariantId", "FeatureId");
 
@@ -663,6 +681,9 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<string>("Consequences")
                         .HasColumnType("text");
 
+                    b.Property<int?>("Distance")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("ProteinEnd")
                         .HasColumnType("integer");
 
@@ -739,6 +760,18 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("FeatureId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("CDNAEnd")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("CDNAStart")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("CDSEnd")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("CDSStart")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Consequences")
                         .HasColumnType("text");
 
@@ -750,6 +783,12 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.Property<double?>("OverlapPercentage")
                         .HasColumnType("double precision");
+
+                    b.Property<int?>("ProteinEnd")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ProteinStart")
+                        .HasColumnType("integer");
 
                     b.HasKey("VariantId", "FeatureId");
 
@@ -1603,8 +1642,8 @@ namespace Unite.Data.Migrations.Migrations
                         new
                         {
                             Id = 6,
-                            Name = "Microarray",
-                            Value = "Microarray Analysis"
+                            Name = "Microarray Analysis",
+                            Value = "Microarray"
                         });
                 });
 
