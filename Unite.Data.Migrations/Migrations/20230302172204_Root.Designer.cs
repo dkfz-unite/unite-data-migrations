@@ -12,7 +12,7 @@ using Unite.Data.Services;
 namespace Unite.Data.Migrations.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    [Migration("20221130152721_Root")]
+    [Migration("20230302172204_Root")]
     partial class Root
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -388,8 +388,19 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("ChromosomeId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
                     b.Property<int?>("End")
                         .HasColumnType("integer");
+
+                    b.Property<int?>("ExonicLength")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("StableId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int?>("Start")
                         .HasColumnType("integer");
@@ -402,26 +413,11 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasAlternateKey("StableId");
+
                     b.HasIndex("ChromosomeId");
 
                     b.ToTable("Genes", "gen");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Genome.GeneInfo", b =>
-                {
-                    b.Property<int>("GeneId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("EnsemblId")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.HasKey("GeneId");
-
-                    b.HasIndex("EnsemblId")
-                        .IsUnique();
-
-                    b.ToTable("GeneInfo", "gen");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Protein", b =>
@@ -435,35 +431,31 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("End")
                         .HasColumnType("integer");
 
+                    b.Property<bool?>("IsCanonical")
+                        .HasColumnType("boolean");
+
                     b.Property<int?>("Length")
                         .HasColumnType("integer");
+
+                    b.Property<string>("StableId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int?>("Start")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Symbol")
-                        .HasColumnType("text");
+                    b.Property<int?>("TranscriptId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Proteins", "gen");
-                });
+                    b.HasAlternateKey("StableId");
 
-            modelBuilder.Entity("Unite.Data.Entities.Genome.ProteinInfo", b =>
-                {
-                    b.Property<int>("ProteinId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("EnsemblId")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.HasKey("ProteinId");
-
-                    b.HasIndex("EnsemblId")
+                    b.HasIndex("TranscriptId")
                         .IsUnique();
 
-                    b.ToTable("ProteinInfo", "gen");
+                    b.ToTable("Proteins", "gen");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Transcript", b =>
@@ -481,14 +473,25 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("ChromosomeId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
                     b.Property<int?>("End")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ExonicLength")
                         .HasColumnType("integer");
 
                     b.Property<int?>("GeneId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ProteinId")
-                        .HasColumnType("integer");
+                    b.Property<bool?>("IsCanonical")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("StableId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int?>("Start")
                         .HasColumnType("integer");
@@ -501,30 +504,37 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasAlternateKey("StableId");
+
                     b.HasIndex("ChromosomeId");
 
                     b.HasIndex("GeneId");
 
-                    b.HasIndex("ProteinId");
-
                     b.ToTable("Transcripts", "gen");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Genome.TranscriptInfo", b =>
+            modelBuilder.Entity("Unite.Data.Entities.Genome.Transcriptomics.GeneExpression", b =>
                 {
-                    b.Property<int>("TranscriptId")
+                    b.Property<int>("GeneId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("EnsemblId")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                    b.Property<int>("AnalysedSampleId")
+                        .HasColumnType("integer");
 
-                    b.HasKey("TranscriptId");
+                    b.Property<double>("FPKM")
+                        .HasColumnType("double precision");
 
-                    b.HasIndex("EnsemblId")
-                        .IsUnique();
+                    b.Property<int>("Reads")
+                        .HasColumnType("integer");
 
-                    b.ToTable("TranscriptInfo", "gen");
+                    b.Property<double>("TPM")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("GeneId", "AnalysedSampleId");
+
+                    b.HasIndex("AnalysedSampleId");
+
+                    b.ToTable("GeneExpressions", "gen");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Variants.CNV.AffectedTranscript", b =>
@@ -595,9 +605,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("ChromosomeId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("CnaTypeId")
-                        .HasColumnType("integer");
-
                     b.Property<double?>("DhMax")
                         .HasColumnType("double precision");
 
@@ -616,9 +623,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("Start")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("SvTypeId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("Tcn")
                         .HasColumnType("integer");
 
@@ -628,13 +632,14 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<double?>("TcnRatio")
                         .HasColumnType("double precision");
 
+                    b.Property<int?>("TypeId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChromosomeId");
 
-                    b.HasIndex("CnaTypeId");
-
-                    b.HasIndex("SvTypeId");
+                    b.HasIndex("TypeId");
 
                     b.ToTable("CNVs", "gen");
                 });
@@ -1536,6 +1541,9 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("IndexingTypeId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("SubmissionTypeId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Target")
                         .IsRequired()
                         .HasColumnType("text");
@@ -1545,6 +1553,8 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasIndex("AnnotationTypeId");
 
                     b.HasIndex("IndexingTypeId");
+
+                    b.HasIndex("SubmissionTypeId");
 
                     b.ToTable("Tasks", "com");
                 });
@@ -1816,7 +1826,7 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Services.Models.EnumValue<Unite.Data.Entities.Genome.Variants.CNV.Enums.CnaType>", b =>
+            modelBuilder.Entity("Unite.Data.Services.Models.EnumValue<Unite.Data.Entities.Genome.Variants.CNV.Enums.CnvType>", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
@@ -1834,7 +1844,7 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasAlternateKey("Value");
 
-                    b.ToTable("CnvCnaTypes", "gen");
+                    b.ToTable("CnvTypes", "gen");
 
                     b.HasData(
                         new
@@ -1854,53 +1864,6 @@ namespace Unite.Data.Migrations.Migrations
                             Id = 3,
                             Name = "TCN neutral",
                             Value = "Neutral"
-                        });
-                });
-
-            modelBuilder.Entity("Unite.Data.Services.Models.EnumValue<Unite.Data.Entities.Genome.Variants.CNV.Enums.SvType>", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Value");
-
-                    b.ToTable("CnvSvTypes", "gen");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Duplication",
-                            Value = "DUP"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Deletion",
-                            Value = "DEL"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Intra-choromosmal translocation",
-                            Value = "ITX"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Inter-chromosomal translocation",
-                            Value = "CTX"
                         });
                 });
 
@@ -2640,18 +2603,6 @@ namespace Unite.Data.Migrations.Migrations
                             Id = 3,
                             Name = "SV",
                             Value = "SV"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "TEX",
-                            Value = "TEX"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "PEX",
-                            Value = "PEX"
                         });
                 });
 
@@ -2717,6 +2668,53 @@ namespace Unite.Data.Migrations.Migrations
                             Id = 7,
                             Name = "SV",
                             Value = "SV"
+                        });
+                });
+
+            modelBuilder.Entity("Unite.Data.Services.Models.EnumValue<Unite.Data.Entities.Tasks.Enums.SubmissionTaskType>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("SubmissionTaskTypes", "com");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "SSM",
+                            Value = "SSM"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "CNV",
+                            Value = "CNV"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "SV",
+                            Value = "SV"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "TEX",
+                            Value = "TEX"
                         });
                 });
 
@@ -2850,22 +2848,13 @@ namespace Unite.Data.Migrations.Migrations
                         .HasForeignKey("ChromosomeId");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Genome.GeneInfo", b =>
+            modelBuilder.Entity("Unite.Data.Entities.Genome.Protein", b =>
                 {
-                    b.HasOne("Unite.Data.Entities.Genome.Gene", null)
-                        .WithOne("Info")
-                        .HasForeignKey("Unite.Data.Entities.Genome.GeneInfo", "GeneId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                    b.HasOne("Unite.Data.Entities.Genome.Transcript", "Transcript")
+                        .WithOne("Protein")
+                        .HasForeignKey("Unite.Data.Entities.Genome.Protein", "TranscriptId");
 
-            modelBuilder.Entity("Unite.Data.Entities.Genome.ProteinInfo", b =>
-                {
-                    b.HasOne("Unite.Data.Entities.Genome.Protein", null)
-                        .WithOne("Info")
-                        .HasForeignKey("Unite.Data.Entities.Genome.ProteinInfo", "ProteinId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Transcript");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Transcript", b =>
@@ -2875,25 +2864,29 @@ namespace Unite.Data.Migrations.Migrations
                         .HasForeignKey("ChromosomeId");
 
                     b.HasOne("Unite.Data.Entities.Genome.Gene", "Gene")
-                        .WithMany()
+                        .WithMany("Transcripts")
                         .HasForeignKey("GeneId");
 
-                    b.HasOne("Unite.Data.Entities.Genome.Protein", "Protein")
-                        .WithMany()
-                        .HasForeignKey("ProteinId");
-
                     b.Navigation("Gene");
-
-                    b.Navigation("Protein");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Genome.TranscriptInfo", b =>
+            modelBuilder.Entity("Unite.Data.Entities.Genome.Transcriptomics.GeneExpression", b =>
                 {
-                    b.HasOne("Unite.Data.Entities.Genome.Transcript", null)
-                        .WithOne("Info")
-                        .HasForeignKey("Unite.Data.Entities.Genome.TranscriptInfo", "TranscriptId")
+                    b.HasOne("Unite.Data.Entities.Genome.Analysis.AnalysedSample", "AnalysedSample")
+                        .WithMany("GeneExpressions")
+                        .HasForeignKey("AnalysedSampleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Unite.Data.Entities.Genome.Gene", "Gene")
+                        .WithMany("GeneExpressions")
+                        .HasForeignKey("GeneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AnalysedSample");
+
+                    b.Navigation("Gene");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Variants.CNV.AffectedTranscript", b =>
@@ -2923,13 +2916,9 @@ namespace Unite.Data.Migrations.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Unite.Data.Services.Models.EnumValue<Unite.Data.Entities.Genome.Variants.CNV.Enums.CnaType>", null)
+                    b.HasOne("Unite.Data.Services.Models.EnumValue<Unite.Data.Entities.Genome.Variants.CNV.Enums.CnvType>", null)
                         .WithMany()
-                        .HasForeignKey("CnaTypeId");
-
-                    b.HasOne("Unite.Data.Services.Models.EnumValue<Unite.Data.Entities.Genome.Variants.CNV.Enums.SvType>", null)
-                        .WithMany()
-                        .HasForeignKey("SvTypeId");
+                        .HasForeignKey("TypeId");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Variants.CNV.VariantOccurrence", b =>
@@ -3319,6 +3308,10 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasOne("Unite.Data.Services.Models.EnumValue<Unite.Data.Entities.Tasks.Enums.IndexingTaskType>", null)
                         .WithMany()
                         .HasForeignKey("IndexingTypeId");
+
+                    b.HasOne("Unite.Data.Services.Models.EnumValue<Unite.Data.Entities.Tasks.Enums.SubmissionTaskType>", null)
+                        .WithMany()
+                        .HasForeignKey("SubmissionTypeId");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Donors.Donor", b =>
@@ -3350,6 +3343,8 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     b.Navigation("CopyNumberVariantOccurrences");
 
+                    b.Navigation("GeneExpressions");
+
                     b.Navigation("MutationOccurrences");
 
                     b.Navigation("StructuralVariantOccurrences");
@@ -3362,17 +3357,14 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Gene", b =>
                 {
-                    b.Navigation("Info");
-                });
+                    b.Navigation("GeneExpressions");
 
-            modelBuilder.Entity("Unite.Data.Entities.Genome.Protein", b =>
-                {
-                    b.Navigation("Info");
+                    b.Navigation("Transcripts");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Transcript", b =>
                 {
-                    b.Navigation("Info");
+                    b.Navigation("Protein");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Variants.CNV.Variant", b =>
