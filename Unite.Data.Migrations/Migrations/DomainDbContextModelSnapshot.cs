@@ -630,7 +630,7 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<double?>("TcnRatio")
                         .HasColumnType("double precision");
 
-                    b.Property<int?>("TypeId")
+                    b.Property<int>("TypeId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -710,7 +710,7 @@ namespace Unite.Data.Migrations.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("AlternateBase")
+                    b.Property<string>("Alt")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
@@ -723,7 +723,7 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("Length")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ReferenceBase")
+                    b.Property<string>("Ref")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
@@ -1862,6 +1862,12 @@ namespace Unite.Data.Migrations.Migrations
                             Id = 3,
                             Name = "TCN neutral",
                             Value = "Neutral"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Undetermined",
+                            Value = "Undetermined"
                         });
                 });
 
@@ -2916,7 +2922,9 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasOne("Unite.Data.Services.Models.EnumValue<Unite.Data.Entities.Genome.Variants.CNV.Enums.CnvType>", null)
                         .WithMany()
-                        .HasForeignKey("TypeId");
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Variants.CNV.VariantOccurrence", b =>

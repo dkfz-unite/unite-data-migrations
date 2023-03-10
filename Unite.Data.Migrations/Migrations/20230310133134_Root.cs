@@ -623,7 +623,7 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    TypeId = table.Column<int>(type: "integer", nullable: true),
+                    TypeId = table.Column<int>(type: "integer", nullable: false),
                     Loh = table.Column<bool>(type: "boolean", nullable: true),
                     HomoDel = table.Column<bool>(type: "boolean", nullable: true),
                     C1Mean = table.Column<double>(type: "double precision", nullable: true),
@@ -654,7 +654,8 @@ namespace Unite.Data.Migrations.Migrations
                         column: x => x.TypeId,
                         principalSchema: "gen",
                         principalTable: "CnvTypes",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -745,8 +746,8 @@ namespace Unite.Data.Migrations.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     TypeId = table.Column<int>(type: "integer", nullable: false),
-                    ReferenceBase = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    AlternateBase = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    Ref = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    Alt = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
                     ChromosomeId = table.Column<int>(type: "integer", nullable: false),
                     Start = table.Column<int>(type: "integer", nullable: false),
                     End = table.Column<int>(type: "integer", nullable: false),
@@ -1842,7 +1843,8 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     { 1, "TCN gain", "Gain" },
                     { 2, "TCN loss", "Loss" },
-                    { 3, "TCN neutral", "Neutral" }
+                    { 3, "TCN neutral", "Neutral" },
+                    { 4, "Undetermined", "Undetermined" }
                 });
 
             migrationBuilder.InsertData(
