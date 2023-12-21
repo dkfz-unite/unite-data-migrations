@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Unite.Data.Context;
 using Unite.Data.Migrations.Configuration.Options;
-using Unite.Data.Services;
 
 
 Console.WriteLine($"[{DateTime.UtcNow}] - Migration service started");

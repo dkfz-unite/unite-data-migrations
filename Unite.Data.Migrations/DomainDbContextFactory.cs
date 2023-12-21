@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Design;
+using Unite.Data.Context;
 using Unite.Data.Migrations.Configuration.Options;
-using Unite.Data.Services;
 
 namespace Unite.Data.Migrations;
 
