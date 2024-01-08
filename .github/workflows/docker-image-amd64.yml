@@ -32,4 +32,4 @@ jobs:
             USER=${{ github.actor }}
             TOKEN=${{ secrets.GITHUB_TOKEN }}
           push: true
-          tags: ${{env.REGISTRY}}/${{github.repository}}
+          tags: ${{env.REGISTRY}}/${{github.repository}}:${{ github.ref_name }}
