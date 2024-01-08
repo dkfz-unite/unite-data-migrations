@@ -1,4 +1,4 @@
-name: Publish Docker Image (Amd/64)
+name: Publish Docker Image
 
 on:
   push:
@@ -27,9 +27,9 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           build-args: |
             USER=${{ github.actor }}
             TOKEN=${{ secrets.GITHUB_TOKEN }}
           push: true
-          tags: ${{env.REGISTRY}}/${{github.repository}}:${{ github.ref_name }}
+          tags: ${{env.REGISTRY}}/${{github.repository}}
