@@ -1,4 +1,4 @@
-name: Publish Docker Image
+name: Publish Docker Image (Amd/64)
 
 on:
   push:
