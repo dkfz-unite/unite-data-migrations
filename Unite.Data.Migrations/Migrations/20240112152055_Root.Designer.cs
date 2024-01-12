@@ -12,7 +12,7 @@ using Unite.Data.Context;
 namespace Unite.Data.Migrations.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    [Migration("20231213134612_Root")]
+    [Migration("20240112152055_Root")]
     partial class Root
     {
         /// <inheritdoc />
@@ -1002,6 +1002,47 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Xenografts.Enums.ImplantLocation>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("ImplantLocations", "spe");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Other",
+                            Value = "Other"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Striatal",
+                            Value = "Striatal"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Cortical",
+                            Value = "Cortical"
+                        });
+                });
+
             modelBuilder.Entity("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Xenografts.Enums.ImplantType>", b =>
                 {
                     b.Property<int>("Id")
@@ -1034,47 +1075,6 @@ namespace Unite.Data.Migrations.Migrations
                             Id = 2,
                             Name = "Orhtotopical",
                             Value = "Orhtotopical"
-                        });
-                });
-
-            modelBuilder.Entity("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Xenografts.Enums.TissueLocation>", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Value");
-
-                    b.ToTable("TissueLocations", "spe");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Other",
-                            Value = "Other"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Striatal",
-                            Value = "Striatal"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Cortical",
-                            Value = "Cortical"
                         });
                 });
 
@@ -2820,6 +2820,9 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("GroupSize")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("ImplantLocationId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("ImplantTypeId")
                         .HasColumnType("integer");
 
@@ -2839,9 +2842,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("SurvivalDaysTo")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("TissueLocationId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("TumorGrowthFormId")
                         .HasColumnType("integer");
 
@@ -2850,11 +2850,11 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasKey("SpecimenId");
 
+                    b.HasIndex("ImplantLocationId");
+
                     b.HasIndex("ImplantTypeId");
 
                     b.HasIndex("ReferenceId");
-
-                    b.HasIndex("TissueLocationId");
 
                     b.HasIndex("TumorGrowthFormId");
 
@@ -3502,6 +3502,10 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Specimens.Xenografts.Xenograft", b =>
                 {
+                    b.HasOne("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Xenografts.Enums.ImplantLocation>", null)
+                        .WithMany()
+                        .HasForeignKey("ImplantLocationId");
+
                     b.HasOne("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Xenografts.Enums.ImplantType>", null)
                         .WithMany()
                         .HasForeignKey("ImplantTypeId");
@@ -3511,10 +3515,6 @@ namespace Unite.Data.Migrations.Migrations
                         .HasForeignKey("Unite.Data.Entities.Specimens.Xenografts.Xenograft", "SpecimenId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Xenografts.Enums.TissueLocation>", null)
-                        .WithMany()
-                        .HasForeignKey("TissueLocationId");
 
                     b.HasOne("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Xenografts.Enums.TumorGrowthForm>", null)
                         .WithMany()

@@ -256,6 +256,21 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ImplantLocations",
+                schema: "spe",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ImplantLocations", x => x.Id);
+                    table.UniqueConstraint("AK_ImplantLocations_Value", x => x.Value);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ImplantTypes",
                 schema: "spe",
                 columns: table => new
@@ -482,21 +497,6 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     table.PrimaryKey("PK_Therapies", x => x.Id);
                     table.UniqueConstraint("AK_Therapies_Name", x => x.Name);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TissueLocations",
-                schema: "spe",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false),
-                    Value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TissueLocations", x => x.Id);
-                    table.UniqueConstraint("AK_TissueLocations_Value", x => x.Value);
                 });
 
             migrationBuilder.CreateTable(
@@ -1422,7 +1422,7 @@ namespace Unite.Data.Migrations.Migrations
                     MouseStrain = table.Column<string>(type: "text", nullable: true),
                     GroupSize = table.Column<int>(type: "integer", nullable: true),
                     ImplantTypeId = table.Column<int>(type: "integer", nullable: true),
-                    TissueLocationId = table.Column<int>(type: "integer", nullable: true),
+                    ImplantLocationId = table.Column<int>(type: "integer", nullable: true),
                     ImplantedCellsNumber = table.Column<int>(type: "integer", nullable: true),
                     Tumorigenicity = table.Column<bool>(type: "boolean", nullable: true),
                     TumorGrowthFormId = table.Column<int>(type: "integer", nullable: true),
@@ -1432,6 +1432,12 @@ namespace Unite.Data.Migrations.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Xenografts", x => x.SpecimenId);
+                    table.ForeignKey(
+                        name: "FK_Xenografts_ImplantLocations_ImplantLocationId",
+                        column: x => x.ImplantLocationId,
+                        principalSchema: "spe",
+                        principalTable: "ImplantLocations",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Xenografts_ImplantTypes_ImplantTypeId",
                         column: x => x.ImplantTypeId,
@@ -1445,12 +1451,6 @@ namespace Unite.Data.Migrations.Migrations
                         principalTable: "Specimens",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Xenografts_TissueLocations_TissueLocationId",
-                        column: x => x.TissueLocationId,
-                        principalSchema: "spe",
-                        principalTable: "TissueLocations",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Xenografts_TumorGrowthForms_TumorGrowthFormId",
                         column: x => x.TumorGrowthFormId,
@@ -1997,6 +1997,17 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.InsertData(
                 schema: "spe",
+                table: "ImplantLocations",
+                columns: new[] { "Id", "Name", "Value" },
+                values: new object[,]
+                {
+                    { 1, "Other", "Other" },
+                    { 2, "Striatal", "Striatal" },
+                    { 3, "Cortical", "Cortical" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "spe",
                 table: "ImplantTypes",
                 columns: new[] { "Id", "Name", "Value" },
                 values: new object[,]
@@ -2116,17 +2127,6 @@ namespace Unite.Data.Migrations.Migrations
                     { 3, "Processing", "Processing" },
                     { 4, "Processed", "Processed" },
                     { 5, "Failed", "Failed" }
-                });
-
-            migrationBuilder.InsertData(
-                schema: "spe",
-                table: "TissueLocations",
-                columns: new[] { "Id", "Name", "Value" },
-                values: new object[,]
-                {
-                    { 1, "Other", "Other" },
-                    { 2, "Striatal", "Striatal" },
-                    { 3, "Cortical", "Cortical" }
                 });
 
             migrationBuilder.InsertData(
@@ -2572,6 +2572,12 @@ namespace Unite.Data.Migrations.Migrations
                 column: "TypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Xenografts_ImplantLocationId",
+                schema: "spe",
+                table: "Xenografts",
+                column: "ImplantLocationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Xenografts_ImplantTypeId",
                 schema: "spe",
                 table: "Xenografts",
@@ -2582,12 +2588,6 @@ namespace Unite.Data.Migrations.Migrations
                 schema: "spe",
                 table: "Xenografts",
                 column: "ReferenceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Xenografts_TissueLocationId",
-                schema: "spe",
-                table: "Xenografts",
-                column: "TissueLocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Xenografts_TumorGrowthFormId",
@@ -2852,15 +2852,15 @@ namespace Unite.Data.Migrations.Migrations
                 schema: "gen");
 
             migrationBuilder.DropTable(
+                name: "ImplantLocations",
+                schema: "spe");
+
+            migrationBuilder.DropTable(
                 name: "ImplantTypes",
                 schema: "spe");
 
             migrationBuilder.DropTable(
                 name: "Specimens",
-                schema: "spe");
-
-            migrationBuilder.DropTable(
-                name: "TissueLocations",
                 schema: "spe");
 
             migrationBuilder.DropTable(
