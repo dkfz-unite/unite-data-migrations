@@ -12,7 +12,7 @@ using Unite.Data.Context;
 namespace Unite.Data.Migrations.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    [Migration("20240112152055_Root")]
+    [Migration("20240117111023_Root")]
     partial class Root
     {
         /// <inheritdoc />
@@ -515,117 +515,6 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Cells.Enums.CellLineCultureType>", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Value");
-
-                    b.ToTable("CellLineCultureTypes", "spe");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Suspension",
-                            Value = "Suspension"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Adherent",
-                            Value = "Adherent"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Both",
-                            Value = "Both"
-                        });
-                });
-
-            modelBuilder.Entity("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Cells.Enums.CellLineType>", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Value");
-
-                    b.ToTable("CellLineTypes", "spe");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Stem Cell",
-                            Value = "Stem Cell"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Differentiated",
-                            Value = "Differentiated"
-                        });
-                });
-
-            modelBuilder.Entity("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Cells.Enums.Species>", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Value");
-
-                    b.ToTable("Species", "spe");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Human",
-                            Value = "Human"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Mouse",
-                            Value = "Mouse"
-                        });
-                });
-
             modelBuilder.Entity("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.GeneExpressionSubtype>", b =>
                 {
                     b.Property<int>("Id")
@@ -903,14 +792,14 @@ namespace Unite.Data.Migrations.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Tissue",
-                            Value = "Tissue"
+                            Name = "Material",
+                            Value = "Material"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "CellLine",
-                            Value = "CellLine"
+                            Name = "Line",
+                            Value = "Line"
                         },
                         new
                         {
@@ -926,7 +815,7 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Tissues.Enums.TissueType>", b =>
+            modelBuilder.Entity("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Lines.Enums.CellsCultureType>", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
@@ -944,14 +833,125 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasAlternateKey("Value");
 
-                    b.ToTable("TissueTypes", "spe");
+                    b.ToTable("CellsCultureTypes", "spe");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Name = "Control",
-                            Value = "Control"
+                            Name = "Suspension",
+                            Value = "Suspension"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Adherent",
+                            Value = "Adherent"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Both",
+                            Value = "Both"
+                        });
+                });
+
+            modelBuilder.Entity("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Lines.Enums.CellsSpecies>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("CellsSpecies", "spe");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Human",
+                            Value = "Human"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Mouse",
+                            Value = "Mouse"
+                        });
+                });
+
+            modelBuilder.Entity("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Lines.Enums.CellsType>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("CellsTypes", "spe");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Stem Cell",
+                            Value = "Stem Cell"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Differentiated",
+                            Value = "Differentiated"
+                        });
+                });
+
+            modelBuilder.Entity("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Materials.Enums.MaterialType>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("MaterialTypes", "spe");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Normal",
+                            Value = "Normal"
                         },
                         new
                         {
@@ -961,7 +961,7 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Tissues.Enums.TumorType>", b =>
+            modelBuilder.Entity("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Materials.Enums.TumorType>", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
@@ -1432,17 +1432,14 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Donors.Clinical.Treatment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("DonorId")
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<int>("TherapyId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Details")
                         .HasColumnType("text");
-
-                    b.Property<int>("DonorId")
-                        .HasColumnType("integer");
 
                     b.Property<int?>("DurationDays")
                         .HasColumnType("integer");
@@ -1459,12 +1456,7 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("StartDay")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TherapyId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DonorId");
+                    b.HasKey("DonorId", "TherapyId");
 
                     b.HasIndex("TherapyId");
 
@@ -2393,68 +2385,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.ToTable("MriImages", "img");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Specimens.Cells.CellLine", b =>
-                {
-                    b.Property<int>("SpecimenId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("CultureTypeId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ReferenceId")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<int?>("SpeciesId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("TypeId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("SpecimenId");
-
-                    b.HasIndex("CultureTypeId");
-
-                    b.HasIndex("ReferenceId");
-
-                    b.HasIndex("SpeciesId");
-
-                    b.HasIndex("TypeId");
-
-                    b.ToTable("CellLines", "spe");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Specimens.Cells.CellLineInfo", b =>
-                {
-                    b.Property<int>("SpecimenId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("AtccLink")
-                        .HasColumnType("text");
-
-                    b.Property<string>("DepositorEstablishment")
-                        .HasColumnType("text");
-
-                    b.Property<string>("DepositorName")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("EstablishmentDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("ExPasyLink")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PubMedLink")
-                        .HasColumnType("text");
-
-                    b.HasKey("SpecimenId");
-
-                    b.ToTable("CellLineInfo", "spe");
-                });
-
             modelBuilder.Entity("Unite.Data.Entities.Specimens.Drug", b =>
                 {
                     b.Property<int>("Id")
@@ -2529,6 +2459,175 @@ namespace Unite.Data.Migrations.Migrations
                     b.ToTable("DrugScreenings", "spe");
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Intervention", b =>
+                {
+                    b.Property<int>("SpecimenId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Details")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("DurationDays")
+                        .HasColumnType("integer");
+
+                    b.Property<DateOnly?>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Results")
+                        .HasColumnType("text");
+
+                    b.Property<DateOnly?>("StartDate")
+                        .HasColumnType("date");
+
+                    b.Property<int?>("StartDay")
+                        .HasColumnType("integer");
+
+                    b.HasKey("SpecimenId", "TypeId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("Interventions", "spe");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.InterventionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Name");
+
+                    b.ToTable("InterventionTypes", "spe");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Lines.Line", b =>
+                {
+                    b.Property<int>("SpecimenId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("CellsCultureTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("CellsSpeciesId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("CellsTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ReferenceId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("SpecimenId");
+
+                    b.HasIndex("CellsCultureTypeId");
+
+                    b.HasIndex("CellsSpeciesId");
+
+                    b.HasIndex("CellsTypeId");
+
+                    b.HasIndex("ReferenceId");
+
+                    b.ToTable("Lines", "spe");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Lines.LineInfo", b =>
+                {
+                    b.Property<int>("SpecimenId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("AtccLink")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DepositorEstablishment")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DepositorName")
+                        .HasColumnType("text");
+
+                    b.Property<DateOnly?>("EstablishmentDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("ExPasyLink")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PubMedLink")
+                        .HasColumnType("text");
+
+                    b.HasKey("SpecimenId");
+
+                    b.ToTable("LineInfos", "spe");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Materials.Material", b =>
+                {
+                    b.Property<int>("SpecimenId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ReferenceId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<int?>("SourceId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TumorTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TypeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("SpecimenId");
+
+                    b.HasIndex("ReferenceId");
+
+                    b.HasIndex("SourceId");
+
+                    b.HasIndex("TumorTypeId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("Materials", "spe");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Materials.MaterialSource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("MaterialSources", "spe");
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Specimens.MolecularData", b =>
                 {
                     b.Property<int?>("SpecimenId")
@@ -2565,70 +2664,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasIndex("MgmtStatusId");
 
                     b.ToTable("MolecularData", "spe");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Specimens.Organoids.Intervention", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Details")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("DurationDays")
-                        .HasColumnType("integer");
-
-                    b.Property<DateOnly?>("EndDate")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Results")
-                        .HasColumnType("text");
-
-                    b.Property<int>("SpecimenId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateOnly?>("StartDate")
-                        .HasColumnType("date");
-
-                    b.Property<int?>("StartDay")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TypeId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SpecimenId");
-
-                    b.HasIndex("TypeId");
-
-                    b.ToTable("OrganoidInterventions", "spe");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Specimens.Organoids.InterventionType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Name");
-
-                    b.ToTable("OrganoidInterventionTypes", "spe");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Specimens.Organoids.Organoid", b =>
@@ -2695,121 +2730,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasIndex("TypeId");
 
                     b.ToTable("Specimens", "spe");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Specimens.Tissues.Tissue", b =>
-                {
-                    b.Property<int>("SpecimenId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ReferenceId")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<int?>("SourceId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("TumorTypeId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("TypeId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("SpecimenId");
-
-                    b.HasIndex("ReferenceId");
-
-                    b.HasIndex("SourceId");
-
-                    b.HasIndex("TumorTypeId");
-
-                    b.HasIndex("TypeId");
-
-                    b.ToTable("Tissues", "spe");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Specimens.Tissues.TissueSource", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Value");
-
-                    b.ToTable("TissueSources", "spe");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Specimens.Xenografts.Intervention", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Details")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("DurationDays")
-                        .HasColumnType("integer");
-
-                    b.Property<DateOnly?>("EndDate")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Results")
-                        .HasColumnType("text");
-
-                    b.Property<int>("SpecimenId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateOnly?>("StartDate")
-                        .HasColumnType("date");
-
-                    b.Property<int?>("StartDay")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TypeId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SpecimenId");
-
-                    b.HasIndex("TypeId");
-
-                    b.ToTable("XenograftInterventions", "spe");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Specimens.Xenografts.InterventionType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Name");
-
-                    b.ToTable("XenograftInterventionTypes", "spe");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Specimens.Xenografts.Xenograft", b =>
@@ -3321,38 +3241,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("Image");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Specimens.Cells.CellLine", b =>
-                {
-                    b.HasOne("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Cells.Enums.CellLineCultureType>", null)
-                        .WithMany()
-                        .HasForeignKey("CultureTypeId");
-
-                    b.HasOne("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Cells.Enums.Species>", null)
-                        .WithMany()
-                        .HasForeignKey("SpeciesId");
-
-                    b.HasOne("Unite.Data.Entities.Specimens.Specimen", "Specimen")
-                        .WithOne("CellLine")
-                        .HasForeignKey("Unite.Data.Entities.Specimens.Cells.CellLine", "SpecimenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Cells.Enums.CellLineType>", null)
-                        .WithMany()
-                        .HasForeignKey("TypeId");
-
-                    b.Navigation("Specimen");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Specimens.Cells.CellLineInfo", b =>
-                {
-                    b.HasOne("Unite.Data.Entities.Specimens.Cells.CellLine", null)
-                        .WithOne("Info")
-                        .HasForeignKey("Unite.Data.Entities.Specimens.Cells.CellLineInfo", "SpecimenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Unite.Data.Entities.Specimens.DrugScreening", b =>
                 {
                     b.HasOne("Unite.Data.Entities.Specimens.Drug", "Drug")
@@ -3368,6 +3256,82 @@ namespace Unite.Data.Migrations.Migrations
                         .IsRequired();
 
                     b.Navigation("Drug");
+
+                    b.Navigation("Specimen");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Intervention", b =>
+                {
+                    b.HasOne("Unite.Data.Entities.Specimens.Specimen", "Specimen")
+                        .WithMany("Interventions")
+                        .HasForeignKey("SpecimenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Unite.Data.Entities.Specimens.InterventionType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Specimen");
+
+                    b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Lines.Line", b =>
+                {
+                    b.HasOne("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Lines.Enums.CellsCultureType>", null)
+                        .WithMany()
+                        .HasForeignKey("CellsCultureTypeId");
+
+                    b.HasOne("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Lines.Enums.CellsSpecies>", null)
+                        .WithMany()
+                        .HasForeignKey("CellsSpeciesId");
+
+                    b.HasOne("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Lines.Enums.CellsType>", null)
+                        .WithMany()
+                        .HasForeignKey("CellsTypeId");
+
+                    b.HasOne("Unite.Data.Entities.Specimens.Specimen", "Specimen")
+                        .WithOne("Line")
+                        .HasForeignKey("Unite.Data.Entities.Specimens.Lines.Line", "SpecimenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Specimen");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Lines.LineInfo", b =>
+                {
+                    b.HasOne("Unite.Data.Entities.Specimens.Lines.Line", null)
+                        .WithOne("Info")
+                        .HasForeignKey("Unite.Data.Entities.Specimens.Lines.LineInfo", "SpecimenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Materials.Material", b =>
+                {
+                    b.HasOne("Unite.Data.Entities.Specimens.Materials.MaterialSource", "Source")
+                        .WithMany()
+                        .HasForeignKey("SourceId");
+
+                    b.HasOne("Unite.Data.Entities.Specimens.Specimen", "Specimen")
+                        .WithOne("Material")
+                        .HasForeignKey("Unite.Data.Entities.Specimens.Materials.Material", "SpecimenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Materials.Enums.TumorType>", null)
+                        .WithMany()
+                        .HasForeignKey("TumorTypeId");
+
+                    b.HasOne("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Materials.Enums.MaterialType>", null)
+                        .WithMany()
+                        .HasForeignKey("TypeId");
+
+                    b.Navigation("Source");
 
                     b.Navigation("Specimen");
                 });
@@ -3403,25 +3367,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("Specimen");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Specimens.Organoids.Intervention", b =>
-                {
-                    b.HasOne("Unite.Data.Entities.Specimens.Organoids.Organoid", "Organoid")
-                        .WithMany("Interventions")
-                        .HasForeignKey("SpecimenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Unite.Data.Entities.Specimens.Organoids.InterventionType", "Type")
-                        .WithMany()
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Organoid");
-
-                    b.Navigation("Type");
-                });
-
             modelBuilder.Entity("Unite.Data.Entities.Specimens.Organoids.Organoid", b =>
                 {
                     b.HasOne("Unite.Data.Entities.Specimens.Specimen", "Specimen")
@@ -3454,50 +3399,6 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("Donor");
 
                     b.Navigation("Parent");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Specimens.Tissues.Tissue", b =>
-                {
-                    b.HasOne("Unite.Data.Entities.Specimens.Tissues.TissueSource", "Source")
-                        .WithMany()
-                        .HasForeignKey("SourceId");
-
-                    b.HasOne("Unite.Data.Entities.Specimens.Specimen", "Specimen")
-                        .WithOne("Tissue")
-                        .HasForeignKey("Unite.Data.Entities.Specimens.Tissues.Tissue", "SpecimenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Tissues.Enums.TumorType>", null)
-                        .WithMany()
-                        .HasForeignKey("TumorTypeId");
-
-                    b.HasOne("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Specimens.Tissues.Enums.TissueType>", null)
-                        .WithMany()
-                        .HasForeignKey("TypeId");
-
-                    b.Navigation("Source");
-
-                    b.Navigation("Specimen");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Specimens.Xenografts.Intervention", b =>
-                {
-                    b.HasOne("Unite.Data.Entities.Specimens.Xenografts.Xenograft", "Xenograft")
-                        .WithMany("Interventions")
-                        .HasForeignKey("SpecimenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Unite.Data.Entities.Specimens.Xenografts.InterventionType", "Type")
-                        .WithMany()
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Type");
-
-                    b.Navigation("Xenograft");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Specimens.Xenografts.Xenograft", b =>
@@ -3644,40 +3545,32 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("MriImage");
                 });
 
-            modelBuilder.Entity("Unite.Data.Entities.Specimens.Cells.CellLine", b =>
+            modelBuilder.Entity("Unite.Data.Entities.Specimens.Lines.Line", b =>
                 {
                     b.Navigation("Info");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Specimens.Organoids.Organoid", b =>
-                {
-                    b.Navigation("Interventions");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Specimens.Specimen", b =>
                 {
                     b.Navigation("AnalysedSamples");
 
-                    b.Navigation("CellLine");
-
                     b.Navigation("Children");
 
                     b.Navigation("DrugScreenings");
 
+                    b.Navigation("Interventions");
+
+                    b.Navigation("Line");
+
                     b.Navigation("MatchedSamples");
+
+                    b.Navigation("Material");
 
                     b.Navigation("MolecularData");
 
                     b.Navigation("Organoid");
 
-                    b.Navigation("Tissue");
-
                     b.Navigation("Xenograft");
-                });
-
-            modelBuilder.Entity("Unite.Data.Entities.Specimens.Xenografts.Xenograft", b =>
-                {
-                    b.Navigation("Interventions");
                 });
 #pragma warning restore 612, 618
         }
