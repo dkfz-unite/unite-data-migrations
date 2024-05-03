@@ -12,8 +12,8 @@ using Unite.Data.Context;
 namespace Unite.Data.Migrations.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    [Migration("20240308093714_Projects")]
-    partial class Projects
+    [Migration("20240503075854_Root")]
+    partial class Root
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1296,8 +1296,14 @@ namespace Unite.Data.Migrations.Migrations
                         new
                         {
                             Id = 4,
-                            Name = "TEX",
-                            Value = "TEX"
+                            Name = "BGE",
+                            Value = "BGE"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "CGE",
+                            Value = "CGE"
                         });
                 });
 
@@ -1351,6 +1357,47 @@ namespace Unite.Data.Migrations.Migrations
                             Id = 5,
                             Name = "Failed",
                             Value = "Failed"
+                        });
+                });
+
+            modelBuilder.Entity("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Tasks.Enums.WorkerType>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("WorkerTypes", "com");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Submission",
+                            Value = "Submission"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Annotation",
+                            Value = "Annotation"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Indexing",
+                            Value = "Indexing"
                         });
                 });
 
@@ -1618,6 +1665,12 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("AnalysisId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("CellsNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("GenesModel")
+                        .HasColumnType("text");
+
                     b.Property<int?>("MatchedSampleId")
                         .HasColumnType("integer")
                         .HasColumnName("MatchedSpecimenId");
@@ -1642,6 +1695,35 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasIndex("TargetSampleId");
 
                     b.ToTable("AnalysedSpecimens", "gen");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Genome.Analysis.AnalysedSampleResource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AnalysedSampleId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnalysedSampleId");
+
+                    b.ToTable("Resources", "gen");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Analysis.Analysis", b =>
@@ -1911,14 +1993,14 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("ChromosomeId")
                         .HasColumnType("integer");
 
+                    b.Property<bool?>("Del")
+                        .HasColumnType("boolean");
+
                     b.Property<double?>("DhMax")
                         .HasColumnType("double precision");
 
                     b.Property<int>("End")
                         .HasColumnType("integer");
-
-                    b.Property<bool?>("HomoDel")
-                        .HasColumnType("boolean");
 
                     b.Property<int?>("Length")
                         .HasColumnType("integer");
@@ -2835,6 +2917,47 @@ namespace Unite.Data.Migrations.Migrations
                     b.ToTable("Tasks", "com");
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.Tasks.Worker", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("TypeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("Workers", "com");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Active = true,
+                            TypeId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Active = true,
+                            TypeId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Active = true,
+                            TypeId = 3
+                        });
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Donors.Clinical.ClinicalData", b =>
                 {
                     b.HasOne("Unite.Data.Entities.Donors.Donor", "Donor")
@@ -2942,6 +3065,15 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("MatchedSample");
 
                     b.Navigation("TargetSample");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Genome.Analysis.AnalysedSampleResource", b =>
+                {
+                    b.HasOne("Unite.Data.Entities.Genome.Analysis.AnalysedSample", null)
+                        .WithMany("Resources")
+                        .HasForeignKey("AnalysedSampleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Analysis.Analysis", b =>
@@ -3453,6 +3585,15 @@ namespace Unite.Data.Migrations.Migrations
                         .HasForeignKey("SubmissionTypeId");
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.Tasks.Worker", b =>
+                {
+                    b.HasOne("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Tasks.Enums.WorkerType>", null)
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Donors.Donor", b =>
                 {
                     b.Navigation("ClinicalData");
@@ -3483,6 +3624,8 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("BulkExpressions");
 
                     b.Navigation("CnvEntries");
+
+                    b.Navigation("Resources");
 
                     b.Navigation("SsmEntries");
 

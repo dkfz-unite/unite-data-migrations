@@ -1293,8 +1293,14 @@ namespace Unite.Data.Migrations.Migrations
                         new
                         {
                             Id = 4,
-                            Name = "TEX",
-                            Value = "TEX"
+                            Name = "BGE",
+                            Value = "BGE"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "CGE",
+                            Value = "CGE"
                         });
                 });
 
@@ -1656,6 +1662,12 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("AnalysisId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("CellsNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("GenesModel")
+                        .HasColumnType("text");
+
                     b.Property<int?>("MatchedSampleId")
                         .HasColumnType("integer")
                         .HasColumnName("MatchedSpecimenId");
@@ -1680,6 +1692,35 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasIndex("TargetSampleId");
 
                     b.ToTable("AnalysedSpecimens", "gen");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Genome.Analysis.AnalysedSampleResource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AnalysedSampleId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnalysedSampleId");
+
+                    b.ToTable("Resources", "gen");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Analysis.Analysis", b =>
@@ -1949,14 +1990,14 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("ChromosomeId")
                         .HasColumnType("integer");
 
+                    b.Property<bool?>("Del")
+                        .HasColumnType("boolean");
+
                     b.Property<double?>("DhMax")
                         .HasColumnType("double precision");
 
                     b.Property<int>("End")
                         .HasColumnType("integer");
-
-                    b.Property<bool?>("HomoDel")
-                        .HasColumnType("boolean");
 
                     b.Property<int?>("Length")
                         .HasColumnType("integer");
@@ -3023,6 +3064,15 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("TargetSample");
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.Genome.Analysis.AnalysedSampleResource", b =>
+                {
+                    b.HasOne("Unite.Data.Entities.Genome.Analysis.AnalysedSample", null)
+                        .WithMany("Resources")
+                        .HasForeignKey("AnalysedSampleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Genome.Analysis.Analysis", b =>
                 {
                     b.HasOne("Unite.Data.Context.Mappers.Entities.EnumEntity<Unite.Data.Entities.Genome.Analysis.Enums.AnalysisType>", null)
@@ -3571,6 +3621,8 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("BulkExpressions");
 
                     b.Navigation("CnvEntries");
+
+                    b.Navigation("Resources");
 
                     b.Navigation("SsmEntries");
 
