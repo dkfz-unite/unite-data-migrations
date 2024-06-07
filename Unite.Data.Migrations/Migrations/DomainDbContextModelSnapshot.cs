@@ -1623,15 +1623,15 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Donors.ProjectDonor", b =>
                 {
-                    b.Property<int>("DonorId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("ProjectId")
                         .HasColumnType("integer");
 
-                    b.HasKey("DonorId", "ProjectId");
+                    b.Property<int>("DonorId")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("ProjectId");
+                    b.HasKey("ProjectId", "DonorId");
+
+                    b.HasIndex("DonorId");
 
                     b.ToTable("ProjectDonors", "don");
                 });
@@ -1661,15 +1661,15 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Donors.StudyDonor", b =>
                 {
-                    b.Property<int>("DonorId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("StudyId")
                         .HasColumnType("integer");
 
-                    b.HasKey("DonorId", "StudyId");
+                    b.Property<int>("DonorId")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("StudyId");
+                    b.HasKey("StudyId", "DonorId");
+
+                    b.HasIndex("DonorId");
 
                     b.ToTable("StudyDonors", "don");
                 });
@@ -1810,17 +1810,17 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Analysis.Dna.Cnv.VariantEntry", b =>
                 {
-                    b.Property<int>("SampleId")
-                        .HasColumnType("integer")
-                        .HasColumnName("SampleId");
-
                     b.Property<int>("EntityId")
                         .HasColumnType("integer")
                         .HasColumnName("VariantId");
 
-                    b.HasKey("SampleId", "EntityId");
+                    b.Property<int>("SampleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("SampleId");
 
-                    b.HasIndex("EntityId");
+                    b.HasKey("EntityId", "SampleId");
+
+                    b.HasIndex("SampleId");
 
                     b.ToTable("CnvEntries", "gen");
                 });
@@ -1918,17 +1918,17 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Analysis.Dna.Ssm.VariantEntry", b =>
                 {
-                    b.Property<int>("SampleId")
-                        .HasColumnType("integer")
-                        .HasColumnName("SampleId");
-
                     b.Property<int>("EntityId")
                         .HasColumnType("integer")
                         .HasColumnName("VariantId");
 
-                    b.HasKey("SampleId", "EntityId");
+                    b.Property<int>("SampleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("SampleId");
 
-                    b.HasIndex("EntityId");
+                    b.HasKey("EntityId", "SampleId");
+
+                    b.HasIndex("SampleId");
 
                     b.ToTable("SsmEntries", "gen");
                 });
@@ -2032,30 +2032,30 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Analysis.Dna.Sv.VariantEntry", b =>
                 {
-                    b.Property<int>("SampleId")
-                        .HasColumnType("integer")
-                        .HasColumnName("SampleId");
-
                     b.Property<int>("EntityId")
                         .HasColumnType("integer")
                         .HasColumnName("VariantId");
 
-                    b.HasKey("SampleId", "EntityId");
+                    b.Property<int>("SampleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("SampleId");
 
-                    b.HasIndex("EntityId");
+                    b.HasKey("EntityId", "SampleId");
+
+                    b.HasIndex("SampleId");
 
                     b.ToTable("SvEntries", "gen");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Genome.Analysis.Rna.GeneExpression", b =>
                 {
-                    b.Property<int>("SampleId")
-                        .HasColumnType("integer")
-                        .HasColumnName("SampleId");
-
                     b.Property<int>("EntityId")
                         .HasColumnType("integer")
                         .HasColumnName("GeneId");
+
+                    b.Property<int>("SampleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("SampleId");
 
                     b.Property<double>("FPKM")
                         .HasColumnType("double precision");
@@ -2066,9 +2066,9 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<double>("TPM")
                         .HasColumnType("double precision");
 
-                    b.HasKey("SampleId", "EntityId");
+                    b.HasKey("EntityId", "SampleId");
 
-                    b.HasIndex("EntityId");
+                    b.HasIndex("SampleId");
 
                     b.ToTable("GeneExpressions", "gen");
                 });
@@ -2337,21 +2337,21 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Images.Analysis.Radiomics.FeatureEntry", b =>
                 {
-                    b.Property<int>("SampleId")
-                        .HasColumnType("integer")
-                        .HasColumnName("SampleId");
-
                     b.Property<int>("EntityId")
                         .HasColumnType("integer")
                         .HasColumnName("FeatureId");
+
+                    b.Property<int>("SampleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("SampleId");
 
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("SampleId", "EntityId");
+                    b.HasKey("EntityId", "SampleId");
 
-                    b.HasIndex("EntityId");
+                    b.HasIndex("SampleId");
 
                     b.ToTable("RadiomicsFeatureEntries", "img");
                 });
@@ -2527,13 +2527,13 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Specimens.Analysis.Drugs.DrugScreening", b =>
                 {
-                    b.Property<int>("SampleId")
-                        .HasColumnType("integer")
-                        .HasColumnName("SampleId");
-
                     b.Property<int>("EntityId")
                         .HasColumnType("integer")
                         .HasColumnName("DrugId");
+
+                    b.Property<int>("SampleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("SampleId");
 
                     b.Property<double?>("Dose25")
                         .HasColumnType("double precision");
@@ -2565,9 +2565,9 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<string>("Responses")
                         .HasColumnType("text");
 
-                    b.HasKey("SampleId", "EntityId");
+                    b.HasKey("EntityId", "SampleId");
 
-                    b.HasIndex("EntityId");
+                    b.HasIndex("SampleId");
 
                     b.ToTable("DrugScreenings", "spe");
                 });
@@ -2602,10 +2602,10 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Specimens.Intervention", b =>
                 {
-                    b.Property<int>("SpecimenId")
+                    b.Property<int>("TypeId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TypeId")
+                    b.Property<int>("SpecimenId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Details")
@@ -2626,9 +2626,9 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int?>("StartDay")
                         .HasColumnType("integer");
 
-                    b.HasKey("SpecimenId", "TypeId");
+                    b.HasKey("TypeId", "SpecimenId");
 
-                    b.HasIndex("TypeId");
+                    b.HasIndex("SpecimenId");
 
                     b.ToTable("Interventions", "spe");
                 });

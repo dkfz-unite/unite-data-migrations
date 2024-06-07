@@ -804,7 +804,7 @@ namespace Unite.Data.Migrations.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProjectDonors", x => new { x.DonorId, x.ProjectId });
+                    table.PrimaryKey("PK_ProjectDonors", x => new { x.ProjectId, x.DonorId });
                     table.ForeignKey(
                         name: "FK_ProjectDonors_Donors_DonorId",
                         column: x => x.DonorId,
@@ -904,7 +904,7 @@ namespace Unite.Data.Migrations.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudyDonors", x => new { x.DonorId, x.StudyId });
+                    table.PrimaryKey("PK_StudyDonors", x => new { x.StudyId, x.DonorId });
                     table.ForeignKey(
                         name: "FK_StudyDonors_Donors_DonorId",
                         column: x => x.DonorId,
@@ -1239,7 +1239,7 @@ namespace Unite.Data.Migrations.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Interventions", x => new { x.SpecimenId, x.TypeId });
+                    table.PrimaryKey("PK_Interventions", x => new { x.TypeId, x.SpecimenId });
                     table.ForeignKey(
                         name: "FK_Interventions_InterventionTypes_TypeId",
                         column: x => x.TypeId,
@@ -1678,7 +1678,7 @@ namespace Unite.Data.Migrations.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RadiomicsFeatureEntries", x => new { x.SampleId, x.FeatureId });
+                    table.PrimaryKey("PK_RadiomicsFeatureEntries", x => new { x.FeatureId, x.SampleId });
                     table.ForeignKey(
                         name: "FK_RadiomicsFeatureEntries_RadiomicsFeatures_FeatureId",
                         column: x => x.FeatureId,
@@ -1731,7 +1731,7 @@ namespace Unite.Data.Migrations.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CnvEntries", x => new { x.SampleId, x.VariantId });
+                    table.PrimaryKey("PK_CnvEntries", x => new { x.VariantId, x.SampleId });
                     table.ForeignKey(
                         name: "FK_CnvEntries_Cnvs_VariantId",
                         column: x => x.VariantId,
@@ -1761,7 +1761,7 @@ namespace Unite.Data.Migrations.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GeneExpressions", x => new { x.SampleId, x.GeneId });
+                    table.PrimaryKey("PK_GeneExpressions", x => new { x.GeneId, x.SampleId });
                     table.ForeignKey(
                         name: "FK_GeneExpressions_Genes_GeneId",
                         column: x => x.GeneId,
@@ -1812,7 +1812,7 @@ namespace Unite.Data.Migrations.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SsmEntries", x => new { x.SampleId, x.VariantId });
+                    table.PrimaryKey("PK_SsmEntries", x => new { x.VariantId, x.SampleId });
                     table.ForeignKey(
                         name: "FK_SsmEntries_Samples_SampleId",
                         column: x => x.SampleId,
@@ -1839,7 +1839,7 @@ namespace Unite.Data.Migrations.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SvEntries", x => new { x.SampleId, x.VariantId });
+                    table.PrimaryKey("PK_SvEntries", x => new { x.VariantId, x.SampleId });
                     table.ForeignKey(
                         name: "FK_SvEntries_Samples_SampleId",
                         column: x => x.SampleId,
@@ -1876,7 +1876,7 @@ namespace Unite.Data.Migrations.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DrugScreenings", x => new { x.SampleId, x.DrugId });
+                    table.PrimaryKey("PK_DrugScreenings", x => new { x.DrugId, x.SampleId });
                     table.ForeignKey(
                         name: "FK_DrugScreenings_Drugs_DrugId",
                         column: x => x.DrugId,
@@ -2292,10 +2292,10 @@ namespace Unite.Data.Migrations.Migrations
                 column: "FeatureId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CnvEntries_VariantId",
+                name: "IX_CnvEntries_SampleId",
                 schema: "gen",
                 table: "CnvEntries",
-                column: "VariantId");
+                column: "SampleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cnvs_ChromosomeId",
@@ -2316,16 +2316,16 @@ namespace Unite.Data.Migrations.Migrations
                 column: "ReferenceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DrugScreenings_DrugId",
+                name: "IX_DrugScreenings_SampleId",
                 schema: "spe",
                 table: "DrugScreenings",
-                column: "DrugId");
+                column: "SampleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GeneExpressions_GeneId",
+                name: "IX_GeneExpressions_SampleId",
                 schema: "gen",
                 table: "GeneExpressions",
-                column: "GeneId");
+                column: "SampleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Genes_ChromosomeId",
@@ -2352,10 +2352,10 @@ namespace Unite.Data.Migrations.Migrations
                 column: "TypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Interventions_TypeId",
+                name: "IX_Interventions_SpecimenId",
                 schema: "spe",
                 table: "Interventions",
-                column: "TypeId");
+                column: "SpecimenId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lines_CellsCultureTypeId",
@@ -2424,10 +2424,10 @@ namespace Unite.Data.Migrations.Migrations
                 column: "MgmtStatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectDonors_ProjectId",
+                name: "IX_ProjectDonors_DonorId",
                 schema: "don",
                 table: "ProjectDonors",
-                column: "ProjectId");
+                column: "DonorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Proteins_TranscriptId",
@@ -2437,10 +2437,10 @@ namespace Unite.Data.Migrations.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_RadiomicsFeatureEntries_FeatureId",
+                name: "IX_RadiomicsFeatureEntries_SampleId",
                 schema: "img",
                 table: "RadiomicsFeatureEntries",
-                column: "FeatureId");
+                column: "SampleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SampleResources_SampleId",
@@ -2524,10 +2524,10 @@ namespace Unite.Data.Migrations.Migrations
                 column: "FeatureId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SsmEntries_VariantId",
+                name: "IX_SsmEntries_SampleId",
                 schema: "gen",
                 table: "SsmEntries",
-                column: "VariantId");
+                column: "SampleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ssms_ChromosomeId",
@@ -2542,10 +2542,10 @@ namespace Unite.Data.Migrations.Migrations
                 column: "TypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudyDonors_StudyId",
+                name: "IX_StudyDonors_DonorId",
                 schema: "don",
                 table: "StudyDonors",
-                column: "StudyId");
+                column: "DonorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SvAffectedTranscripts_FeatureId",
@@ -2554,10 +2554,10 @@ namespace Unite.Data.Migrations.Migrations
                 column: "FeatureId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SvEntries_VariantId",
+                name: "IX_SvEntries_SampleId",
                 schema: "gen",
                 table: "SvEntries",
-                column: "VariantId");
+                column: "SampleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Svs_ChromosomeId",
