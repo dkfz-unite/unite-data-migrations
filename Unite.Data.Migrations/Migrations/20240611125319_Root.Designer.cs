@@ -12,7 +12,7 @@ using Unite.Data.Context;
 namespace Unite.Data.Migrations.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    [Migration("20240607134303_Root")]
+    [Migration("20240611125319_Root")]
     partial class Root
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Unite.Data.Migrations.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
