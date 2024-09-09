@@ -1421,10 +1421,10 @@ namespace Unite.Data.Migrations.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     MatchedSampleId = table.Column<int>(type: "integer", nullable: true),
+                    Genome = table.Column<string>(type: "text", nullable: true),
                     Purity = table.Column<double>(type: "double precision", nullable: true),
                     Ploidy = table.Column<double>(type: "double precision", nullable: true),
-                    CellsNumber = table.Column<int>(type: "integer", nullable: true),
-                    GenesModel = table.Column<string>(type: "text", nullable: true),
+                    Cells = table.Column<int>(type: "integer", nullable: true),
                     SpecimenId = table.Column<int>(type: "integer", nullable: false),
                     AnalysisId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -1788,6 +1788,7 @@ namespace Unite.Data.Migrations.Migrations
                     SampleId = table.Column<int>(type: "integer", nullable: false),
                     Type = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Format = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Archive = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     Url = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -1897,7 +1898,11 @@ namespace Unite.Data.Migrations.Migrations
                 schema: "com",
                 table: "AnalysisTaskTypes",
                 columns: new[] { "Id", "Name", "Value" },
-                values: new object[] { 1, "DExp", "DExp" });
+                values: new object[,]
+                {
+                    { 320, "rna-de", "rna-de" },
+                    { 340, "rnacs", "rnacs" }
+                });
 
             migrationBuilder.InsertData(
                 schema: "gen",
@@ -1929,9 +1934,9 @@ namespace Unite.Data.Migrations.Migrations
                 columns: new[] { "Id", "Name", "Value" },
                 values: new object[,]
                 {
-                    { 1, "SSM", "SSM" },
-                    { 2, "CNV", "CNV" },
-                    { 3, "SV", "SV" }
+                    { 301, "dna-ssm", "dna-ssm" },
+                    { 302, "dna-cnv", "dna-cnv" },
+                    { 303, "dna-sv", "dna-sv" }
                 });
 
             migrationBuilder.InsertData(
@@ -2097,14 +2102,14 @@ namespace Unite.Data.Migrations.Migrations
                 columns: new[] { "Id", "Name", "Value" },
                 values: new object[,]
                 {
-                    { 1, "Donor", "Donor" },
-                    { 2, "Image", "Image" },
-                    { 3, "Specimen", "Specimen" },
-                    { 4, "Gene", "Gene" },
-                    { 5, "SSM", "SSM" },
-                    { 6, "CNV", "CNV" },
-                    { 7, "SV", "SV" },
-                    { 8, "Project", "Project" }
+                    { 1, "Project", "Project" },
+                    { 2, "Donor", "Donor" },
+                    { 3, "Image", "Image" },
+                    { 4, "Specimen", "Specimen" },
+                    { 5, "Gene", "Gene" },
+                    { 6, "SSM", "SSM" },
+                    { 7, "CNV", "CNV" },
+                    { 8, "SV", "SV" }
                 });
 
             migrationBuilder.InsertData(
@@ -2170,11 +2175,11 @@ namespace Unite.Data.Migrations.Migrations
                 columns: new[] { "Id", "Name", "Value" },
                 values: new object[,]
                 {
-                    { 1, "SSM", "SSM" },
-                    { 2, "CNV", "CNV" },
-                    { 3, "SV", "SV" },
-                    { 4, "BGE", "BGE" },
-                    { 5, "CGE", "CGE" }
+                    { 301, "dna-ssm", "dna-ssm" },
+                    { 302, "dna-cnv", "dna-cnv" },
+                    { 303, "dna-sv", "dna-sv" },
+                    { 321, "rna-exp", "rna-exp" },
+                    { 341, "rnasc-exp", "rnasc-exp" }
                 });
 
             migrationBuilder.InsertData(

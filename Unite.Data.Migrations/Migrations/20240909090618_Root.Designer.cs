@@ -12,8 +12,8 @@ using Unite.Data.Context;
 namespace Unite.Data.Migrations.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    [Migration("20240808113826_Samples")]
-    partial class Samples
+    [Migration("20240909090618_Root")]
+    partial class Root
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1159,9 +1159,15 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Name = "DExp",
-                            Value = "DExp"
+                            Id = 320,
+                            Name = "rna-de",
+                            Value = "rna-de"
+                        },
+                        new
+                        {
+                            Id = 340,
+                            Name = "rnacs",
+                            Value = "rnacs"
                         });
                 });
 
@@ -1188,21 +1194,21 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Name = "SSM",
-                            Value = "SSM"
+                            Id = 301,
+                            Name = "dna-ssm",
+                            Value = "dna-ssm"
                         },
                         new
                         {
-                            Id = 2,
-                            Name = "CNV",
-                            Value = "CNV"
+                            Id = 302,
+                            Name = "dna-cnv",
+                            Value = "dna-cnv"
                         },
                         new
                         {
-                            Id = 3,
-                            Name = "SV",
-                            Value = "SV"
+                            Id = 303,
+                            Name = "dna-sv",
+                            Value = "dna-sv"
                         });
                 });
 
@@ -1230,50 +1236,50 @@ namespace Unite.Data.Migrations.Migrations
                         new
                         {
                             Id = 1,
+                            Name = "Project",
+                            Value = "Project"
+                        },
+                        new
+                        {
+                            Id = 2,
                             Name = "Donor",
                             Value = "Donor"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = 3,
                             Name = "Image",
                             Value = "Image"
                         },
                         new
                         {
-                            Id = 3,
+                            Id = 4,
                             Name = "Specimen",
                             Value = "Specimen"
                         },
                         new
                         {
-                            Id = 4,
+                            Id = 5,
                             Name = "Gene",
                             Value = "Gene"
                         },
                         new
                         {
-                            Id = 5,
+                            Id = 6,
                             Name = "SSM",
                             Value = "SSM"
                         },
                         new
                         {
-                            Id = 6,
+                            Id = 7,
                             Name = "CNV",
                             Value = "CNV"
                         },
                         new
                         {
-                            Id = 7,
+                            Id = 8,
                             Name = "SV",
                             Value = "SV"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Project",
-                            Value = "Project"
                         });
                 });
 
@@ -1300,33 +1306,33 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Name = "SSM",
-                            Value = "SSM"
+                            Id = 301,
+                            Name = "dna-ssm",
+                            Value = "dna-ssm"
                         },
                         new
                         {
-                            Id = 2,
-                            Name = "CNV",
-                            Value = "CNV"
+                            Id = 302,
+                            Name = "dna-cnv",
+                            Value = "dna-cnv"
                         },
                         new
                         {
-                            Id = 3,
-                            Name = "SV",
-                            Value = "SV"
+                            Id = 303,
+                            Name = "dna-sv",
+                            Value = "dna-sv"
                         },
                         new
                         {
-                            Id = 4,
-                            Name = "BGE",
-                            Value = "BGE"
+                            Id = 321,
+                            Name = "rna-exp",
+                            Value = "rna-exp"
                         },
                         new
                         {
-                            Id = 5,
-                            Name = "CGE",
-                            Value = "CGE"
+                            Id = 341,
+                            Name = "rnasc-exp",
+                            Value = "rnasc-exp"
                         });
                 });
 
@@ -2126,6 +2132,10 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Archive")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Format")
                         .IsRequired()
