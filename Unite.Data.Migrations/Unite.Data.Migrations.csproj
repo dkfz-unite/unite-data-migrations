@@ -8,6 +8,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7" />
-    <PackageReference Include="Unite.Data.Context" Version="9.2.0" />
+    <PackageReference Include="Unite.Data.Context" Version="9.4.0" />
   </ItemGroup>
 </Project>
