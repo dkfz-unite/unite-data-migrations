@@ -1925,10 +1925,10 @@ namespace Unite.Data.Migrations.Migrations
                 columns: new[] { "id", "name", "value" },
                 values: new object[,]
                 {
-                    { 1, "don-sce", "don-sce" },
-                    { 300, "meth-dm", "meth-dm" },
-                    { 301, "rna_de", "rna_de" },
-                    { 302, "rnasc_dc", "rnasc_dc" }
+                    { 1, "de", "de" },
+                    { 2, "scell", "scell" },
+                    { 3, "surv", "surv" },
+                    { 4, "dm", "dm" }
                 });
 
             migrationBuilder.InsertData(

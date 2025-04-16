@@ -1315,26 +1315,26 @@ namespace Unite.Data.Migrations.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "don-sce",
-                            Value = "don-sce"
+                            Name = "de",
+                            Value = "de"
                         },
                         new
                         {
-                            Id = 300,
-                            Name = "meth-dm",
-                            Value = "meth-dm"
+                            Id = 2,
+                            Name = "scell",
+                            Value = "scell"
                         },
                         new
                         {
-                            Id = 301,
-                            Name = "rna_de",
-                            Value = "rna_de"
+                            Id = 3,
+                            Name = "surv",
+                            Value = "surv"
                         },
                         new
                         {
-                            Id = 302,
-                            Name = "rnasc_dc",
-                            Value = "rnasc_dc"
+                            Id = 4,
+                            Name = "dm",
+                            Value = "dm"
                         });
                 });
 
