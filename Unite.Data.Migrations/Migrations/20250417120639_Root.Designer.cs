@@ -12,7 +12,7 @@ using Unite.Data.Context;
 namespace Unite.Data.Migrations.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    [Migration("20250416145301_Root")]
+    [Migration("20250417120639_Root")]
     partial class Root
     {
         /// <inheritdoc />
