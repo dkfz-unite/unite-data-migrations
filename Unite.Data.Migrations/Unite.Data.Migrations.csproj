@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11" />
-    <PackageReference Include="Unite.Data.Context" Version="9.7.1" />
+    <PackageReference Include="Unite.Data.Context" Version="11.0.0" />
   </ItemGroup>
   <ItemGroup>
     <!-- <ProjectReference Include="../../unite-data/Unite.Data.Context/Unite.Data.Context.csproj" /> -->
