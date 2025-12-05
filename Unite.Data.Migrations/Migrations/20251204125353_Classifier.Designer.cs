@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Unite.Data.Context;
@@ -11,9 +12,11 @@ using Unite.Data.Context;
 namespace Unite.Data.Migrations.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    partial class DomainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251204125353_Classifier")]
+    partial class Classifier
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -648,7 +651,7 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.ExpressionSubtype>", b =>
+            modelBuilder.Entity("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.GeneExpressionSubtype>", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer")
@@ -669,7 +672,7 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasAlternateKey("Value");
 
-                    b.ToTable("expression_subtype", "spe");
+                    b.ToTable("gene_expression_subtype", "spe");
 
                     b.HasData(
                         new
@@ -784,6 +787,44 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.IdhStatus>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("value");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("idh_status", "spe");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Wild Type",
+                            Value = "Wild Type"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Mutant",
+                            Value = "Mutant"
+                        });
+                });
+
             modelBuilder.Entity("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.MethylationSubtype>", b =>
                 {
                     b.Property<int>("Id")
@@ -840,6 +881,44 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.MgmtStatus>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("value");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("mgmt_status", "spe");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Unmethylated",
+                            Value = "Unmethylated"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Methylated",
+                            Value = "Methylated"
+                        });
+                });
+
             modelBuilder.Entity("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.SpecimenType>", b =>
                 {
                     b.Property<int>("Id")
@@ -887,44 +966,6 @@ namespace Unite.Data.Migrations.Migrations
                             Id = 4,
                             Name = "Xenograft",
                             Value = "Xenograft"
-                        });
-                });
-
-            modelBuilder.Entity("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.TertMutation>", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("name");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("value");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Value");
-
-                    b.ToTable("tert_mutation", "spe");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "C228T",
-                            Value = "C228T"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "C250T",
-                            Value = "C250T"
                         });
                 });
 
@@ -3273,13 +3314,13 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("specimen_id");
 
-                    b.Property<int?>("ExpressionSubtypeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("expression_subtype_id");
-
                     b.Property<bool?>("GcimpMethylation")
                         .HasColumnType("boolean")
                         .HasColumnName("gcimp_methylation");
+
+                    b.Property<int?>("GeneExpressionSubtypeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("gene_expression_subtype_id");
 
                     b.Property<string>("GeneKnockouts")
                         .HasColumnType("text")
@@ -3289,35 +3330,29 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("idh_mutation_id");
 
-                    b.Property<bool?>("IdhStatus")
-                        .HasColumnType("boolean")
-                        .HasColumnName("idh_status");
+                    b.Property<int?>("IdhStatusId")
+                        .HasColumnType("integer")
+                        .HasColumnName("idh_status_id");
 
                     b.Property<int?>("MethylationSubtypeId")
                         .HasColumnType("integer")
                         .HasColumnName("methylation_subtype_id");
 
-                    b.Property<bool?>("MgmtStatus")
-                        .HasColumnType("boolean")
-                        .HasColumnName("mgmt_status");
-
-                    b.Property<int?>("TertMutationId")
+                    b.Property<int?>("MgmtStatusId")
                         .HasColumnType("integer")
-                        .HasColumnName("tert_mutation_id");
-
-                    b.Property<bool?>("TertStatus")
-                        .HasColumnType("boolean")
-                        .HasColumnName("tert_status");
+                        .HasColumnName("mgmt_status_id");
 
                     b.HasKey("SpecimenId");
 
-                    b.HasIndex("ExpressionSubtypeId");
+                    b.HasIndex("GeneExpressionSubtypeId");
 
                     b.HasIndex("IdhMutationId");
 
+                    b.HasIndex("IdhStatusId");
+
                     b.HasIndex("MethylationSubtypeId");
 
-                    b.HasIndex("TertMutationId");
+                    b.HasIndex("MgmtStatusId");
 
                     b.ToTable("molecular_data", "spe");
                 });
@@ -4238,27 +4273,31 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Specimens.MolecularData", b =>
                 {
-                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.ExpressionSubtype>", null)
+                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.GeneExpressionSubtype>", null)
                         .WithMany()
-                        .HasForeignKey("ExpressionSubtypeId");
+                        .HasForeignKey("GeneExpressionSubtypeId");
 
                     b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.IdhMutation>", null)
                         .WithMany()
                         .HasForeignKey("IdhMutationId");
 
+                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.IdhStatus>", null)
+                        .WithMany()
+                        .HasForeignKey("IdhStatusId");
+
                     b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.MethylationSubtype>", null)
                         .WithMany()
                         .HasForeignKey("MethylationSubtypeId");
+
+                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.MgmtStatus>", null)
+                        .WithMany()
+                        .HasForeignKey("MgmtStatusId");
 
                     b.HasOne("Unite.Data.Entities.Specimens.Specimen", "Specimen")
                         .WithOne("MolecularData")
                         .HasForeignKey("Unite.Data.Entities.Specimens.MolecularData", "SpecimenId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.TertMutation>", null)
-                        .WithMany()
-                        .HasForeignKey("TertMutationId");
 
                     b.Navigation("Specimen");
                 });
