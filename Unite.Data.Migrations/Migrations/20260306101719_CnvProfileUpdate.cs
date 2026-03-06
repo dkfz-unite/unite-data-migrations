@@ -12,6 +12,18 @@ namespace Unite.Data.Migrations.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // Update sample_id foreign key to CASCADE on delete
+            migrationBuilder.Sql(@"
+                ALTER TABLE omi.cnv_profile 
+                DROP CONSTRAINT ""FK_cnv_profile_sample_sample_id""");
+
+            migrationBuilder.Sql(@"
+                ALTER TABLE omi.cnv_profile 
+                ADD CONSTRAINT ""FK_cnv_profile_sample_sample_id"" 
+                FOREIGN KEY (""sample_id"") 
+                REFERENCES omi.sample(""id"") 
+                ON DELETE CASCADE ON UPDATE NO ACTION");
+
             // Rename foreign key constraints using raw SQL (EF doesn't support RenameConstraint)
             migrationBuilder.Sql(@"
                 ALTER TABLE omi.cnv_profile 
@@ -105,6 +117,18 @@ namespace Unite.Data.Migrations.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            // Revert sample_id foreign key from CASCADE to RESTRICT
+            migrationBuilder.Sql(@"
+                ALTER TABLE omi.cnv_profile 
+                DROP CONSTRAINT ""FK_cnv_profile_sample_sample_id""");
+
+            migrationBuilder.Sql(@"
+                ALTER TABLE omi.cnv_profile 
+                ADD CONSTRAINT ""FK_cnv_profile_sample_sample_id"" 
+                FOREIGN KEY (""sample_id"") 
+                REFERENCES omi.sample(""id"") 
+                ON DELETE RESTRICT ON UPDATE NO ACTION");
+
             // Delete the indexing task type that was inserted
             migrationBuilder.DeleteData(
                 schema: "com",
@@ -182,17 +206,6 @@ namespace Unite.Data.Migrations.Migrations
                 schema: "omi",
                 table: "cnv_profile",
                 newName: "chromosome");
-
-            // Rename foreign key constraints back using raw SQL
-            migrationBuilder.Sql(@"
-                ALTER TABLE omi.cnv_profile 
-                RENAME CONSTRAINT ""FK_cnv_profile_chromosome_arm_chromosome_arm_id"" 
-                TO ""FK_cnv_profile_chromosome_arm_chromosome_arm""");
-
-            migrationBuilder.Sql(@"
-                ALTER TABLE omi.cnv_profile 
-                RENAME CONSTRAINT ""FK_cnv_profile_chromosome_chromosome_id"" 
-                TO ""FK_cnv_profile_chromosome_chromosome""");
         }
     }
 }
