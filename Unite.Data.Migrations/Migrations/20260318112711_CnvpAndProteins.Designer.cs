@@ -12,8 +12,8 @@ using Unite.Data.Context;
 namespace Unite.Data.Migrations.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    [Migration("20260310164913_Dep")]
-    partial class Dep
+    [Migration("20260318112711_CnvpAndProteins")]
+    partial class CnvpAndProteins
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -2844,6 +2844,11 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("AnalysisId")
                         .HasColumnType("integer")
                         .HasColumnName("analysis_id");
+
+                    b.Property<string>("Batch")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("batch");
 
                     b.Property<int?>("Cells")
                         .HasColumnType("integer")
