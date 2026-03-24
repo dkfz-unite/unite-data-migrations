@@ -8,4 +8,5 @@ public class SqlOptions : ISqlOptions
     public string Port => EnvironmentConfig.SqlPort;
     public string User => EnvironmentConfig.SqlUser;
     public string Password => EnvironmentConfig.SqlPassword;
+    public bool IncludeErrorDetail => false;
 }

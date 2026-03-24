@@ -12,8 +12,8 @@ using Unite.Data.Context;
 namespace Unite.Data.Migrations.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    [Migration("20251205101727_Tert")]
-    partial class Tert
+    [Migration("20260324131948_Root")]
+    partial class Root
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -402,6 +402,12 @@ namespace Unite.Data.Migrations.Migrations
                             Id = 11,
                             Name = "Reduced Representation Bisulfite Sequencing",
                             Value = "RRBS"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Mass Spectrometry",
+                            Value = "MS"
                         });
                 });
 
@@ -581,6 +587,44 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.ChromosomeArm>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("value");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Value");
+
+                    b.ToTable("chromosome_arm", "omi");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Short arm",
+                            Value = "P"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Long arm",
+                            Value = "Q"
+                        });
+                });
+
             modelBuilder.Entity("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Analysis.Enums.AnalysisType>", b =>
                 {
                     b.Property<int>("Id")
@@ -613,7 +657,7 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.Condition>", b =>
+            modelBuilder.Entity("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.Category>", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer")
@@ -634,7 +678,7 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasAlternateKey("Value");
 
-                    b.ToTable("condition", "spe");
+                    b.ToTable("category", "spe");
 
                     b.HasData(
                         new
@@ -1280,8 +1324,8 @@ namespace Unite.Data.Migrations.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "de",
-                            Value = "de"
+                            Name = "deg",
+                            Value = "deg"
                         },
                         new
                         {
@@ -1312,6 +1356,12 @@ namespace Unite.Data.Migrations.Migrations
                             Id = 6,
                             Name = "gaf",
                             Value = "gaf"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "dep",
+                            Value = "dep"
                         });
                 });
 
@@ -1415,6 +1465,12 @@ namespace Unite.Data.Migrations.Migrations
                         },
                         new
                         {
+                            Id = 10,
+                            Name = "Protein",
+                            Value = "Protein"
+                        },
+                        new
+                        {
                             Id = 6,
                             Name = "SM",
                             Value = "SM"
@@ -1430,6 +1486,12 @@ namespace Unite.Data.Migrations.Migrations
                             Id = 8,
                             Name = "SV",
                             Value = "SV"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "CNVProfile",
+                            Value = "CNVProfile"
                         });
                 });
 
@@ -1537,6 +1599,12 @@ namespace Unite.Data.Migrations.Migrations
                         },
                         new
                         {
+                            Id = 304,
+                            Name = "dna-cnvp",
+                            Value = "dna-cnvp"
+                        },
+                        new
+                        {
                             Id = 303,
                             Name = "dna-sv",
                             Value = "dna-sv"
@@ -1576,6 +1644,18 @@ namespace Unite.Data.Migrations.Migrations
                             Id = 331,
                             Name = "rnasc-exp",
                             Value = "rnasc-exp"
+                        },
+                        new
+                        {
+                            Id = 340,
+                            Name = "prot",
+                            Value = "prot"
+                        },
+                        new
+                        {
+                            Id = 341,
+                            Name = "prot-exp",
+                            Value = "prot-exp"
                         });
                 });
 
@@ -2287,6 +2367,50 @@ namespace Unite.Data.Migrations.Migrations
                     b.ToTable("cnv_affected_transcript", "omi");
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.Omics.Analysis.Dna.Cnv.Profile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ChromosomeArmId")
+                        .HasColumnType("integer")
+                        .HasColumnName("chromosome_arm_id");
+
+                    b.Property<int>("ChromosomeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("chromosome_id");
+
+                    b.Property<double>("Gain")
+                        .HasColumnType("double precision")
+                        .HasColumnName("gain");
+
+                    b.Property<double>("Loss")
+                        .HasColumnType("double precision")
+                        .HasColumnName("loss");
+
+                    b.Property<double>("Neutral")
+                        .HasColumnType("double precision")
+                        .HasColumnName("neutral");
+
+                    b.Property<int>("SampleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("sample_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChromosomeArmId");
+
+                    b.HasIndex("ChromosomeId");
+
+                    b.HasIndex("SampleId");
+
+                    b.ToTable("cnv_profile", "omi");
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Omics.Analysis.Dna.Cnv.Variant", b =>
                 {
                     b.Property<int>("Id")
@@ -2311,6 +2435,10 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<double?>("C2Mean")
                         .HasColumnType("double precision")
                         .HasColumnName("c2_mean");
+
+                    b.Property<int?>("ChromosomeArmId")
+                        .HasColumnType("integer")
+                        .HasColumnName("chromosome_arm_id");
 
                     b.Property<int>("ChromosomeId")
                         .HasColumnType("integer")
@@ -2357,6 +2485,8 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnName("type_id");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChromosomeArmId");
 
                     b.HasIndex("ChromosomeId");
 
@@ -2461,6 +2591,10 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("character varying(200)")
                         .HasColumnName("alt");
 
+                    b.Property<int?>("ChromosomeArmId")
+                        .HasColumnType("integer")
+                        .HasColumnName("chromosome_arm_id");
+
                     b.Property<int>("ChromosomeId")
                         .HasColumnType("integer")
                         .HasColumnName("chromosome_id");
@@ -2487,6 +2621,8 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnName("type_id");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChromosomeArmId");
 
                     b.HasIndex("ChromosomeId");
 
@@ -2578,6 +2714,10 @@ namespace Unite.Data.Migrations.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("ChromosomeArmId")
+                        .HasColumnType("integer")
+                        .HasColumnName("chromosome_arm_id");
+
                     b.Property<int>("ChromosomeId")
                         .HasColumnType("integer")
                         .HasColumnName("chromosome_id");
@@ -2602,6 +2742,10 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("length");
 
+                    b.Property<int?>("OtherChromosomeArmId")
+                        .HasColumnType("integer")
+                        .HasColumnName("other_chromosome_arm_id");
+
                     b.Property<int>("OtherChromosomeId")
                         .HasColumnType("integer")
                         .HasColumnName("other_chromosome_id");
@@ -2624,7 +2768,11 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ChromosomeArmId");
+
                     b.HasIndex("ChromosomeId");
+
+                    b.HasIndex("OtherChromosomeArmId");
 
                     b.HasIndex("OtherChromosomeId");
 
@@ -2650,6 +2798,31 @@ namespace Unite.Data.Migrations.Migrations
                     b.ToTable("sv_entry", "omi");
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.Omics.Analysis.Prot.ProteinExpression", b =>
+                {
+                    b.Property<int>("EntityId")
+                        .HasColumnType("integer")
+                        .HasColumnName("protein_id");
+
+                    b.Property<int>("SampleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("sample_id");
+
+                    b.Property<double>("Normalized")
+                        .HasColumnType("double precision")
+                        .HasColumnName("normalized");
+
+                    b.Property<double>("Raw")
+                        .HasColumnType("double precision")
+                        .HasColumnName("raw");
+
+                    b.HasKey("EntityId", "SampleId");
+
+                    b.HasIndex("SampleId");
+
+                    b.ToTable("protein_expression", "omi");
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Omics.Analysis.Rna.GeneExpression", b =>
                 {
                     b.Property<int>("EntityId")
@@ -2664,9 +2837,13 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("double precision")
                         .HasColumnName("fpkm");
 
-                    b.Property<int>("Reads")
+                    b.Property<double>("Normalized")
+                        .HasColumnType("double precision")
+                        .HasColumnName("normalized");
+
+                    b.Property<int>("Raw")
                         .HasColumnType("integer")
-                        .HasColumnName("reads");
+                        .HasColumnName("raw");
 
                     b.Property<double>("TPM")
                         .HasColumnType("double precision")
@@ -2691,6 +2868,11 @@ namespace Unite.Data.Migrations.Migrations
                     b.Property<int>("AnalysisId")
                         .HasColumnType("integer")
                         .HasColumnName("analysis_id");
+
+                    b.Property<string>("Batch")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("batch");
 
                     b.Property<int?>("Cells")
                         .HasColumnType("integer")
@@ -2790,6 +2972,10 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("biotype");
 
+                    b.Property<int?>("ChromosomeArmId")
+                        .HasColumnType("integer")
+                        .HasColumnName("chromosome_arm_id");
+
                     b.Property<int?>("ChromosomeId")
                         .HasColumnType("integer")
                         .HasColumnName("chromosome_id");
@@ -2828,6 +3014,8 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasAlternateKey("StableId");
 
+                    b.HasIndex("ChromosomeArmId");
+
                     b.HasIndex("ChromosomeId");
 
                     b.ToTable("gene", "omi");
@@ -2841,6 +3029,28 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AccessionId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("accession_id");
+
+                    b.Property<int?>("ChromosomeArmId")
+                        .HasColumnType("integer")
+                        .HasColumnName("chromosome_arm_id");
+
+                    b.Property<int?>("ChromosomeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("chromosome_id");
+
+                    b.Property<string>("Database")
+                        .HasColumnType("text")
+                        .HasColumnName("database");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<int?>("End")
                         .HasColumnType("integer")
@@ -2864,6 +3074,14 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("start");
 
+                    b.Property<bool?>("Strand")
+                        .HasColumnType("boolean")
+                        .HasColumnName("strand");
+
+                    b.Property<string>("Symbol")
+                        .HasColumnType("text")
+                        .HasColumnName("symbol");
+
                     b.Property<int?>("TranscriptId")
                         .HasColumnType("integer")
                         .HasColumnName("transcript_id");
@@ -2871,6 +3089,10 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasKey("Id");
 
                     b.HasAlternateKey("StableId");
+
+                    b.HasIndex("ChromosomeArmId");
+
+                    b.HasIndex("ChromosomeId");
 
                     b.HasIndex("TranscriptId")
                         .IsUnique();
@@ -2891,6 +3113,10 @@ namespace Unite.Data.Migrations.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("biotype");
+
+                    b.Property<int?>("ChromosomeArmId")
+                        .HasColumnType("integer")
+                        .HasColumnName("chromosome_arm_id");
 
                     b.Property<int?>("ChromosomeId")
                         .HasColumnType("integer")
@@ -2937,6 +3163,8 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasKey("Id");
 
                     b.HasAlternateKey("StableId");
+
+                    b.HasIndex("ChromosomeArmId");
 
                     b.HasIndex("ChromosomeId");
 
@@ -3357,9 +3585,9 @@ namespace Unite.Data.Migrations.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ConditionId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("integer")
-                        .HasColumnName("condition_id");
+                        .HasColumnName("category_id");
 
                     b.Property<DateOnly?>("CreationDate")
                         .HasColumnType("date")
@@ -3397,7 +3625,7 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ConditionId");
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("DonorId");
 
@@ -3447,9 +3675,17 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("class_id");
 
+                    b.Property<double?>("ClassScore")
+                        .HasColumnType("double precision")
+                        .HasColumnName("class_score");
+
                     b.Property<int?>("FamilyId")
                         .HasColumnType("integer")
                         .HasColumnName("family_id");
+
+                    b.Property<double?>("FamilyScore")
+                        .HasColumnType("double precision")
+                        .HasColumnName("family_score");
 
                     b.Property<int>("SpecimenId")
                         .HasColumnType("integer")
@@ -3459,9 +3695,17 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("subclass_id");
 
+                    b.Property<double?>("SubclassScore")
+                        .HasColumnType("double precision")
+                        .HasColumnName("subclass_score");
+
                     b.Property<int?>("SuperfamilyId")
                         .HasColumnType("integer")
                         .HasColumnName("superfamily_id");
+
+                    b.Property<double?>("SuperfamilyScore")
+                        .HasColumnType("double precision")
+                        .HasColumnName("superfamily_score");
 
                     b.HasKey("Id");
 
@@ -3890,8 +4134,33 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("Variant");
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.Omics.Analysis.Dna.Cnv.Profile", b =>
+                {
+                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.ChromosomeArm>", null)
+                        .WithMany()
+                        .HasForeignKey("ChromosomeArmId");
+
+                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.Chromosome>", null)
+                        .WithMany()
+                        .HasForeignKey("ChromosomeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Unite.Data.Entities.Omics.Analysis.Sample", "Sample")
+                        .WithMany("CnvProfiles")
+                        .HasForeignKey("SampleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sample");
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Omics.Analysis.Dna.Cnv.Variant", b =>
                 {
+                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.ChromosomeArm>", null)
+                        .WithMany()
+                        .HasForeignKey("ChromosomeArmId");
+
                     b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.Chromosome>", null)
                         .WithMany()
                         .HasForeignKey("ChromosomeId")
@@ -3945,6 +4214,10 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Omics.Analysis.Dna.Sm.Variant", b =>
                 {
+                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.ChromosomeArm>", null)
+                        .WithMany()
+                        .HasForeignKey("ChromosomeArmId");
+
                     b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.Chromosome>", null)
                         .WithMany()
                         .HasForeignKey("ChromosomeId")
@@ -3998,11 +4271,19 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Omics.Analysis.Dna.Sv.Variant", b =>
                 {
+                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.ChromosomeArm>", null)
+                        .WithMany()
+                        .HasForeignKey("ChromosomeArmId");
+
                     b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.Chromosome>", null)
                         .WithMany()
                         .HasForeignKey("ChromosomeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.ChromosomeArm>", null)
+                        .WithMany()
+                        .HasForeignKey("OtherChromosomeArmId");
 
                     b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.Chromosome>", null)
                         .WithMany()
@@ -4027,6 +4308,25 @@ namespace Unite.Data.Migrations.Migrations
 
                     b.HasOne("Unite.Data.Entities.Omics.Analysis.Sample", "Sample")
                         .WithMany("SvEntries")
+                        .HasForeignKey("SampleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Entity");
+
+                    b.Navigation("Sample");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Omics.Analysis.Prot.ProteinExpression", b =>
+                {
+                    b.HasOne("Unite.Data.Entities.Omics.Protein", "Entity")
+                        .WithMany("ProteinExpressions")
+                        .HasForeignKey("EntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Unite.Data.Entities.Omics.Analysis.Sample", "Sample")
+                        .WithMany("ProteinExpressions")
                         .HasForeignKey("SampleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -4093,6 +4393,10 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Omics.Gene", b =>
                 {
+                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.ChromosomeArm>", null)
+                        .WithMany()
+                        .HasForeignKey("ChromosomeArmId");
+
                     b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.Chromosome>", null)
                         .WithMany()
                         .HasForeignKey("ChromosomeId");
@@ -4100,6 +4404,14 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Omics.Protein", b =>
                 {
+                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.ChromosomeArm>", null)
+                        .WithMany()
+                        .HasForeignKey("ChromosomeArmId");
+
+                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.Chromosome>", null)
+                        .WithMany()
+                        .HasForeignKey("ChromosomeId");
+
                     b.HasOne("Unite.Data.Entities.Omics.Transcript", "Transcript")
                         .WithOne("Protein")
                         .HasForeignKey("Unite.Data.Entities.Omics.Protein", "TranscriptId");
@@ -4109,6 +4421,10 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Omics.Transcript", b =>
                 {
+                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.ChromosomeArm>", null)
+                        .WithMany()
+                        .HasForeignKey("ChromosomeArmId");
+
                     b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Omics.Enums.Chromosome>", null)
                         .WithMany()
                         .HasForeignKey("ChromosomeId");
@@ -4279,9 +4595,9 @@ namespace Unite.Data.Migrations.Migrations
 
             modelBuilder.Entity("Unite.Data.Entities.Specimens.Specimen", b =>
                 {
-                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.Condition>", null)
+                    b.HasOne("Unite.Data.Context.Mappers.Base.Entities.EnumEntity<Unite.Data.Entities.Specimens.Enums.Category>", null)
                         .WithMany()
-                        .HasForeignKey("ConditionId");
+                        .HasForeignKey("CategoryId");
 
                     b.HasOne("Unite.Data.Entities.Donors.Donor", "Donor")
                         .WithMany("Specimens")
@@ -4475,7 +4791,11 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     b.Navigation("CnvEntries");
 
+                    b.Navigation("CnvProfiles");
+
                     b.Navigation("GeneExpressions");
+
+                    b.Navigation("ProteinExpressions");
 
                     b.Navigation("Resources");
 
@@ -4489,6 +4809,11 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("GeneExpressions");
 
                     b.Navigation("Transcripts");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Omics.Protein", b =>
+                {
+                    b.Navigation("ProteinExpressions");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Omics.Transcript", b =>

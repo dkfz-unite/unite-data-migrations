@@ -15,10 +15,10 @@ namespace Unite.Data.Migrations.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "gen");
+                name: "img");
 
             migrationBuilder.EnsureSchema(
-                name: "img");
+                name: "omi");
 
             migrationBuilder.EnsureSchema(
                 name: "spe");
@@ -46,7 +46,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "analysis_type",
-                schema: "gen",
+                schema: "img",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false),
@@ -61,7 +61,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "analysis_type",
-                schema: "img",
+                schema: "omi",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false),
@@ -102,6 +102,21 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     table.PrimaryKey("PK_annotation_task_type", x => x.id);
                     table.UniqueConstraint("AK_annotation_task_type_value", x => x.value);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "category",
+                schema: "spe",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false),
+                    value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_category", x => x.id);
+                    table.UniqueConstraint("AK_category_value", x => x.value);
                 });
 
             migrationBuilder.CreateTable(
@@ -151,7 +166,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "chromosome",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false),
@@ -165,8 +180,23 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "chromosome_arm",
+                schema: "omi",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false),
+                    value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_chromosome_arm", x => x.id);
+                    table.UniqueConstraint("AK_chromosome_arm_value", x => x.value);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "cnv_type",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false),
@@ -211,6 +241,21 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "expression_subtype",
+                schema: "spe",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false),
+                    value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_expression_subtype", x => x.id);
+                    table.UniqueConstraint("AK_expression_subtype_value", x => x.value);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "fixation_type",
                 schema: "spe",
                 columns: table => new
@@ -226,21 +271,6 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "gene_expression_subtype",
-                schema: "spe",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false),
-                    value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_gene_expression_subtype", x => x.id);
-                    table.UniqueConstraint("AK_gene_expression_subtype_value", x => x.value);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "idh_mutation",
                 schema: "spe",
                 columns: table => new
@@ -253,21 +283,6 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     table.PrimaryKey("PK_idh_mutation", x => x.id);
                     table.UniqueConstraint("AK_idh_mutation_value", x => x.value);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "idh_status",
-                schema: "spe",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false),
-                    value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_idh_status", x => x.id);
-                    table.UniqueConstraint("AK_idh_status_value", x => x.value);
                 });
 
             migrationBuilder.CreateTable(
@@ -362,21 +377,6 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "material_type",
-                schema: "spe",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false),
-                    value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_material_type", x => x.id);
-                    table.UniqueConstraint("AK_material_type_value", x => x.value);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "methylation_subtype",
                 schema: "spe",
                 columns: table => new
@@ -389,21 +389,6 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     table.PrimaryKey("PK_methylation_subtype", x => x.id);
                     table.UniqueConstraint("AK_methylation_subtype_value", x => x.value);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mgmt_status",
-                schema: "spe",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false),
-                    value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mgmt_status", x => x.id);
-                    table.UniqueConstraint("AK_mgmt_status_value", x => x.value);
                 });
 
             migrationBuilder.CreateTable(
@@ -454,7 +439,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "sm_type",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false),
@@ -515,7 +500,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "sv_type",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false),
@@ -544,6 +529,21 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "tert_mutation",
+                schema: "spe",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false),
+                    value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tert_mutation", x => x.id);
+                    table.UniqueConstraint("AK_tert_mutation_value", x => x.value);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "therapy",
                 schema: "don",
                 columns: table => new
@@ -557,6 +557,36 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     table.PrimaryKey("PK_therapy", x => x.id);
                     table.UniqueConstraint("AK_therapy_name", x => x.name);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tumor_class",
+                schema: "spe",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tumor_class", x => x.id);
+                    table.UniqueConstraint("AK_tumor_class_name", x => x.name);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tumor_family",
+                schema: "spe",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tumor_family", x => x.id);
+                    table.UniqueConstraint("AK_tumor_family_name", x => x.name);
                 });
 
             migrationBuilder.CreateTable(
@@ -605,6 +635,36 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "tumor_subclass",
+                schema: "spe",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tumor_subclass", x => x.id);
+                    table.UniqueConstraint("AK_tumor_subclass_name", x => x.name);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tumor_superfamily",
+                schema: "spe",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tumor_superfamily", x => x.id);
+                    table.UniqueConstraint("AK_tumor_superfamily_name", x => x.name);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tumor_type",
                 schema: "spe",
                 columns: table => new
@@ -636,30 +696,6 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "analysis",
-                schema: "gen",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<DateOnly>(type: "date", nullable: true),
-                    day = table.Column<int>(type: "integer", nullable: true),
-                    parameters = table.Column<string>(type: "text", nullable: true),
-                    type_id = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_analysis", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_analysis_analysis_type_type_id",
-                        column: x => x.type_id,
-                        principalSchema: "gen",
-                        principalTable: "analysis_type",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "analysis",
                 schema: "img",
                 columns: table => new
                 {
@@ -677,6 +713,30 @@ namespace Unite.Data.Migrations.Migrations
                         name: "FK_analysis_analysis_type_type_id",
                         column: x => x.type_id,
                         principalSchema: "img",
+                        principalTable: "analysis_type",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "analysis",
+                schema: "omi",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    name = table.Column<DateOnly>(type: "date", nullable: true),
+                    day = table.Column<int>(type: "integer", nullable: true),
+                    parameters = table.Column<string>(type: "text", nullable: true),
+                    type_id = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_analysis", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_analysis_analysis_type_type_id",
+                        column: x => x.type_id,
+                        principalSchema: "omi",
                         principalTable: "analysis_type",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -708,13 +768,14 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "gene",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     stable_id = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     chromosome_id = table.Column<int>(type: "integer", nullable: true),
+                    chromosome_arm_id = table.Column<int>(type: "integer", nullable: true),
                     start = table.Column<int>(type: "integer", nullable: true),
                     end = table.Column<int>(type: "integer", nullable: true),
                     strand = table.Column<bool>(type: "boolean", nullable: true),
@@ -728,16 +789,22 @@ namespace Unite.Data.Migrations.Migrations
                     table.PrimaryKey("PK_gene", x => x.id);
                     table.UniqueConstraint("AK_gene_stable_id", x => x.stable_id);
                     table.ForeignKey(
+                        name: "FK_gene_chromosome_arm_chromosome_arm_id",
+                        column: x => x.chromosome_arm_id,
+                        principalSchema: "omi",
+                        principalTable: "chromosome_arm",
+                        principalColumn: "id");
+                    table.ForeignKey(
                         name: "FK_gene_chromosome_chromosome_id",
                         column: x => x.chromosome_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "chromosome",
                         principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "cnv",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -754,6 +821,7 @@ namespace Unite.Data.Migrations.Migrations
                     tcn_ratio = table.Column<double>(type: "double precision", nullable: true),
                     dh_max = table.Column<double>(type: "double precision", nullable: true),
                     chromosome_id = table.Column<int>(type: "integer", nullable: false),
+                    chromosome_arm_id = table.Column<int>(type: "integer", nullable: true),
                     start = table.Column<int>(type: "integer", nullable: false),
                     end = table.Column<int>(type: "integer", nullable: false),
                     length = table.Column<int>(type: "integer", nullable: true)
@@ -762,16 +830,22 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     table.PrimaryKey("PK_cnv", x => x.id);
                     table.ForeignKey(
+                        name: "FK_cnv_chromosome_arm_chromosome_arm_id",
+                        column: x => x.chromosome_arm_id,
+                        principalSchema: "omi",
+                        principalTable: "chromosome_arm",
+                        principalColumn: "id");
+                    table.ForeignKey(
                         name: "FK_cnv_chromosome_chromosome_id",
                         column: x => x.chromosome_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "chromosome",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_cnv_cnv_type_type_id",
                         column: x => x.type_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "cnv_type",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -838,7 +912,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "sm",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -847,6 +921,7 @@ namespace Unite.Data.Migrations.Migrations
                     @ref = table.Column<string>(name: "ref", type: "character varying(200)", maxLength: 200, nullable: true),
                     alt = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
                     chromosome_id = table.Column<int>(type: "integer", nullable: false),
+                    chromosome_arm_id = table.Column<int>(type: "integer", nullable: true),
                     start = table.Column<int>(type: "integer", nullable: false),
                     end = table.Column<int>(type: "integer", nullable: false),
                     length = table.Column<int>(type: "integer", nullable: true)
@@ -855,56 +930,23 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     table.PrimaryKey("PK_sm", x => x.id);
                     table.ForeignKey(
+                        name: "FK_sm_chromosome_arm_chromosome_arm_id",
+                        column: x => x.chromosome_arm_id,
+                        principalSchema: "omi",
+                        principalTable: "chromosome_arm",
+                        principalColumn: "id");
+                    table.ForeignKey(
                         name: "FK_sm_chromosome_chromosome_id",
                         column: x => x.chromosome_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "chromosome",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_sm_sm_type_type_id",
                         column: x => x.type_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "sm_type",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "specimen",
-                schema: "spe",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    parent_id = table.Column<int>(type: "integer", nullable: true),
-                    reference_id = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    donor_id = table.Column<int>(type: "integer", nullable: false),
-                    creation_date = table.Column<DateOnly>(type: "date", nullable: true),
-                    creation_day = table.Column<int>(type: "integer", nullable: true),
-                    type_id = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_specimen", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_specimen_donor_donor_id",
-                        column: x => x.donor_id,
-                        principalSchema: "don",
-                        principalTable: "donor",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_specimen_specimen_parent_id",
-                        column: x => x.parent_id,
-                        principalSchema: "spe",
-                        principalTable: "specimen",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_specimen_specimen_type_type_id",
-                        column: x => x.type_id,
-                        principalSchema: "spe",
-                        principalTable: "specimen_type",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -938,12 +980,13 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "sv",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     other_chromosome_id = table.Column<int>(type: "integer", nullable: false),
+                    other_chromosome_arm_id = table.Column<int>(type: "integer", nullable: true),
                     other_start = table.Column<int>(type: "integer", nullable: false),
                     other_end = table.Column<int>(type: "integer", nullable: false),
                     type_id = table.Column<int>(type: "integer", nullable: false),
@@ -951,6 +994,7 @@ namespace Unite.Data.Migrations.Migrations
                     flanking_sequence_from = table.Column<string>(type: "text", nullable: true),
                     flanking_sequence_to = table.Column<string>(type: "text", nullable: true),
                     chromosome_id = table.Column<int>(type: "integer", nullable: false),
+                    chromosome_arm_id = table.Column<int>(type: "integer", nullable: true),
                     start = table.Column<int>(type: "integer", nullable: false),
                     end = table.Column<int>(type: "integer", nullable: false),
                     length = table.Column<int>(type: "integer", nullable: true)
@@ -959,23 +1003,35 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     table.PrimaryKey("PK_sv", x => x.id);
                     table.ForeignKey(
+                        name: "FK_sv_chromosome_arm_chromosome_arm_id",
+                        column: x => x.chromosome_arm_id,
+                        principalSchema: "omi",
+                        principalTable: "chromosome_arm",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_sv_chromosome_arm_other_chromosome_arm_id",
+                        column: x => x.other_chromosome_arm_id,
+                        principalSchema: "omi",
+                        principalTable: "chromosome_arm",
+                        principalColumn: "id");
+                    table.ForeignKey(
                         name: "FK_sv_chromosome_chromosome_id",
                         column: x => x.chromosome_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "chromosome",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_sv_chromosome_other_chromosome_id",
                         column: x => x.other_chromosome_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "chromosome",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_sv_sv_type_type_id",
                         column: x => x.type_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "sv_type",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -1118,6 +1174,60 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "specimen",
+                schema: "spe",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    parent_id = table.Column<int>(type: "integer", nullable: true),
+                    category_id = table.Column<int>(type: "integer", nullable: true),
+                    tumor_type_id = table.Column<int>(type: "integer", nullable: true),
+                    tumor_grade = table.Column<byte>(type: "smallint", nullable: true),
+                    reference_id = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    donor_id = table.Column<int>(type: "integer", nullable: false),
+                    creation_date = table.Column<DateOnly>(type: "date", nullable: true),
+                    creation_day = table.Column<int>(type: "integer", nullable: true),
+                    type_id = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_specimen", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_specimen_category_category_id",
+                        column: x => x.category_id,
+                        principalSchema: "spe",
+                        principalTable: "category",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_specimen_donor_donor_id",
+                        column: x => x.donor_id,
+                        principalSchema: "don",
+                        principalTable: "donor",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_specimen_specimen_parent_id",
+                        column: x => x.parent_id,
+                        principalSchema: "spe",
+                        principalTable: "specimen",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_specimen_specimen_type_type_id",
+                        column: x => x.type_id,
+                        principalSchema: "spe",
+                        principalTable: "specimen_type",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_specimen_tumor_type_tumor_type_id",
+                        column: x => x.tumor_type_id,
+                        principalSchema: "spe",
+                        principalTable: "tumor_type",
+                        principalColumn: "id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "worker",
                 schema: "com",
                 columns: table => new
@@ -1141,7 +1251,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "transcript",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -1149,6 +1259,7 @@ namespace Unite.Data.Migrations.Migrations
                     stable_id = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     gene_id = table.Column<int>(type: "integer", nullable: true),
                     chromosome_id = table.Column<int>(type: "integer", nullable: true),
+                    chromosome_arm_id = table.Column<int>(type: "integer", nullable: true),
                     start = table.Column<int>(type: "integer", nullable: true),
                     end = table.Column<int>(type: "integer", nullable: true),
                     strand = table.Column<bool>(type: "boolean", nullable: true),
@@ -1163,15 +1274,21 @@ namespace Unite.Data.Migrations.Migrations
                     table.PrimaryKey("PK_transcript", x => x.id);
                     table.UniqueConstraint("AK_transcript_stable_id", x => x.stable_id);
                     table.ForeignKey(
+                        name: "FK_transcript_chromosome_arm_chromosome_arm_id",
+                        column: x => x.chromosome_arm_id,
+                        principalSchema: "omi",
+                        principalTable: "chromosome_arm",
+                        principalColumn: "id");
+                    table.ForeignKey(
                         name: "FK_transcript_chromosome_chromosome_id",
                         column: x => x.chromosome_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "chromosome",
                         principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_transcript_gene_gene_id",
                         column: x => x.gene_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "gene",
                         principalColumn: "id");
                 });
@@ -1319,10 +1436,7 @@ namespace Unite.Data.Migrations.Migrations
                 {
                     specimen_id = table.Column<int>(type: "integer", nullable: false),
                     source_id = table.Column<int>(type: "integer", nullable: true),
-                    type_id = table.Column<int>(type: "integer", nullable: true),
-                    fixation_type_id = table.Column<int>(type: "integer", nullable: true),
-                    tumor_type_id = table.Column<int>(type: "integer", nullable: true),
-                    tumor_grade = table.Column<byte>(type: "smallint", nullable: true)
+                    fixation_type_id = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1340,24 +1454,12 @@ namespace Unite.Data.Migrations.Migrations
                         principalTable: "material_source",
                         principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_material_material_type_type_id",
-                        column: x => x.type_id,
-                        principalSchema: "spe",
-                        principalTable: "material_type",
-                        principalColumn: "id");
-                    table.ForeignKey(
                         name: "FK_material_specimen_specimen_id",
                         column: x => x.specimen_id,
                         principalSchema: "spe",
                         principalTable: "specimen",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_material_tumor_type_tumor_type_id",
-                        column: x => x.tumor_type_id,
-                        principalSchema: "spe",
-                        principalTable: "tumor_type",
-                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -1366,21 +1468,24 @@ namespace Unite.Data.Migrations.Migrations
                 columns: table => new
                 {
                     specimen_id = table.Column<int>(type: "integer", nullable: false),
-                    mgmt_status_id = table.Column<int>(type: "integer", nullable: true),
-                    idh_status_id = table.Column<int>(type: "integer", nullable: true),
+                    mgmt_status = table.Column<bool>(type: "boolean", nullable: true),
+                    idh_status = table.Column<bool>(type: "boolean", nullable: true),
                     idh_mutation_id = table.Column<int>(type: "integer", nullable: true),
-                    gene_expression_subtype_id = table.Column<int>(type: "integer", nullable: true),
+                    tert_status = table.Column<bool>(type: "boolean", nullable: true),
+                    tert_mutation_id = table.Column<int>(type: "integer", nullable: true),
+                    expression_subtype_id = table.Column<int>(type: "integer", nullable: true),
                     methylation_subtype_id = table.Column<int>(type: "integer", nullable: true),
-                    gcimp_methylation = table.Column<bool>(type: "boolean", nullable: true)
+                    gcimp_methylation = table.Column<bool>(type: "boolean", nullable: true),
+                    gene_knockouts = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_molecular_data", x => x.specimen_id);
                     table.ForeignKey(
-                        name: "FK_molecular_data_gene_expression_subtype_gene_expression_subt~",
-                        column: x => x.gene_expression_subtype_id,
+                        name: "FK_molecular_data_expression_subtype_expression_subtype_id",
+                        column: x => x.expression_subtype_id,
                         principalSchema: "spe",
-                        principalTable: "gene_expression_subtype",
+                        principalTable: "expression_subtype",
                         principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_molecular_data_idh_mutation_idh_mutation_id",
@@ -1389,22 +1494,10 @@ namespace Unite.Data.Migrations.Migrations
                         principalTable: "idh_mutation",
                         principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_molecular_data_idh_status_idh_status_id",
-                        column: x => x.idh_status_id,
-                        principalSchema: "spe",
-                        principalTable: "idh_status",
-                        principalColumn: "id");
-                    table.ForeignKey(
                         name: "FK_molecular_data_methylation_subtype_methylation_subtype_id",
                         column: x => x.methylation_subtype_id,
                         principalSchema: "spe",
                         principalTable: "methylation_subtype",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_molecular_data_mgmt_status_mgmt_status_id",
-                        column: x => x.mgmt_status_id,
-                        principalSchema: "spe",
-                        principalTable: "mgmt_status",
                         principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_molecular_data_specimen_specimen_id",
@@ -1413,6 +1506,12 @@ namespace Unite.Data.Migrations.Migrations
                         principalTable: "specimen",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_molecular_data_tert_mutation_tert_mutation_id",
+                        column: x => x.tert_mutation_id,
+                        principalSchema: "spe",
+                        principalTable: "tert_mutation",
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -1439,7 +1538,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "sample",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -1449,6 +1548,7 @@ namespace Unite.Data.Migrations.Migrations
                     purity = table.Column<double>(type: "double precision", nullable: true),
                     ploidy = table.Column<double>(type: "double precision", nullable: true),
                     cells = table.Column<int>(type: "integer", nullable: true),
+                    batch = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     specimen_id = table.Column<int>(type: "integer", nullable: false),
                     analysis_id = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -1458,14 +1558,14 @@ namespace Unite.Data.Migrations.Migrations
                     table.ForeignKey(
                         name: "FK_sample_analysis_analysis_id",
                         column: x => x.analysis_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "analysis",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_sample_sample_matched_sample_id",
                         column: x => x.matched_sample_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "sample",
                         principalColumn: "id");
                     table.ForeignKey(
@@ -1504,6 +1604,59 @@ namespace Unite.Data.Migrations.Migrations
                         principalTable: "specimen",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tumor_classification",
+                schema: "spe",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    specimen_id = table.Column<int>(type: "integer", nullable: false),
+                    superfamily_id = table.Column<int>(type: "integer", nullable: true),
+                    superfamily_score = table.Column<double>(type: "double precision", nullable: true),
+                    family_id = table.Column<int>(type: "integer", nullable: true),
+                    family_score = table.Column<double>(type: "double precision", nullable: true),
+                    class_id = table.Column<int>(type: "integer", nullable: true),
+                    class_score = table.Column<double>(type: "double precision", nullable: true),
+                    subclass_id = table.Column<int>(type: "integer", nullable: true),
+                    subclass_score = table.Column<double>(type: "double precision", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tumor_classification", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_tumor_classification_specimen_specimen_id",
+                        column: x => x.specimen_id,
+                        principalSchema: "spe",
+                        principalTable: "specimen",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_tumor_classification_tumor_class_class_id",
+                        column: x => x.class_id,
+                        principalSchema: "spe",
+                        principalTable: "tumor_class",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_tumor_classification_tumor_family_family_id",
+                        column: x => x.family_id,
+                        principalSchema: "spe",
+                        principalTable: "tumor_family",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_tumor_classification_tumor_subclass_subclass_id",
+                        column: x => x.subclass_id,
+                        principalSchema: "spe",
+                        principalTable: "tumor_subclass",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_tumor_classification_tumor_superfamily_superfamily_id",
+                        column: x => x.superfamily_id,
+                        principalSchema: "spe",
+                        principalTable: "tumor_superfamily",
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -1554,7 +1707,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "cnv_affected_transcript",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     variant_id = table.Column<int>(type: "integer", nullable: false),
@@ -1576,14 +1729,14 @@ namespace Unite.Data.Migrations.Migrations
                     table.ForeignKey(
                         name: "FK_cnv_affected_transcript_cnv_variant_id",
                         column: x => x.variant_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "cnv",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_cnv_affected_transcript_transcript_feature_id",
                         column: x => x.feature_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "transcript",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -1591,33 +1744,52 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "protein",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     stable_id = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    accession_id = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     transcript_id = table.Column<int>(type: "integer", nullable: true),
+                    chromosome_id = table.Column<int>(type: "integer", nullable: true),
+                    chromosome_arm_id = table.Column<int>(type: "integer", nullable: true),
                     start = table.Column<int>(type: "integer", nullable: true),
                     end = table.Column<int>(type: "integer", nullable: true),
+                    strand = table.Column<bool>(type: "boolean", nullable: true),
                     length = table.Column<int>(type: "integer", nullable: true),
-                    is_canonical = table.Column<bool>(type: "boolean", nullable: true)
+                    is_canonical = table.Column<bool>(type: "boolean", nullable: true),
+                    symbol = table.Column<string>(type: "text", nullable: true),
+                    description = table.Column<string>(type: "text", nullable: true),
+                    database = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_protein", x => x.id);
                     table.UniqueConstraint("AK_protein_stable_id", x => x.stable_id);
                     table.ForeignKey(
+                        name: "FK_protein_chromosome_arm_chromosome_arm_id",
+                        column: x => x.chromosome_arm_id,
+                        principalSchema: "omi",
+                        principalTable: "chromosome_arm",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_protein_chromosome_chromosome_id",
+                        column: x => x.chromosome_id,
+                        principalSchema: "omi",
+                        principalTable: "chromosome",
+                        principalColumn: "id");
+                    table.ForeignKey(
                         name: "FK_protein_transcript_transcript_id",
                         column: x => x.transcript_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "transcript",
                         principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "sm_affected_transcript",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     variant_id = table.Column<int>(type: "integer", nullable: false),
@@ -1641,14 +1813,14 @@ namespace Unite.Data.Migrations.Migrations
                     table.ForeignKey(
                         name: "FK_sm_affected_transcript_sm_variant_id",
                         column: x => x.variant_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "sm",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_sm_affected_transcript_transcript_feature_id",
                         column: x => x.feature_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "transcript",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -1656,7 +1828,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "sv_affected_transcript",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     variant_id = table.Column<int>(type: "integer", nullable: false),
@@ -1678,14 +1850,14 @@ namespace Unite.Data.Migrations.Migrations
                     table.ForeignKey(
                         name: "FK_sv_affected_transcript_sv_variant_id",
                         column: x => x.variant_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "sv",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_sv_affected_transcript_transcript_feature_id",
                         column: x => x.feature_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "transcript",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -1747,7 +1919,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "cnv_entry",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     sample_id = table.Column<int>(type: "integer", nullable: false),
@@ -1759,14 +1931,53 @@ namespace Unite.Data.Migrations.Migrations
                     table.ForeignKey(
                         name: "FK_cnv_entry_cnv_variant_id",
                         column: x => x.variant_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "cnv",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_cnv_entry_sample_sample_id",
                         column: x => x.sample_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
+                        principalTable: "sample",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "cnv_profile",
+                schema: "omi",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    sample_id = table.Column<int>(type: "integer", nullable: false),
+                    chromosome_id = table.Column<int>(type: "integer", nullable: false),
+                    chromosome_arm_id = table.Column<int>(type: "integer", nullable: true),
+                    gain = table.Column<double>(type: "double precision", nullable: false),
+                    loss = table.Column<double>(type: "double precision", nullable: false),
+                    neutral = table.Column<double>(type: "double precision", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_cnv_profile", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_cnv_profile_chromosome_arm_chromosome_arm_id",
+                        column: x => x.chromosome_arm_id,
+                        principalSchema: "omi",
+                        principalTable: "chromosome_arm",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_cnv_profile_chromosome_chromosome_id",
+                        column: x => x.chromosome_id,
+                        principalSchema: "omi",
+                        principalTable: "chromosome",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_cnv_profile_sample_sample_id",
+                        column: x => x.sample_id,
+                        principalSchema: "omi",
                         principalTable: "sample",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -1774,14 +1985,15 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "gene_expression",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     sample_id = table.Column<int>(type: "integer", nullable: false),
                     gene_id = table.Column<int>(type: "integer", nullable: false),
-                    reads = table.Column<int>(type: "integer", nullable: false),
+                    raw = table.Column<int>(type: "integer", nullable: false),
                     tpm = table.Column<double>(type: "double precision", nullable: false),
-                    fpkm = table.Column<double>(type: "double precision", nullable: false)
+                    fpkm = table.Column<double>(type: "double precision", nullable: false),
+                    normalized = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1789,14 +2001,14 @@ namespace Unite.Data.Migrations.Migrations
                     table.ForeignKey(
                         name: "FK_gene_expression_gene_gene_id",
                         column: x => x.gene_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "gene",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_gene_expression_sample_sample_id",
                         column: x => x.sample_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "sample",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -1804,7 +2016,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "sample_resource",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -1822,7 +2034,7 @@ namespace Unite.Data.Migrations.Migrations
                     table.ForeignKey(
                         name: "FK_sample_resource_sample_sample_id",
                         column: x => x.sample_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "sample",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -1830,7 +2042,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "sm_entry",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     sample_id = table.Column<int>(type: "integer", nullable: false),
@@ -1842,14 +2054,14 @@ namespace Unite.Data.Migrations.Migrations
                     table.ForeignKey(
                         name: "FK_sm_entry_sample_sample_id",
                         column: x => x.sample_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "sample",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_sm_entry_sm_variant_id",
                         column: x => x.variant_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "sm",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -1857,7 +2069,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateTable(
                 name: "sv_entry",
-                schema: "gen",
+                schema: "omi",
                 columns: table => new
                 {
                     sample_id = table.Column<int>(type: "integer", nullable: false),
@@ -1869,14 +2081,14 @@ namespace Unite.Data.Migrations.Migrations
                     table.ForeignKey(
                         name: "FK_sv_entry_sample_sample_id",
                         column: x => x.sample_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "sample",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_sv_entry_sv_variant_id",
                         column: x => x.variant_id,
-                        principalSchema: "gen",
+                        principalSchema: "omi",
                         principalTable: "sv",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -1919,20 +2131,58 @@ namespace Unite.Data.Migrations.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "protein_expression",
+                schema: "omi",
+                columns: table => new
+                {
+                    sample_id = table.Column<int>(type: "integer", nullable: false),
+                    protein_id = table.Column<int>(type: "integer", nullable: false),
+                    raw = table.Column<double>(type: "double precision", nullable: false),
+                    normalized = table.Column<double>(type: "double precision", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_protein_expression", x => new { x.protein_id, x.sample_id });
+                    table.ForeignKey(
+                        name: "FK_protein_expression_protein_protein_id",
+                        column: x => x.protein_id,
+                        principalSchema: "omi",
+                        principalTable: "protein",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_protein_expression_sample_sample_id",
+                        column: x => x.sample_id,
+                        principalSchema: "omi",
+                        principalTable: "sample",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 schema: "com",
                 table: "analysis_task_type",
                 columns: new[] { "id", "name", "value" },
                 values: new object[,]
                 {
-                    { 1, "de", "de" },
+                    { 1, "deg", "deg" },
                     { 2, "scell", "scell" },
                     { 3, "surv", "surv" },
-                    { 4, "dm", "dm" }
+                    { 4, "dm", "dm" },
+                    { 5, "pcam", "pcam" },
+                    { 6, "gaf", "gaf" },
+                    { 7, "dep", "dep" }
                 });
 
             migrationBuilder.InsertData(
-                schema: "gen",
+                schema: "img",
+                table: "analysis_type",
+                columns: new[] { "id", "name", "value" },
+                values: new object[] { 1, "Radiomics Features Extraction", "RFE" });
+
+            migrationBuilder.InsertData(
+                schema: "omi",
                 table: "analysis_type",
                 columns: new[] { "id", "name", "value" },
                 values: new object[,]
@@ -1947,14 +2197,9 @@ namespace Unite.Data.Migrations.Migrations
                     { 8, "Single Nucleus ATAC Sequencing", "snATACSeq" },
                     { 9, "Illumina Infinium Methylation Arrays Assay", "MethArray" },
                     { 10, "Whole Genome Bisulfite Sequencing", "WGBS" },
-                    { 11, "Reduced Representation Bisulfite Sequencing", "RRBS" }
+                    { 11, "Reduced Representation Bisulfite Sequencing", "RRBS" },
+                    { 12, "Mass Spectrometry", "MS" }
                 });
-
-            migrationBuilder.InsertData(
-                schema: "img",
-                table: "analysis_type",
-                columns: new[] { "id", "name", "value" },
-                values: new object[] { 1, "Radiomics Features Extraction", "RFE" });
 
             migrationBuilder.InsertData(
                 schema: "spe",
@@ -1971,6 +2216,16 @@ namespace Unite.Data.Migrations.Migrations
                     { 301, "dna-sm", "dna-sm" },
                     { 302, "dna-cnv", "dna-cnv" },
                     { 303, "dna-sv", "dna-sv" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "spe",
+                table: "category",
+                columns: new[] { "id", "name", "value" },
+                values: new object[,]
+                {
+                    { 1, "Normal", "Normal" },
+                    { 2, "Tumor", "Tumor" }
                 });
 
             migrationBuilder.InsertData(
@@ -2005,7 +2260,7 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.InsertData(
-                schema: "gen",
+                schema: "omi",
                 table: "chromosome",
                 columns: new[] { "id", "name", "value" },
                 values: new object[,]
@@ -2038,7 +2293,17 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.InsertData(
-                schema: "gen",
+                schema: "omi",
+                table: "chromosome_arm",
+                columns: new[] { "id", "name", "value" },
+                values: new object[,]
+                {
+                    { 1, "Short arm", "P" },
+                    { 2, "Long arm", "Q" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "omi",
                 table: "cnv_type",
                 columns: new[] { "id", "name", "value" },
                 values: new object[,]
@@ -2051,23 +2316,23 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.InsertData(
                 schema: "spe",
-                table: "fixation_type",
-                columns: new[] { "id", "name", "value" },
-                values: new object[,]
-                {
-                    { 1, "FFPE", "FFPE" },
-                    { 2, "Fresh Frozen", "Fresh Frozen" }
-                });
-
-            migrationBuilder.InsertData(
-                schema: "spe",
-                table: "gene_expression_subtype",
+                table: "expression_subtype",
                 columns: new[] { "id", "name", "value" },
                 values: new object[,]
                 {
                     { 1, "Classical", "Classical" },
                     { 2, "Mesenchymal", "Mesenchymal" },
                     { 3, "Proneural", "Proneural" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "spe",
+                table: "fixation_type",
+                columns: new[] { "id", "name", "value" },
+                values: new object[,]
+                {
+                    { 1, "FFPE", "FFPE" },
+                    { 2, "Fresh Frozen", "Fresh Frozen" }
                 });
 
             migrationBuilder.InsertData(
@@ -2087,16 +2352,6 @@ namespace Unite.Data.Migrations.Migrations
                     { 9, "IDH2 R172T", "IDH2 R172T" },
                     { 10, "IDH2 R172M", "IDH2 R172M" },
                     { 11, "IDH2 R172S", "IDH2 R172S" }
-                });
-
-            migrationBuilder.InsertData(
-                schema: "spe",
-                table: "idh_status",
-                columns: new[] { "id", "name", "value" },
-                values: new object[,]
-                {
-                    { 1, "Wild Type", "Wild Type" },
-                    { 2, "Mutant", "Mutant" }
                 });
 
             migrationBuilder.InsertData(
@@ -2143,17 +2398,9 @@ namespace Unite.Data.Migrations.Migrations
                     { 5, "Gene", "Gene" },
                     { 6, "SM", "SM" },
                     { 7, "CNV", "CNV" },
-                    { 8, "SV", "SV" }
-                });
-
-            migrationBuilder.InsertData(
-                schema: "spe",
-                table: "material_type",
-                columns: new[] { "id", "name", "value" },
-                values: new object[,]
-                {
-                    { 1, "Normal", "Normal" },
-                    { 2, "Tumor", "Tumor" }
+                    { 8, "SV", "SV" },
+                    { 9, "CNVProfile", "CNVProfile" },
+                    { 10, "Protein", "Protein" }
                 });
 
             migrationBuilder.InsertData(
@@ -2170,16 +2417,6 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.InsertData(
-                schema: "spe",
-                table: "mgmt_status",
-                columns: new[] { "id", "name", "value" },
-                values: new object[,]
-                {
-                    { 1, "Unmethylated", "Unmethylated" },
-                    { 2, "Methylated", "Methylated" }
-                });
-
-            migrationBuilder.InsertData(
                 schema: "don",
                 table: "sex",
                 columns: new[] { "id", "name", "value" },
@@ -2191,7 +2428,7 @@ namespace Unite.Data.Migrations.Migrations
                 });
 
             migrationBuilder.InsertData(
-                schema: "gen",
+                schema: "omi",
                 table: "sm_type",
                 columns: new[] { "id", "name", "value" },
                 values: new object[,]
@@ -2234,16 +2471,19 @@ namespace Unite.Data.Migrations.Migrations
                     { 301, "dna-sm", "dna-sm" },
                     { 302, "dna-cnv", "dna-cnv" },
                     { 303, "dna-sv", "dna-sv" },
+                    { 304, "dna-cnvp", "dna-cnvp" },
                     { 310, "meth", "meth" },
                     { 311, "meth-lvl", "meth-lvl" },
                     { 320, "rna", "rna" },
                     { 321, "rna-exp", "rna-exp" },
                     { 330, "rnasc", "rnasc" },
-                    { 331, "rnasc-exp", "rnasc-exp" }
+                    { 331, "rnasc-exp", "rnasc-exp" },
+                    { 340, "prot", "prot" },
+                    { 341, "prot-exp", "prot-exp" }
                 });
 
             migrationBuilder.InsertData(
-                schema: "gen",
+                schema: "omi",
                 table: "sv_type",
                 columns: new[] { "id", "name", "value" },
                 values: new object[,]
@@ -2270,6 +2510,16 @@ namespace Unite.Data.Migrations.Migrations
                     { 4, "Processed", "Processed" },
                     { 5, "Failed", "Failed" },
                     { 6, "Rejected", "Rejected" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "spe",
+                table: "tert_mutation",
+                columns: new[] { "id", "name", "value" },
+                values: new object[,]
+                {
+                    { 1, "C228T", "C228T" },
+                    { 2, "C250T", "C250T" }
                 });
 
             migrationBuilder.InsertData(
@@ -2317,13 +2567,13 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_analysis_type_id",
-                schema: "gen",
+                schema: "img",
                 table: "analysis",
                 column: "type_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_analysis_type_id1",
-                schema: "img",
+                schema: "omi",
                 table: "analysis",
                 column: "type_id");
 
@@ -2352,27 +2602,51 @@ namespace Unite.Data.Migrations.Migrations
                 column: "sex_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_cnv_chromosome_arm_id",
+                schema: "omi",
+                table: "cnv",
+                column: "chromosome_arm_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_cnv_chromosome_id",
-                schema: "gen",
+                schema: "omi",
                 table: "cnv",
                 column: "chromosome_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_cnv_type_id",
-                schema: "gen",
+                schema: "omi",
                 table: "cnv",
                 column: "type_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_cnv_affected_transcript_feature_id",
-                schema: "gen",
+                schema: "omi",
                 table: "cnv_affected_transcript",
                 column: "feature_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_cnv_entry_sample_id",
-                schema: "gen",
+                schema: "omi",
                 table: "cnv_entry",
+                column: "sample_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_cnv_profile_chromosome_arm_id",
+                schema: "omi",
+                table: "cnv_profile",
+                column: "chromosome_arm_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_cnv_profile_chromosome_id",
+                schema: "omi",
+                table: "cnv_profile",
+                column: "chromosome_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_cnv_profile_sample_id",
+                schema: "omi",
+                table: "cnv_profile",
                 column: "sample_id");
 
             migrationBuilder.CreateIndex(
@@ -2388,14 +2662,20 @@ namespace Unite.Data.Migrations.Migrations
                 column: "sample_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_gene_chromosome_arm_id",
+                schema: "omi",
+                table: "gene",
+                column: "chromosome_arm_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_gene_chromosome_id",
-                schema: "gen",
+                schema: "omi",
                 table: "gene",
                 column: "chromosome_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_gene_expression_sample_id",
-                schema: "gen",
+                schema: "omi",
                 table: "gene_expression",
                 column: "sample_id");
 
@@ -2454,22 +2734,10 @@ namespace Unite.Data.Migrations.Migrations
                 column: "source_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_material_tumor_type_id",
-                schema: "spe",
-                table: "material",
-                column: "tumor_type_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_material_type_id",
-                schema: "spe",
-                table: "material",
-                column: "type_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_molecular_data_gene_expression_subtype_id",
+                name: "IX_molecular_data_expression_subtype_id",
                 schema: "spe",
                 table: "molecular_data",
-                column: "gene_expression_subtype_id");
+                column: "expression_subtype_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_molecular_data_idh_mutation_id",
@@ -2478,22 +2746,16 @@ namespace Unite.Data.Migrations.Migrations
                 column: "idh_mutation_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_molecular_data_idh_status_id",
-                schema: "spe",
-                table: "molecular_data",
-                column: "idh_status_id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_molecular_data_methylation_subtype_id",
                 schema: "spe",
                 table: "molecular_data",
                 column: "methylation_subtype_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_molecular_data_mgmt_status_id",
+                name: "IX_molecular_data_tert_mutation_id",
                 schema: "spe",
                 table: "molecular_data",
-                column: "mgmt_status_id");
+                column: "tert_mutation_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_project_donor_donor_id",
@@ -2502,11 +2764,29 @@ namespace Unite.Data.Migrations.Migrations
                 column: "donor_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_protein_chromosome_arm_id",
+                schema: "omi",
+                table: "protein",
+                column: "chromosome_arm_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_protein_chromosome_id",
+                schema: "omi",
+                table: "protein",
+                column: "chromosome_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_protein_transcript_id",
-                schema: "gen",
+                schema: "omi",
                 table: "protein",
                 column: "transcript_id",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_protein_expression_sample_id",
+                schema: "omi",
+                table: "protein_expression",
+                column: "sample_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_radiomics_feature_entry_sample_id",
@@ -2516,25 +2796,6 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_sample_analysis_id",
-                schema: "gen",
-                table: "sample",
-                column: "analysis_id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_sample_matched_sample_id",
-                schema: "gen",
-                table: "sample",
-                column: "matched_sample_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_sample_specimen_id",
-                schema: "gen",
-                table: "sample",
-                column: "specimen_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_sample_analysis_id1",
                 schema: "img",
                 table: "sample",
                 column: "analysis_id",
@@ -2545,6 +2806,25 @@ namespace Unite.Data.Migrations.Migrations
                 schema: "img",
                 table: "sample",
                 column: "image_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_sample_analysis_id1",
+                schema: "omi",
+                table: "sample",
+                column: "analysis_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_sample_matched_sample_id",
+                schema: "omi",
+                table: "sample",
+                column: "matched_sample_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_sample_specimen_id",
+                schema: "omi",
+                table: "sample",
+                column: "specimen_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_sample_analysis_id2",
@@ -2561,33 +2841,45 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_sample_resource_sample_id",
-                schema: "gen",
+                schema: "omi",
                 table: "sample_resource",
                 column: "sample_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_sm_chromosome_arm_id",
+                schema: "omi",
+                table: "sm",
+                column: "chromosome_arm_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_sm_chromosome_id",
-                schema: "gen",
+                schema: "omi",
                 table: "sm",
                 column: "chromosome_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_sm_type_id",
-                schema: "gen",
+                schema: "omi",
                 table: "sm",
                 column: "type_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_sm_affected_transcript_feature_id",
-                schema: "gen",
+                schema: "omi",
                 table: "sm_affected_transcript",
                 column: "feature_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_sm_entry_sample_id",
-                schema: "gen",
+                schema: "omi",
                 table: "sm_entry",
                 column: "sample_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_specimen_category_id",
+                schema: "spe",
+                table: "specimen",
+                column: "category_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_specimen_donor_id",
@@ -2608,6 +2900,12 @@ namespace Unite.Data.Migrations.Migrations
                 column: "reference_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_specimen_tumor_type_id",
+                schema: "spe",
+                table: "specimen",
+                column: "tumor_type_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_specimen_type_id",
                 schema: "spe",
                 table: "specimen",
@@ -2620,32 +2918,44 @@ namespace Unite.Data.Migrations.Migrations
                 column: "donor_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_sv_chromosome_arm_id",
+                schema: "omi",
+                table: "sv",
+                column: "chromosome_arm_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_sv_chromosome_id",
-                schema: "gen",
+                schema: "omi",
                 table: "sv",
                 column: "chromosome_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_sv_other_chromosome_arm_id",
+                schema: "omi",
+                table: "sv",
+                column: "other_chromosome_arm_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_sv_other_chromosome_id",
-                schema: "gen",
+                schema: "omi",
                 table: "sv",
                 column: "other_chromosome_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_sv_type_id",
-                schema: "gen",
+                schema: "omi",
                 table: "sv",
                 column: "type_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_sv_affected_transcript_feature_id",
-                schema: "gen",
+                schema: "omi",
                 table: "sv_affected_transcript",
                 column: "feature_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_sv_entry_sample_id",
-                schema: "gen",
+                schema: "omi",
                 table: "sv_entry",
                 column: "sample_id");
 
@@ -2680,14 +2990,20 @@ namespace Unite.Data.Migrations.Migrations
                 column: "task_status_type_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_transcript_chromosome_arm_id",
+                schema: "omi",
+                table: "transcript",
+                column: "chromosome_arm_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_transcript_chromosome_id",
-                schema: "gen",
+                schema: "omi",
                 table: "transcript",
                 column: "chromosome_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_transcript_gene_id",
-                schema: "gen",
+                schema: "omi",
                 table: "transcript",
                 column: "gene_id");
 
@@ -2696,6 +3012,37 @@ namespace Unite.Data.Migrations.Migrations
                 schema: "don",
                 table: "treatment",
                 column: "therapy_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tumor_classification_class_id",
+                schema: "spe",
+                table: "tumor_classification",
+                column: "class_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tumor_classification_family_id",
+                schema: "spe",
+                table: "tumor_classification",
+                column: "family_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tumor_classification_specimen_id",
+                schema: "spe",
+                table: "tumor_classification",
+                column: "specimen_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tumor_classification_subclass_id",
+                schema: "spe",
+                table: "tumor_classification",
+                column: "subclass_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tumor_classification_superfamily_id",
+                schema: "spe",
+                table: "tumor_classification",
+                column: "superfamily_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_worker_type_id",
@@ -2731,11 +3078,15 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.DropTable(
                 name: "cnv_affected_transcript",
-                schema: "gen");
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "cnv_entry",
-                schema: "gen");
+                schema: "omi");
+
+            migrationBuilder.DropTable(
+                name: "cnv_profile",
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "drug_screening",
@@ -2743,7 +3094,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.DropTable(
                 name: "gene_expression",
-                schema: "gen");
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "intervention",
@@ -2774,8 +3125,8 @@ namespace Unite.Data.Migrations.Migrations
                 schema: "don");
 
             migrationBuilder.DropTable(
-                name: "protein",
-                schema: "gen");
+                name: "protein_expression",
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "radiomics_feature_entry",
@@ -2783,15 +3134,15 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.DropTable(
                 name: "sample_resource",
-                schema: "gen");
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "sm_affected_transcript",
-                schema: "gen");
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "sm_entry",
-                schema: "gen");
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "study_donor",
@@ -2799,11 +3150,11 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.DropTable(
                 name: "sv_affected_transcript",
-                schema: "gen");
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "sv_entry",
-                schema: "gen");
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "task",
@@ -2812,6 +3163,10 @@ namespace Unite.Data.Migrations.Migrations
             migrationBuilder.DropTable(
                 name: "treatment",
                 schema: "don");
+
+            migrationBuilder.DropTable(
+                name: "tumor_classification",
+                schema: "spe");
 
             migrationBuilder.DropTable(
                 name: "worker",
@@ -2835,7 +3190,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.DropTable(
                 name: "cnv",
-                schema: "gen");
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "drug",
@@ -2862,15 +3217,7 @@ namespace Unite.Data.Migrations.Migrations
                 schema: "spe");
 
             migrationBuilder.DropTable(
-                name: "material_type",
-                schema: "spe");
-
-            migrationBuilder.DropTable(
-                name: "tumor_type",
-                schema: "spe");
-
-            migrationBuilder.DropTable(
-                name: "gene_expression_subtype",
+                name: "expression_subtype",
                 schema: "spe");
 
             migrationBuilder.DropTable(
@@ -2878,20 +3225,20 @@ namespace Unite.Data.Migrations.Migrations
                 schema: "spe");
 
             migrationBuilder.DropTable(
-                name: "idh_status",
-                schema: "spe");
-
-            migrationBuilder.DropTable(
                 name: "methylation_subtype",
                 schema: "spe");
 
             migrationBuilder.DropTable(
-                name: "mgmt_status",
+                name: "tert_mutation",
                 schema: "spe");
 
             migrationBuilder.DropTable(
                 name: "project",
                 schema: "don");
+
+            migrationBuilder.DropTable(
+                name: "protein",
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "radiomics_feature",
@@ -2903,23 +3250,19 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.DropTable(
                 name: "sm",
-                schema: "gen");
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "study",
                 schema: "don");
 
             migrationBuilder.DropTable(
-                name: "transcript",
-                schema: "gen");
-
-            migrationBuilder.DropTable(
                 name: "sample",
-                schema: "gen");
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "sv",
-                schema: "gen");
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "analysis_task_type",
@@ -2946,6 +3289,22 @@ namespace Unite.Data.Migrations.Migrations
                 schema: "don");
 
             migrationBuilder.DropTable(
+                name: "tumor_class",
+                schema: "spe");
+
+            migrationBuilder.DropTable(
+                name: "tumor_family",
+                schema: "spe");
+
+            migrationBuilder.DropTable(
+                name: "tumor_subclass",
+                schema: "spe");
+
+            migrationBuilder.DropTable(
+                name: "tumor_superfamily",
+                schema: "spe");
+
+            migrationBuilder.DropTable(
                 name: "worker_type",
                 schema: "com");
 
@@ -2963,7 +3322,7 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.DropTable(
                 name: "cnv_type",
-                schema: "gen");
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "analysis",
@@ -2982,6 +3341,10 @@ namespace Unite.Data.Migrations.Migrations
                 schema: "spe");
 
             migrationBuilder.DropTable(
+                name: "transcript",
+                schema: "omi");
+
+            migrationBuilder.DropTable(
                 name: "analysis",
                 schema: "img");
 
@@ -2991,15 +3354,11 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.DropTable(
                 name: "sm_type",
-                schema: "gen");
-
-            migrationBuilder.DropTable(
-                name: "gene",
-                schema: "gen");
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "analysis",
-                schema: "gen");
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "specimen",
@@ -3007,11 +3366,15 @@ namespace Unite.Data.Migrations.Migrations
 
             migrationBuilder.DropTable(
                 name: "sv_type",
-                schema: "gen");
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "analysis_type",
                 schema: "spe");
+
+            migrationBuilder.DropTable(
+                name: "gene",
+                schema: "omi");
 
             migrationBuilder.DropTable(
                 name: "analysis_type",
@@ -3022,12 +3385,12 @@ namespace Unite.Data.Migrations.Migrations
                 schema: "img");
 
             migrationBuilder.DropTable(
-                name: "chromosome",
-                schema: "gen");
+                name: "analysis_type",
+                schema: "omi");
 
             migrationBuilder.DropTable(
-                name: "analysis_type",
-                schema: "gen");
+                name: "category",
+                schema: "spe");
 
             migrationBuilder.DropTable(
                 name: "donor",
@@ -3036,6 +3399,18 @@ namespace Unite.Data.Migrations.Migrations
             migrationBuilder.DropTable(
                 name: "specimen_type",
                 schema: "spe");
+
+            migrationBuilder.DropTable(
+                name: "tumor_type",
+                schema: "spe");
+
+            migrationBuilder.DropTable(
+                name: "chromosome_arm",
+                schema: "omi");
+
+            migrationBuilder.DropTable(
+                name: "chromosome",
+                schema: "omi");
         }
     }
 }
