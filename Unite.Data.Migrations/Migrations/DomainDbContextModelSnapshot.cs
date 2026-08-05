@@ -1786,6 +1786,24 @@ namespace Unite.Data.Migrations.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.DataUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("data_user", "don");
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Donors.Clinical.ClinicalData", b =>
                 {
                     b.Property<int>("DonorId")
@@ -2037,6 +2055,23 @@ namespace Unite.Data.Migrations.Migrations
                     b.HasIndex("DonorId");
 
                     b.ToTable("project_donor", "don");
+                });
+
+            modelBuilder.Entity("Unite.Data.Entities.Donors.ProjectUser", b =>
+                {
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("integer")
+                        .HasColumnName("project_id");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("ProjectId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("project_user", "don");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Donors.Study", b =>
@@ -4033,6 +4068,25 @@ namespace Unite.Data.Migrations.Migrations
                     b.Navigation("Project");
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.Donors.ProjectUser", b =>
+                {
+                    b.HasOne("Unite.Data.Entities.Donors.Project", "Project")
+                        .WithMany("ProjectUsers")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Unite.Data.Entities.DataUser", "User")
+                        .WithMany("UserProjects")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Donors.StudyDonor", b =>
                 {
                     b.HasOne("Unite.Data.Entities.Donors.Donor", "Donor")
@@ -4735,6 +4789,11 @@ namespace Unite.Data.Migrations.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Unite.Data.Entities.DataUser", b =>
+                {
+                    b.Navigation("UserProjects");
+                });
+
             modelBuilder.Entity("Unite.Data.Entities.Donors.Donor", b =>
                 {
                     b.Navigation("ClinicalData");
@@ -4753,6 +4812,8 @@ namespace Unite.Data.Migrations.Migrations
             modelBuilder.Entity("Unite.Data.Entities.Donors.Project", b =>
                 {
                     b.Navigation("ProjectDonors");
+
+                    b.Navigation("ProjectUsers");
                 });
 
             modelBuilder.Entity("Unite.Data.Entities.Donors.Study", b =>
