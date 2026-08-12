@@ -2027,11 +2027,10 @@ namespace Unite.Data.Migrations.Migrations
                         .HasColumnType("text")
                         .HasColumnName("description");
 
-                    b.Property<string>("IsPublic")
-                        .IsRequired()
+                    b.Property<bool>("IsPublic")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("text")
-                        .HasDefaultValue("False")
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
                         .HasColumnName("is_public");
 
                     b.Property<string>("Name")
